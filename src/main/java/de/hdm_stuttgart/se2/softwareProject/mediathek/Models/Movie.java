@@ -20,7 +20,7 @@ public class Movie {
 	
 	private void showDetails(Movie m) {
 		System.out.println(m.title + "\nSchauspieler:");
-		// Schleife, damit alle Schauspieler, die das Array enthält, ausgegeben werden
+		// Schleife, damit alle Schauspieler, die die Liste enthält, ausgegeben werden
 		for (String i : m.actor) {
 			System.out.println(i);
 		}
@@ -30,10 +30,7 @@ public class Movie {
 		System.out.println("Genre: " + m.genre);
 		System.out.println("Filmbeschreibung: " + m.info);
 		System.out.println("Bewertung: " + m.ranking);
-	}
-
-
-	
+	}	
 	
 	
 	
