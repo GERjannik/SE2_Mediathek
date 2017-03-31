@@ -6,6 +6,7 @@ import java.util.List;
 
 public class Movie {
 
+	private int id;
 	private String title;
 	private List<String> actor;
 	private int duration;
@@ -15,9 +16,29 @@ public class Movie {
 	private String genre;
 	private String info;
 	private int ranking;
-	private List<Integer> inPlaylists;
 	private File file;
 	
+	/**
+	 * @param title
+	 * @param duration
+	 * @param favorite
+	 * @param inPlaylists
+	 * @param file
+	 */
+	/*public Movie(String title,  int duration , boolean favorite, File file) {
+		// super(); automatisch generiert
+		this.title = title;
+		//this.duration = duration;
+		this.favorite = favorite;
+		this.file = file;
+	} */
+
+	public Movie(String title, boolean favorite, File file) {
+		this.title = title;
+		this.favorite = favorite;
+		this.file = file;	
+		}
+
 	private void showDetails(Movie m) {
 		System.out.println(m.title + "\nSchauspieler:");
 		// Schleife, damit alle Schauspieler, die die Liste enthält, ausgegeben werden
