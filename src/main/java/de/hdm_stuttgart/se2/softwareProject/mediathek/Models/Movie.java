@@ -39,18 +39,18 @@ public class Movie {
 		this.file = file;	
 		}
 
-	private void showDetails(Movie m) {
-		System.out.println(m.title + "\nSchauspieler:");
+	public void showDetails() {
+		System.out.println(this.title + "\nSchauspieler:");
 		// Schleife, damit alle Schauspieler, die die Liste enthält, ausgegeben werden
-		for (String i : m.actor) {
+		for (String i : this.actor) {
 			System.out.println(i);
 		}
-		System.out.println("Dauer: " + m.duration);
-		System.out.println("Erscheinungsdatum: " + m.releaseDate);
-		System.out.println("Regisseur: " + m.regisseur);
-		System.out.println("Genre: " + m.genre);
-		System.out.println("Filmbeschreibung: " + m.info);
-		System.out.println("Bewertung: " + m.ranking);
+		System.out.println("Dauer: " + this.duration);
+		System.out.println("Erscheinungsdatum: " + this.releaseDate);
+		System.out.println("Regisseur: " + this.regisseur);
+		System.out.println("Genre: " + this.genre);
+		System.out.println("Filmbeschreibung: " + this.info);
+		System.out.println("Bewertung: " + this.ranking);
 	}	
 	
 	
