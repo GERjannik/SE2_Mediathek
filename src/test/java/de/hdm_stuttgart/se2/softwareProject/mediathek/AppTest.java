@@ -5,10 +5,9 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
 
-import de.hdm_stuttgart.se2.softwareProject.mediathek.Models.Movie;
-import de.hdm_stuttgart.se2.softwareProject.mediathek.Models.Movielist;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.driver.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.driver.Settings;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.models.Movielist;
 
 /**
  * Unit test for address database

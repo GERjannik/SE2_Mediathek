@@ -1,4 +1,4 @@
-package de.hdm_stuttgart.se2.softwareProject.mediathek.Models;
+package de.hdm_stuttgart.se2.softwareProject.mediathek.models;
 
 import java.util.HashMap;
 import java.util.Map;

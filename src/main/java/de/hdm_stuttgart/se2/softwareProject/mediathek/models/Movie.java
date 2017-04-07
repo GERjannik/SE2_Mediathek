@@ -1,10 +1,12 @@
-package de.hdm_stuttgart.se2.softwareProject.mediathek.Models;
+package de.hdm_stuttgart.se2.softwareProject.mediathek.models;
 
 import java.io.File;
 import java.util.Date;
 import java.util.List;
 
-public class Movie {
+import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
+
+class Movie implements IMedia {
 
 	private int id;
 	private String title;
@@ -39,6 +41,10 @@ public class Movie {
 		this.file = file;	
 		}
 
+	/* (non-Javadoc)
+	 * @see de.hdm_stuttgart.se2.softwareProject.mediathek.models.IMedia#showDetails()
+	 */
+	@Override
 	public void showDetails() {
 		System.out.println(this.title + "\nSchauspieler:");
 		// Schleife, damit alle Schauspieler, die die Liste enthält, ausgegeben werden
