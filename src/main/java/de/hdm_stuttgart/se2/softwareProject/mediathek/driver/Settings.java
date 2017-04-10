@@ -10,7 +10,6 @@ public class Settings {
 	 * @param directory
 	 */
 	public Settings(File directory) {
-		super();
 		this.directory = directory;
 	}
 
