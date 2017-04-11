@@ -15,9 +15,9 @@ class Movie extends Media implements IMedia {
 	private String genre;
 	private String info;
 	private int ranking;
-	
-	public Movie(String title, boolean favorite, File file/*, int duration*/) {
-		super(title, favorite, file);
+
+	public Movie(String title, boolean favorite, File file/*, int duration*/, boolean visible) {
+		super(title, favorite, file, visible);
 		//this.duration = duration;
 	}	
 
@@ -27,17 +27,32 @@ class Movie extends Media implements IMedia {
 	 */
 	@Override
 	public void getDetails() {
-		System.out.println(this.title + "\nSchauspieler:");
-		// Schleife, damit alle Schauspieler, die die Liste enthält, ausgegeben werden
-		for (String i : this.actor) {
-			System.out.println(i);
+		
+		System.out.println(this.title);
+		
+		if (this.actor != null && this.actor.size() != 0) {
+			System.out.println("Schauspieler:");
+			// Schleife, damit alle Schauspieler, die die Liste enthält, ausgegeben werden
+			for (String i : this.actor) {
+				System.out.println(i);
+			}
 		}
-		System.out.println("Dauer: " + this.duration);
-		System.out.println("Erscheinungsdatum: " + this.releaseDate);
-		System.out.println("Regisseur: " + this.regisseur);
-		System.out.println("Genre: " + this.genre);
-		System.out.println("Filmbeschreibung: " + this.info);
-		System.out.println("Bewertung: " + this.ranking);
+		if (this.duration != 0) {
+			System.out.println("Dauer: " + this.duration);
+		}
+		if (this.releaseDate != null && !(this.releaseDate.equals(""))) {
+			System.out.println("Erscheinungsdatum: " + this.releaseDate);
+		}
+		if (this.regisseur != null && !(this.regisseur.equals(""))) {
+			System.out.println("Regisseur: " + this.regisseur);
+		}
+		if (this.genre != null && !(this.genre.equals(""))) {
+			System.out.println("Genre: " + this.genre);
+		}
+		if (this.info != null && !(this.info.equals(""))) {
+			System.out.println("Filmbeschreibung: " + this.info);
+		}
+			System.out.println("Bewertung: " + this.ranking);
 	}
-	
+
 }

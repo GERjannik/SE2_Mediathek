@@ -17,19 +17,29 @@ class Book extends Media implements IMedia {
 	
 	
 	
-	public Book(String title, boolean favorite, File file/*, int pages*/) {
-		super(title, favorite, file);
+	public Book(String title, boolean favorite, File file/*, int pages*/, boolean visible) {
+		super(title, favorite, file, visible);
 		//this.pages = pages;
 	}
 
 	@Override
 	public void getDetails() {
 		System.out.println(this.title);
-		System.out.println("Seitenzahl: " + this.pages);
-		System.out.println("Erscheinungsdatum: " + this.releaseDate);
-		System.out.println("Autor: " + this.author);
-		System.out.println("Genre: " + this.genre);
-		System.out.println("Klappentext: " + this.info);
+		if (this.pages != 0) {
+			System.out.println("Seitenzahl: " + this.pages);
+		}
+		if (this.releaseDate != null && !(this.releaseDate.equals(""))) {
+			System.out.println("Erscheinungsdatum: " + this.releaseDate);
+		}
+		if (this.author != null && !(this.author.equals(""))) {
+			System.out.println("Autor: " + this.author);
+		}
+		if (this.genre != null && !(this.genre.equals(""))) {
+			System.out.println("Genre: " + this.genre);
+		}
+		if (this.info != null && !(this.info.equals(""))) {
+			System.out.println("Klappentext: " + this.info);
+		}
 		System.out.println("Bewertung: " + this.ranking);
 	}
 }

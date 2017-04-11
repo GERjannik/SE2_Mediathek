@@ -1,14 +1,12 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek;
 
 import java.io.File;
-import java.util.HashMap;
 
 import org.junit.Assert;
 import org.junit.Test;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.driver.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.driver.Settings;
-import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 
 /**
@@ -17,15 +15,34 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 public class AppTest {
 
 	@Test
-	public void test_movieRead() {
+	public void test_movieReadAtHDM() {
 		File f = new File ("/stud/js329/Documents/testVideos/");
 		Settings test = new Settings(f);
-		IMedialist[] m = MediaStorage.createMedialists(f);
+		IMedialist[] m = MediaStorage.mediaScan(test.getDirectory());
 		IMedialist movies = m[0];
 		IMedialist audio = m[1];
 		IMedialist books = m[2];
-		//Assert.assertTrue(m.size() == f.listFiles().length);
-		movies.getContent().get(1001).getDetails();
+		Assert.assertTrue(movies.getContent().size() + audio.getContent().size() + books.getContent().size() == f.listFiles().length);
+		movies.printList();
+		System.out.println("---------------------------");
+		audio.printList();
+		System.out.println("---------------------------");
+		books.printList();
 	}
 	 
+	@Test
+	public void test_movieReadJannikAtHome() {
+		File f = new File ("/home/jannik/Downloads/testVideos/");
+		Settings test = new Settings(f);
+		IMedialist[] m = MediaStorage.mediaScan(test.getDirectory());
+		IMedialist movies = m[0];
+		IMedialist audio = m[1];
+		IMedialist books = m[2];
+		Assert.assertTrue(movies.getContent().size() + audio.getContent().size() + books.getContent().size() == f.listFiles().length);
+		movies.printList();
+		System.out.println("---------------------------");
+		audio.printList();
+		System.out.println("---------------------------");
+		books.printList();
+	}
 }

@@ -6,6 +6,8 @@ import java.util.Map;
 public interface IMedialist {
 
 	Map<File, IMedia> getContent();
+	String getName();
 	void removeMedia(IMedia m);
+	void printList();
 
 }

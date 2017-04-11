@@ -6,6 +6,8 @@ public interface IMedia {
 
 	void getDetails();
 	void openFile();
+	void removeMedia();
+	String getTitle();
 	File getFile();
 
 }

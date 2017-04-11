@@ -14,8 +14,8 @@ class Audio extends Media implements IMedia {
 	private Date releaseDate;
 	
 	
-	public Audio(String title, boolean favorite, File file/*, int duration*/) {
-		super(title, favorite, file);
+	public Audio(String title, boolean favorite, File file/*, int duration*/, boolean visible) {
+		super(title, favorite, file, visible);
 		//this.duration = duration;
 	}
 
@@ -23,10 +23,18 @@ class Audio extends Media implements IMedia {
 	@Override
 	public void getDetails() {
 		System.out.println(this.title);
-		System.out.println("Länge: " + this.duration);
-		System.out.println("Erscheinungsdatum: " + this.releaseDate);
-		System.out.println("Interpret: " + this.interpret);
-		System.out.println("Genre: " + this.genre);
+		if (this.duration != 0) {
+			System.out.println("Länge: " + this.duration);
+		}
+		if (this.releaseDate != null && !(this.releaseDate.equals(""))) {
+			System.out.println("Erscheinungsdatum: " + this.releaseDate);
+		}
+		if (this.interpret != null && !(this.interpret.equals(""))) {
+			System.out.println("Interpret: " + this.interpret);
+		}
+		if (this.genre != null && !(this.genre.equals(""))) {
+			System.out.println("Genre: " + this.genre);
+		}
 		System.out.println("Bewertung: " + this.ranking);
 	}
 }
