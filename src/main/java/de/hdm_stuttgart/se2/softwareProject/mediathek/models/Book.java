@@ -17,10 +17,9 @@ class Book extends Media implements IMedia {
 	
 	
 	
-	public Book(int id, String title, boolean favorite, File file, int pages) {
+	public Book(int id, String title, boolean favorite, File file/*, int pages*/) {
 		super(id, title, favorite, file);
-		this.pages = pages;
-		this.author = author;
+		//this.pages = pages;
 	}
 
 	@Override
@@ -33,5 +32,4 @@ class Book extends Media implements IMedia {
 		System.out.println("Klappentext: " + this.info);
 		System.out.println("Bewertung: " + this.ranking);
 	}
-
 }

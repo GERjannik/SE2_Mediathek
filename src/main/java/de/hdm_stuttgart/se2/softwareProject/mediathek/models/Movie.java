@@ -2,6 +2,7 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.models;
 
 import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
@@ -16,9 +17,9 @@ class Movie extends Media implements IMedia {
 	private String info;
 	private int ranking;
 	
-	public Movie(int id, String title, boolean favorite, File file, int duration) {
+	public Movie(int id, String title, boolean favorite, File file/*, int duration*/) {
 		super(id, title, favorite, file);
-		this.duration = duration;
+		//this.duration = duration;
 	}	
 
 
@@ -38,5 +39,6 @@ class Movie extends Media implements IMedia {
 		System.out.println("Genre: " + this.genre);
 		System.out.println("Filmbeschreibung: " + this.info);
 		System.out.println("Bewertung: " + this.ranking);
-	}	
+	}
+	
 }

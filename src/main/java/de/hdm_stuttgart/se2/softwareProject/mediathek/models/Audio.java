@@ -14,9 +14,9 @@ class Audio extends Media implements IMedia {
 	private Date releaseDate;
 	
 	
-	public Audio(int id, String title, boolean favorite, File file, int duration) {
+	public Audio(int id, String title, boolean favorite, File file/*, int duration*/) {
 		super(id, title, favorite, file);
-		this.duration = duration;
+		//this.duration = duration;
 	}
 
 
@@ -29,5 +29,4 @@ class Audio extends Media implements IMedia {
 		System.out.println("Genre: " + this.genre);
 		System.out.println("Bewertung: " + this.ranking);
 	}
-
 }
