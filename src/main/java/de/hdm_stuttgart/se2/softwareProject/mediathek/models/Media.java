@@ -6,13 +6,11 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
 abstract class Media implements IMedia{
 	
-	protected int id;
 	protected String title;
 	protected boolean favorite;
 	protected File file;
 	
-	public Media(int id, String title, boolean favorite, File file) {
-		this.id = id;
+	public Media(String title, boolean favorite, File file) {
 		this.title = title;
 		this.favorite = favorite;
 		this.file = file;
@@ -24,8 +22,8 @@ abstract class Media implements IMedia{
 	}
 
 	@Override
-	public int getId() {
-		return this.id;
+	public File getFile() {
+		return this.file;
 	}
 	
 	@Override

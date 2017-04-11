@@ -1,49 +1,46 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.driver;
 
 import java.io.File;
-import java.util.HashMap;
-
-
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.models.MediaFactory;
-import de.hdm_stuttgart.se2.softwareProject.mediathek.models.Medialist;
 
 public class MediaStorage {
-	
+
 	static private File[] scanPath(File f) {
 		return f.listFiles();
 	}
-	
-	public static Medialist createMovieInList(File f) {
-		
+
+	public static IMedialist[] createMedialists(File f) {
+
 		File[] scannedMedia = scanPath(f);
-		Medialist allMedia = null;
-		allMedia.createMap();
-		int videoId = 1000;
-		int audioId = 2000;
-		int bookId = 3000;
-		
+		IMedialist movies = ListFactory.getInstance("video", "scannedMovies");
+		IMedialist audio = ListFactory.getInstance("audio", "scannedAudio");
+		IMedialist books = ListFactory.getInstance("book", "scannedBooks");
+
 		for (int i = 0; i < scannedMedia.length; i++) {
-			
+			// TODO: Methode um Dauer/Seitenanzahl zu ermitteln fehlt noch (size)
 			String typ = null;
-			int id = 0;
-			
+
 			if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")) {
 				typ = "video";
-				id = ++videoId;
+				IMedia temp = MediaFactory.getInstance(typ, scannedMedia[i].getName(), false, scannedMedia[i]/*, size*/);
+				movies.getContent().put(scannedMedia[i], temp);
 			} else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(mp3||wav|wma|aac|ogg)$")) {
 				typ = "audio";
-				id = ++audioId;
+				IMedia temp = MediaFactory.getInstance(typ, scannedMedia[i].getName(), false, scannedMedia[i]/*, size*/);
+				audio.getContent().put(scannedMedia[i], temp);
 			} else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(doc|docx|pdf|html)$")) {
 				typ = "book";
-				id = ++bookId;
+				IMedia temp = MediaFactory.getInstance(typ, scannedMedia[i].getName(), false, scannedMedia[i]/*, size*/);
+				books.getContent().put(scannedMedia[i], temp);
 			} else {
 				System.out.println("Info: Dateityp nicht unterstützt. " + scannedMedia[i] + " wurde nicht eingelesen.");
 			}
-			// TODO: Methode um Dauer/Seitenanzahl zu ermitteln fehlt noch (size)
-			IMedia temp = MediaFactory.getInstance(typ, id, scannedMedia[i].getName(), false, scannedMedia[i]/*, size*/);
-			allMedia.getContent().put(id, temp);
 		}
+		
+		IMedialist[] allMedia = {movies, audio, books};
 		return allMedia;
 	}
 }

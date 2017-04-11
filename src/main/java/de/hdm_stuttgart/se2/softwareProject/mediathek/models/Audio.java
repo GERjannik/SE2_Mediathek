@@ -14,8 +14,8 @@ class Audio extends Media implements IMedia {
 	private Date releaseDate;
 	
 	
-	public Audio(int id, String title, boolean favorite, File file/*, int duration*/) {
-		super(id, title, favorite, file);
+	public Audio(String title, boolean favorite, File file/*, int duration*/) {
+		super(title, favorite, file);
 		//this.duration = duration;
 	}
 

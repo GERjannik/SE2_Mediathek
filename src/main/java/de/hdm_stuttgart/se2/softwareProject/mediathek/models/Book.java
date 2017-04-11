@@ -17,8 +17,8 @@ class Book extends Media implements IMedia {
 	
 	
 	
-	public Book(int id, String title, boolean favorite, File file/*, int pages*/) {
-		super(id, title, favorite, file);
+	public Book(String title, boolean favorite, File file/*, int pages*/) {
+		super(title, favorite, file);
 		//this.pages = pages;
 	}
 
