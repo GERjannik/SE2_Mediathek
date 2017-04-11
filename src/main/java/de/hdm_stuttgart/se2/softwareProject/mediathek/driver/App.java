@@ -1,9 +1,6 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.driver;
 
 import java.io.File;
-import java.util.HashMap;
-
-import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 
 public class App {

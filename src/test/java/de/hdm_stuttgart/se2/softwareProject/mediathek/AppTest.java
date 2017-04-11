@@ -9,9 +9,6 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.driver.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.driver.Settings;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 
-/**
- * Unit test for address database
- */
 public class AppTest {
 
 	@Test
@@ -44,5 +41,18 @@ public class AppTest {
 		audio.printList();
 		System.out.println("---------------------------");
 		books.printList();
+	}
+	
+	@Test
+	public void test_deleteMedia() {
+		File f = new File ("/home/jannik/Downloads/testVideos/");
+		Settings test = new Settings(f);
+		IMedialist[] m = MediaStorage.mediaScan(test.getDirectory());
+		IMedialist movies = m[0];
+		IMedialist audio = m[1];
+		IMedialist books = m[2];
+		movies.printList();
+		MediaStorage.deleteMedia(movies.getContent().get(movies.getContent().entrySet().iterator().next().getKey()));
+		movies.printList();
 	}
 }

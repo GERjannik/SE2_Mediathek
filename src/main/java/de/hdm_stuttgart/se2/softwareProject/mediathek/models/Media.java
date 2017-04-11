@@ -30,7 +30,9 @@ abstract class Media implements IMedia{
 	
 	@Override
 	public void getDetails() {
-		System.out.println(this.title);
+		if (this.visible == true) {
+			System.out.println(this.title);
+		}
 	}
 
 	@Override
