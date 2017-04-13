@@ -10,16 +10,24 @@ class Movie extends Media implements IMedia {
 
 	private List<String> actor;
 	private long duration;
-	private Date releaseDate;
+	private String releaseDate;
 	private String regisseur;
 	private String genre;
 	private String info;
 	private int ranking;
 
-	public Movie(String title, boolean favorite, File file, long duration, boolean visible) {
+	
+
+	public Movie(String title, boolean favorite, File file, boolean visible, long duration,
+			String releaseDate, String regisseur, String genre, String info) {
 		super(title, favorite, file, visible);
 		this.duration = duration;
-	}	
+		this.releaseDate = releaseDate;
+		this.regisseur = regisseur;
+		this.genre = genre;
+		this.info = info;
+	}
+
 
 
 	/* (non-Javadoc)

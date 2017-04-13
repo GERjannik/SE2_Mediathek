@@ -11,12 +11,15 @@ class Audio extends Media implements IMedia {
 	private String interpret;
 	private String genre;
 	private int ranking;
-	private Date releaseDate;
+	private String releaseDate;
 
-
-	public Audio(String title, boolean favorite, File file, long duration, boolean visible) {
+	public Audio(String title, boolean favorite, File file, boolean visible, long duration, String interpret,
+			String genre, String releaseDate) {
 		super(title, favorite, file, visible);
-		//this.duration = duration;
+		this.duration = duration;
+		this.interpret = interpret;
+		this.genre = genre;
+		this.releaseDate = releaseDate;
 	}
 
 

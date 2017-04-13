@@ -12,28 +12,11 @@ import uk.co.caprica.vlcj.player.MediaPlayerFactory;
 
 public class MediaStorage {
 	
-	// Test Path "/stud/ll040/Desktop/DB1_Tutorial_gr-1.mp4"
 	public static MediaMeta readMetaData(String path) {
 		MediaPlayerFactory factory = new MediaPlayerFactory();
 		MediaMeta meta = factory.getMediaMeta(path, true);
 		return meta;
 	}
-	
-	/* public static IMedia createMovie(int id, String path) {
-		String title;
-		boolean favorite = false;
-		File file = new File(path);
-		int duration;
-		
-		MediaMeta meta = readMetaData(path);
-		
-		title = meta.getTitle();
-		duration = (int) meta.getLength();
-		meta.release();
-		
-		IMedia movie = MediaFactory.getInstance("video", title, favorite, file, true, duration);
-		return movie;
-	} */ 
 
 	public static IMedialist[] mediaScan(File f) {
 
@@ -52,11 +35,13 @@ public class MediaStorage {
 
 			if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")) {
 				typ = "video";
-				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, scannedMedia[i], meta.getLength(), true);
+				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, scannedMedia[i],
+						true, meta.getLength(), meta.getDate(), meta.getArtist(), meta.getGenre(), meta.getDescription());
 				movies.getContent().put(scannedMedia[i], temp);
 			} else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(mp3||wav|wma|aac|ogg)$")) {
 				typ = "audio";
-				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, scannedMedia[i], meta.getLength(), true);
+				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, scannedMedia[i],
+						true, meta.getLength(), meta.getDate(), meta.getArtist(), meta.getGenre(), meta.getDescription());
 				audio.getContent().put(scannedMedia[i], temp);
 			} /*else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(doc|docx|pdf|html)$")) {
 				typ = "book";
