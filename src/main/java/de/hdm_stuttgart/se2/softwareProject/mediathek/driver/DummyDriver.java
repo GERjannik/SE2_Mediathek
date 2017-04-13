@@ -5,8 +5,13 @@ import uk.co.caprica.vlcj.player.MediaMeta;
 public class DummyDriver {
 
 	public static void main(String[] args) {
-		MediaMeta meta = MediaStorage.readMetaData("/stud/ll040/Desktop/DB1_Tutorial_gr-1.mp4");
+		MediaMeta meta = MediaStorage.readMetaData("/stud/js329/Documents/testVideos/Sample Videos (52) - Copy.mp4.mp4");
 		System.out.println(meta.getTitle());
+		System.out.println(meta.getArtist());
+		System.out.println(meta.getDate());
+		System.out.println(meta.getLength());
+		System.out.println(meta.getGenre());
+		System.out.println(meta.getLanguage());
 	}
 
 }

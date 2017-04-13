@@ -1,22 +1,16 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.driver;
 
 import java.io.File;
-
-import javax.rmi.CORBA.StubDelegate;
+import java.util.Scanner;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.models.MediaFactory;
-import de.hdm_stuttgart.se2.softwareProject.mediathek.models.Movielist;
 import uk.co.caprica.vlcj.player.MediaMeta;
 import uk.co.caprica.vlcj.player.MediaPlayerFactory;
-import uk.co.caprica.vlcj.player.headless.HeadlessMediaPlayer;
 
 public class MediaStorage {
-	
-	static private File[] scanPath(File f) {
-		return f.listFiles();
-	}
-	
 	
 	// Test Path "/stud/ll040/Desktop/DB1_Tutorial_gr-1.mp4"
 	public static MediaMeta readMetaData(String path) {
@@ -25,10 +19,10 @@ public class MediaStorage {
 		return meta;
 	}
 	
-	public static IMedia createMovie(int id, String path) {
+	/* public static IMedia createMovie(int id, String path) {
 		String title;
 		boolean favorite = false;
-		File file = null;
+		File file = new File(path);
 		int duration;
 		
 		MediaMeta meta = readMetaData(path);
@@ -37,31 +31,63 @@ public class MediaStorage {
 		duration = (int) meta.getLength();
 		meta.release();
 		
-		IMedia movie = MediaFactory.getInstance("video", id, title, favorite, file, duration);
+		IMedia movie = MediaFactory.getInstance("video", title, favorite, file, true, duration);
 		return movie;
-	}
-	
-	public static Movielist createMovieInList(File f) {
-		File[] scannedMedia = scanPath(f);
-		Movielist allFilms = new Movielist();
-		allFilms.createMap();
+	} */ 
+
+	public static IMedialist[] mediaScan(File f) {
+
+		// Angegebener Ordner wird gescannt und alle Dateien in Array geschrieben
+		File[] scannedMedia = f.listFiles();
+		
+		// HashMaps für Medien werden erzeugt
+		IMedialist movies = ListFactory.getInstance("video", "scannedMovies");
+		IMedialist audio = ListFactory.getInstance("audio", "scannedAudio");
+		IMedialist books = ListFactory.getInstance("book", "scannedBooks");
+
+		// Aus jeder Datei des Arrays wird ein Objekt erstellt und der richtigen HashMap zugeordnet
 		for (int i = 0; i < scannedMedia.length; i++) {
-			
 			String typ = null;
-			
+			MediaMeta meta = readMetaData(scannedMedia[i].toString());
+
 			if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")) {
 				typ = "video";
+				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, scannedMedia[i], meta.getLength(), true);
+				movies.getContent().put(scannedMedia[i], temp);
 			} else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(mp3||wav|wma|aac|ogg)$")) {
 				typ = "audio";
-			} else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(doc|docx|pdf|html)$")) {
+				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, scannedMedia[i], meta.getLength(), true);
+				audio.getContent().put(scannedMedia[i], temp);
+			} /*else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(doc|docx|pdf|html)$")) {
 				typ = "book";
-			} else {
+				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, scannedMedia[i], size, true);
+				books.getContent().put(scannedMedia[i], temp);
+			}*/ else {
 				System.out.println("Info: Dateityp nicht unterstützt. " + scannedMedia[i] + " wurde nicht eingelesen.");
 			}
-			// TODO: Methode um Dauer/Seitenanzahl zu ermitteln fehlt noch (size)
-			int size = 0;
-			IMedia temp = MediaFactory.getInstance(typ, i, scannedMedia[i].getName(), false, scannedMedia[i], size);
+			meta.release();
 		}
-		return allFilms;
+		 // Die drei Maps werden in ein Array geschrieben und zurückgegeben
+		IMedialist[] allMedia = {movies, audio, books};
+		return allMedia;
+	}
+	
+	public static void deleteMedia(IMedia m) {
+		Scanner s = new Scanner(System.in);
+		
+		System.out.println("Möchtest du das Medium " + m.getTitle() +  " von der Festplatte löschen? (Ja/Nein)\n");
+		
+		String input = s.nextLine();
+		if (input.equals("Ja") || input.equals("ja")) {
+			System.out.println("Das Medium " + m.getTitle() + " wurde von der Festplatte gelöscht");
+			m.getFile().delete();
+			m.removeMedia();
+		} else if (input.equals("Nein") || input.equals("nein")) {
+			System.out.println("Das Medium " + m.getTitle() + " wurde aus der Mediathek entfernt");
+			m.removeMedia();
+		} else {
+			System.out.println("ungültige Eingabe");
+		}
+		s.close();
 	}
 }
