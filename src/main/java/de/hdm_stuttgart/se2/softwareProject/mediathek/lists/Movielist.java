@@ -39,5 +39,15 @@ class Movielist implements IMedialist {
 			m.getValue().getDetails();
 		}
 	}
+	
+	@Override
+	public void setName(String name) {
+		this.name = name;		
+	}
+	
+	@Override
+	public void addMedia(IMedia media) {
+		this.content.put(media.getFile(), media);
+	}
 }
 

@@ -9,5 +9,7 @@ public interface IMedialist {
 	String getName();
 	void removeMedia(IMedia m);
 	void printList();
+	void setName(String name);
+	void addMedia(IMedia media);
 
 }

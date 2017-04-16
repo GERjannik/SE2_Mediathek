@@ -13,9 +13,9 @@ class Movie extends Media implements IMedia {
 	private String regisseur;
 	private String genre;
 	private String info;
-	private int ranking;
+	private String ranking;
 
-	
+
 
 	public Movie(String typ, String title, boolean favorite, File file, boolean visible, long duration,
 			String releaseDate, String regisseur, String genre, String info) {
@@ -26,7 +26,6 @@ class Movie extends Media implements IMedia {
 		this.genre = genre;
 		this.info = info;
 	}
-
 
 
 	/* (non-Javadoc)
@@ -51,7 +50,7 @@ class Movie extends Media implements IMedia {
 					System.out.format("Dauer: %d Sekunden\n", this.duration / 1000);
 				}
 			}
-			if (this.releaseDate != null && !(this.releaseDate.equals(""))) {
+			if (this.releaseDate != null && !(this.releaseDate.equals("")) && !(this.releaseDate.equals("0"))) {
 				System.out.println("Erscheinungsdatum: " + this.releaseDate);
 			}
 			if (this.regisseur != null && !(this.regisseur.equals(""))) {
@@ -63,8 +62,34 @@ class Movie extends Media implements IMedia {
 			if (this.info != null && !(this.info.equals(""))) {
 				System.out.println("Filmbeschreibung: " + this.info);
 			}
-			System.out.println("Bewertung: " + this.ranking);
+			if (this.info != null && !(this.info.equals(""))) {
+				System.out.println("Bewertung: " + this.ranking);
+			}
 		}
+	}
+	@Override
+	public void setDate(String date) {
+		this.releaseDate = date;
+	}
+
+	@Override
+	public void setRegisseur(String regisseur) {
+		this.regisseur = regisseur;
+	}
+
+	@Override
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
+
+	@Override
+	public void setInfo(String info) {
+		this.info = info;
+	}
+
+	@Override
+	public void setRanking(String ranking) {
+		this.ranking = ranking;
 	}
 
 }

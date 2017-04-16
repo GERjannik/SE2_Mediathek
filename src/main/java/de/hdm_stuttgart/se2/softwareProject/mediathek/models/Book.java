@@ -1,8 +1,6 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.models;
 
 import java.io.File;
-import java.util.Date;
-
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
 class Book extends Media implements IMedia {
@@ -10,9 +8,9 @@ class Book extends Media implements IMedia {
 	private int pages;
 	private String author;
 	private String info;
-	private Date releaseDate;
+	private String releaseDate;
 	private String genre;
-	private int ranking;
+	private String ranking;
 
 
 
@@ -43,5 +41,34 @@ class Book extends Media implements IMedia {
 			}
 			System.out.println("Bewertung: " + this.ranking);
 		}
+	}
+
+	@Override
+	public void setDate(String date) {
+		this.releaseDate = date;
+	}
+
+
+	@Override
+	public void setRegisseur(String regisseur) {
+		this.author = regisseur;
+	}
+
+
+	@Override
+	public void setGenre(String genre) {
+		this.genre = genre;
+	}
+
+
+	@Override
+	public void setInfo(String info) {
+		this.info = info;
+	}
+
+
+	@Override
+	public void setRanking(String ranking) {
+		this.ranking = ranking;
 	}
 }

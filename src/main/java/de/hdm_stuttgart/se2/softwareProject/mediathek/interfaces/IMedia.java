@@ -12,5 +12,10 @@ public interface IMedia {
 	String getTyp();
 	void setTitle(String title);
 	void setFavorite(boolean favorite);
+	void setDate(String date);
+	void setRegisseur(String regisseur);
+	void setGenre(String genre);
+	void setInfo(String info);
+	void setRanking(String ranking);
 
 }

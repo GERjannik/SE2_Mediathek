@@ -13,7 +13,7 @@ public class MediaFactory {
 					releaseDate, regisseur, genre, info);
 		case "audio":
 			return new Audio(typ, title, favorite, file, visible, duration, regisseur,
-					genre, releaseDate);
+					genre, releaseDate, info);
 		case "book":
 			return new Book(typ, title, favorite, file/*, size*/, visible);
 		default: 

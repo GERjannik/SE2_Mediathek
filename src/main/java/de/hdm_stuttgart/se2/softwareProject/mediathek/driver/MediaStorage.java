@@ -126,7 +126,16 @@ public class MediaStorage {
 			if (input.equals("Ja") || input.equals("ja")) {
 				validInput = true;
 				System.out.println("Änderungen werden gespeichert...");
+				// Metainformationen werden in Datei gespeichert
 				meta.save();
+				
+				// Metainformationen werden in Attributen des IMedia Objekts geschrieben
+				m.setTitle(meta.getTitle());
+				m.setDate(meta.getDate());
+				m.setRegisseur(meta.getArtist());
+				m.setGenre(meta.getGenre());
+				m.setInfo(meta.getDescription());
+				m.setRanking(meta.getRating());
 				meta.release();
 				System.out.println("Änderungen erfolgreich gespeichert.");
 			} else if (input.equals("Nein") || input.equals("nein")) {
