@@ -1,7 +1,6 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.models;
 
 import java.io.File;
-import java.util.Date;
 import java.util.List;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
@@ -18,9 +17,9 @@ class Movie extends Media implements IMedia {
 
 	
 
-	public Movie(String title, boolean favorite, File file, boolean visible, long duration,
+	public Movie(String typ, String title, boolean favorite, File file, boolean visible, long duration,
 			String releaseDate, String regisseur, String genre, String info) {
-		super(title, favorite, file, visible);
+		super(typ, title, favorite, file, visible);
 		this.duration = duration;
 		this.releaseDate = releaseDate;
 		this.regisseur = regisseur;
@@ -46,7 +45,11 @@ class Movie extends Media implements IMedia {
 				}
 			}
 			if (this.duration != 0) {
-				System.out.println("Dauer: " + this.duration);
+				if (this.duration / 60000 != 0)	{
+					System.out.format("Dauer: %d Minuten\n", this.duration / 60000);
+				} else {
+					System.out.format("Dauer: %d Sekunden\n", this.duration / 1000);
+				}
 			}
 			if (this.releaseDate != null && !(this.releaseDate.equals(""))) {
 				System.out.println("Erscheinungsdatum: " + this.releaseDate);

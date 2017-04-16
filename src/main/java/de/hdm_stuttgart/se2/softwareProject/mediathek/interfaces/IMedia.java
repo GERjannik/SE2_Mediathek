@@ -9,5 +9,8 @@ public interface IMedia {
 	void removeMedia();
 	String getTitle();
 	File getFile();
+	String getTyp();
+	void setTitle(String title);
+	void setFavorite(boolean favorite);
 
 }

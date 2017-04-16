@@ -9,13 +9,13 @@ public class MediaFactory {
 			String releaseDate, String regisseur, String genre, String info) {
 		switch (typ) {
 		case "video":
-			return new Movie(title, favorite, file, visible, duration,
+			return new Movie(typ, title, favorite, file, visible, duration,
 					releaseDate, regisseur, genre, info);
 		case "audio":
-			return new Audio(title, favorite, file, visible, duration, regisseur,
+			return new Audio(typ, title, favorite, file, visible, duration, regisseur,
 					genre, releaseDate);
 		case "book":
-			return new Book(title, favorite, file/*, size*/, visible);
+			return new Book(typ, title, favorite, file/*, size*/, visible);
 		default: 
 			return null; // TODO: Statt null soll Exception geworfen werden
 		}

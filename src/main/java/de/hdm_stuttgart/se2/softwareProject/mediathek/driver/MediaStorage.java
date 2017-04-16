@@ -11,7 +11,7 @@ import uk.co.caprica.vlcj.player.MediaMeta;
 import uk.co.caprica.vlcj.player.MediaPlayerFactory;
 
 public class MediaStorage {
-	
+
 	public static MediaMeta readMetaData(String path) {
 		MediaPlayerFactory factory = new MediaPlayerFactory();
 		MediaMeta meta = factory.getMediaMeta(path, true);
@@ -22,7 +22,7 @@ public class MediaStorage {
 
 		// Angegebener Ordner wird gescannt und alle Dateien in Array geschrieben
 		File[] scannedMedia = f.listFiles();
-		
+
 		// HashMaps für Medien werden erzeugt
 		IMedialist movies = ListFactory.getInstance("video", "scannedMovies");
 		IMedialist audio = ListFactory.getInstance("audio", "scannedAudio");
@@ -52,27 +52,90 @@ public class MediaStorage {
 			}
 			meta.release();
 		}
-		 // Die drei Maps werden in ein Array geschrieben und zurückgegeben
+		// Die drei Maps werden in ein Array geschrieben und zurückgegeben
 		IMedialist[] allMedia = {movies, audio, books};
 		return allMedia;
 	}
-	
+
 	public static void deleteMedia(IMedia m) {
 		Scanner s = new Scanner(System.in);
-		
+
 		System.out.println("Möchtest du das Medium " + m.getTitle() +  " von der Festplatte löschen? (Ja/Nein)\n");
-		
-		String input = s.nextLine();
-		if (input.equals("Ja") || input.equals("ja")) {
-			System.out.println("Das Medium " + m.getTitle() + " wurde von der Festplatte gelöscht");
-			m.getFile().delete();
-			m.removeMedia();
-		} else if (input.equals("Nein") || input.equals("nein")) {
-			System.out.println("Das Medium " + m.getTitle() + " wurde aus der Mediathek entfernt");
-			m.removeMedia();
-		} else {
-			System.out.println("ungültige Eingabe");
+
+		boolean validInput = false;
+		while (validInput == false) {
+			String input = s.nextLine();
+			if (input.equals("Ja") || input.equals("ja")) {
+				validInput = true;
+				System.out.println("Das Medium " + m.getTitle() + " wurde von der Festplatte gelöscht");
+				m.getFile().delete();
+				m.removeMedia();
+			} else if (input.equals("Nein") || input.equals("nein")) {
+				validInput = true;
+				System.out.println("Das Medium " + m.getTitle() + " wurde aus der Mediathek entfernt");
+				m.removeMedia();
+			} else {
+				System.out.println("ungültige Eingabe - entweder für 'Ja' / 'ja' oder 'Nein' / 'nein' entscheiden");
+			}
 		}
 		s.close();
+	}
+
+	public static void editMetaInformation(IMedia m, Scanner s) {
+		MediaMeta meta = readMetaData(m.getFile().toString());
+
+		if (m.getTyp().equals("video"))	{
+			System.out.println("Wie lautet der Titel des Films?");
+			meta.setTitle(s.nextLine());
+			System.out.println("Wann wurde der Film veröffentlicht?");
+			meta.setDate(s.nextLine());
+			System.out.println("Wer ist Regisseur des Films?");
+			meta.setArtist(s.nextLine());
+			System.out.println("Welchem Genre gehört der Film an?");
+			meta.setGenre(s.nextLine());
+			System.out.println("Weitere Infos zum Film?");
+			meta.setDescription(s.nextLine());
+			System.out.println("Welche Bewertung bekommt der Film?");
+			meta.setRating(s.nextLine());
+		}
+		if (m.getTyp().equals("audio"))	{
+			System.out.println("Wie lautet der Titel der Audiodatei?");
+			meta.setTitle(s.nextLine());
+			System.out.println("Wann wurde das Audio veröffentlicht?");
+			meta.setDate(s.nextLine());
+			System.out.println("Wer ist der Verfasser der Audios?");
+			meta.setArtist(s.nextLine());
+			System.out.println("Welchem Genre gehört das Audio an?");
+			meta.setGenre(s.nextLine());
+			System.out.println("Weitere Infos zum Audio?");
+			meta.setDescription(s.nextLine());
+			System.out.println("Welche Bewertung bekommt das Audio?");
+			meta.setRating(s.nextLine());
+		}
+		System.out.println("Folgende Eingaben speichern? (Ja/Nein)");
+		System.out.println(meta.getTitle());
+		System.out.println(meta.getDate());
+		System.out.println(meta.getArtist());
+		System.out.println(meta.getGenre());
+		System.out.println(meta.getDescription());
+		System.out.println(meta.getRating());
+
+		boolean validInput = false;
+		while (validInput == false) {
+			String input = s.nextLine();
+			if (input.equals("Ja") || input.equals("ja")) {
+				validInput = true;
+				System.out.println("Änderungen werden gespeichert...");
+				meta.save();
+				meta.release();
+				System.out.println("Änderungen erfolgreich gespeichert.");
+			} else if (input.equals("Nein") || input.equals("nein")) {
+				validInput = true;
+				System.out.println("Änderungen werden verworfen.");
+				meta.release();
+			} else {
+				System.out.println("ungültige Eingabe - entweder für 'Ja' / 'ja' oder 'Nein' / 'nein' entscheiden");
+			}
+		}
 	}
 }

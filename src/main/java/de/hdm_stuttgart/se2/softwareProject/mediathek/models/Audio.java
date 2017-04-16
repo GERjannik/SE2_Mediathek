@@ -1,8 +1,6 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.models;
 
 import java.io.File;
-import java.util.Date;
-
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
 class Audio extends Media implements IMedia {
@@ -13,9 +11,9 @@ class Audio extends Media implements IMedia {
 	private int ranking;
 	private String releaseDate;
 
-	public Audio(String title, boolean favorite, File file, boolean visible, long duration, String interpret,
+	public Audio(String typ, String title, boolean favorite, File file, boolean visible, long duration, String interpret,
 			String genre, String releaseDate) {
-		super(title, favorite, file, visible);
+		super(typ, title, favorite, file, visible);
 		this.duration = duration;
 		this.interpret = interpret;
 		this.genre = genre;
@@ -28,7 +26,7 @@ class Audio extends Media implements IMedia {
 		if (this.visible == true) {
 			System.out.println(this.title);
 			if (this.duration != 0) {
-				System.out.println("Länge: " + this.duration);
+				System.out.format("Dauer: %d:%02d Minuten\n", this.duration / 60000, (this.duration % 60000) / 1000 );
 			}
 			if (this.releaseDate != null && !(this.releaseDate.equals(""))) {
 				System.out.println("Erscheinungsdatum: " + this.releaseDate);
