@@ -1,6 +1,7 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.driver;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
@@ -17,7 +18,21 @@ public class MediaStorage {
 		MediaMeta meta = factory.getMediaMeta(path, true);
 		return meta;
 	}
-
+	
+	
+	public ArrayList<File> directoryList(File f) {
+		File[] scannedMedia = f.listFiles();
+		ArrayList<File> directories = new ArrayList<File>();
+		
+		for (int i = 0; i < scannedMedia.length; i++) {
+			if (scannedMedia[i].isDirectory()) {
+				directories.add(scannedMedia[i]);
+			}
+		}
+		return directories;
+	}
+	
+	
 	public static IMedialist[] mediaScan(File f) {
 
 		// Angegebener Ordner wird gescannt und alle Dateien in Array geschrieben
