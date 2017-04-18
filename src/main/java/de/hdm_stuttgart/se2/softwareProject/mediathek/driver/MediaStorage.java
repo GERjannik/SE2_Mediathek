@@ -129,7 +129,7 @@ public class MediaStorage {
 				// Metainformationen werden in Datei gespeichert
 				meta.save();
 				
-				// Metainformationen werden in Attributen des IMedia Objekts geschrieben
+				// Metainformationen werden in Attribute des IMedia Objekts geschrieben
 				m.setTitle(meta.getTitle());
 				m.setDate(meta.getDate());
 				m.setRegisseur(meta.getArtist());

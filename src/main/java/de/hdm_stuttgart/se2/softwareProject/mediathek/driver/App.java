@@ -8,11 +8,11 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 
 // Ansatz - Enthält Fehler
-/* public class App {
+public class App {
 
 	public static void main(String[] args) {
 		// TODO Dateiverzeichnis manuell vom Benutzer festlegen lassen
-		Settings s = new Settings(new File ("/home/jannik/Downloads/testVideos/"));
+		Settings s = new Settings(new File ("/stud/js329/Documents/testVideos/"));
 		System.out.println("Medien werden eingelesen");
 		IMedialist[] scannedContent = MediaStorage.mediaScan(s.getDirectory());
 		IMedialist movies = scannedContent[0];
@@ -79,4 +79,4 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 		return null;
 	}
 
-} */
+} 
