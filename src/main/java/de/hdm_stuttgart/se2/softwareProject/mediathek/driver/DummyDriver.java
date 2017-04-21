@@ -13,6 +13,7 @@ public class DummyDriver {
 	public static void main(String[] args) {
 		String path = "/stud/js329/Documents/testVideos/Sample Videos (52) - Copy.mp4.mp4";
 		Settings s = new Settings(new File("/stud/dk100/Downloads/"));
+		System.out.println("Mehh" + MediaStorage.directoryList(s.getDirectory()));
 		IMedialist[] scannedContent = MediaStorage.mediaScan(s.getDirectory());
 		IMedialist movies = scannedContent[0];
 		IMedialist audio = scannedContent[1];

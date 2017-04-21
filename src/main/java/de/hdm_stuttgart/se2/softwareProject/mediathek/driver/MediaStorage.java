@@ -18,15 +18,17 @@ public class MediaStorage {
 		MediaMeta meta = factory.getMediaMeta(path, true);
 		return meta;
 	}
+	public static ArrayList<File> directories = new ArrayList<File>();
 	
-	
-	public ArrayList<File> directoryList(File f) {
+	public static ArrayList<File> directoryList(File f) {
 		File[] scannedMedia = f.listFiles();
-		ArrayList<File> directories = new ArrayList<File>();
+		
 		
 		for (int i = 0; i < scannedMedia.length; i++) {
 			if (scannedMedia[i].isDirectory()) {
+				
 				directories.add(scannedMedia[i]);
+				directoryList(scannedMedia[i]);
 			}
 		}
 		return directories;
