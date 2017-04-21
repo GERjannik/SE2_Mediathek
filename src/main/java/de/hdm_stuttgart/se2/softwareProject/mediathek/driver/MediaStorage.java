@@ -6,6 +6,7 @@ import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidTypeException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
@@ -26,26 +27,32 @@ public class MediaStorage {
 
 	private static ArrayList<File> directories = new ArrayList<File>();
 	private static ArrayList<File> files = new ArrayList<File>();
-	
+
 	public static void directoryList(File f) {
 		log.info("Ordner " + f.toString() + " wird gescannt");
 		File[] scannedMedia = f.listFiles();
-		
-		for (int i = 0; i < scannedMedia.length; i++) {
-			if (scannedMedia[i].isDirectory()) {
-				
-				directories.add(scannedMedia[i]);
-				directoryList(scannedMedia[i]);
-			} else {
-				log.debug(scannedMedia[i] + "wurde registriert");
-				files.add(scannedMedia[i]);
+
+		try {
+			for (int i = 0; i < scannedMedia.length; i++) {
+				if (scannedMedia[i].isDirectory()) {
+
+					directories.add(scannedMedia[i]);
+					directoryList(scannedMedia[i]);
+				} else {
+					log.debug(scannedMedia[i] + "wurde registriert");
+					files.add(scannedMedia[i]);
+				}
 			}
+		} catch(NullPointerException e) {
+			throw new NullPointerException();
+			// logging
+
 		}
 	}
-	
-	
+
+
 	public static IMedialist[] mediaScan() {
-		
+
 		// HashMaps für Medien werden erzeugt
 		IMedialist movies = ListFactory.getInstance("video", "scannedMovies");
 		log.info("Liste für Videodateien erstellt");
@@ -76,6 +83,7 @@ public class MediaStorage {
 				books.getContent().put(scannedMedia[i], temp);
 			}*/ else {
 				log.info("Dateityp nicht unterstützt. " + files.get(i) + " wurde nicht eingelesen.");
+				throw new InvalidTypeException();
 			}
 			meta.release();
 		}
@@ -155,7 +163,7 @@ public class MediaStorage {
 				System.out.println("Änderungen werden gespeichert...");
 				// Metainformationen werden in Datei gespeichert
 				meta.save();
-				
+
 				// Metainformationen werden in Attribute des IMedia Objekts geschrieben
 				m.setTitle(meta.getTitle());
 				m.setDate(meta.getDate());
