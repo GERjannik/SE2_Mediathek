@@ -3,6 +3,8 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.driver;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
@@ -13,6 +15,9 @@ import uk.co.caprica.vlcj.player.MediaPlayerFactory;
 
 public class MediaStorage {
 
+	private static Logger log = LogManager.getLogger(MediaStorage.class);
+
+	
 	public static MediaMeta readMetaData(String path) {
 		MediaPlayerFactory factory = new MediaPlayerFactory();
 		MediaMeta meta = factory.getMediaMeta(path, true);
@@ -23,6 +28,7 @@ public class MediaStorage {
 	private static ArrayList<File> files = new ArrayList<File>();
 	
 	public static void directoryList(File f) {
+		log.info("Ordner " + f.toString() + " wird gescannt");
 		File[] scannedMedia = f.listFiles();
 		
 		for (int i = 0; i < scannedMedia.length; i++) {
@@ -31,6 +37,7 @@ public class MediaStorage {
 				directories.add(scannedMedia[i]);
 				directoryList(scannedMedia[i]);
 			} else {
+				log.debug(scannedMedia[i] + "wurde registriert");
 				files.add(scannedMedia[i]);
 			}
 		}
@@ -41,14 +48,18 @@ public class MediaStorage {
 		
 		// HashMaps für Medien werden erzeugt
 		IMedialist movies = ListFactory.getInstance("video", "scannedMovies");
+		log.info("Liste für Videodateien erstellt");
 		IMedialist audio = ListFactory.getInstance("audio", "scannedAudio");
+		log.info("Liste für Audiodateien erstellt");
 		IMedialist books = ListFactory.getInstance("book", "scannedBooks");
+		log.info("Liste für Textdateien erstellt");
 
 		// Aus jeder Datei des Arrays wird ein Objekt erstellt und der richtigen HashMap zugeordnet
 		for (int i = 0; i < files.size(); i++) {
 			String typ = null;
 			MediaMeta meta = readMetaData(files.get(i).toString());
-
+			log.info("Metadaten von " + files.get(i) + " werden gelesen");
+			
 			if (files.get(i).getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")) {
 				typ = "video";
 				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, files.get(i),
@@ -64,7 +75,7 @@ public class MediaStorage {
 				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, scannedMedia[i], size, true);
 				books.getContent().put(scannedMedia[i], temp);
 			}*/ else {
-				System.out.println("Info: Dateityp nicht unterstützt. " + files.get(i) + " wurde nicht eingelesen.");
+				log.info("Dateityp nicht unterstützt. " + files.get(i) + " wurde nicht eingelesen.");
 			}
 			meta.release();
 		}

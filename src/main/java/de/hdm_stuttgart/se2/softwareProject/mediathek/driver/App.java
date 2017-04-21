@@ -12,6 +12,7 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 public class App {
 
 	public static void main(String[] args) {
+		
 		// TODO Dateiverzeichnis manuell vom Benutzer festlegen lassen
 		Settings s = new Settings(new File ("/stud/js329/Documents/testVideos/"));
 		System.out.println("Medien werden eingelesen");
