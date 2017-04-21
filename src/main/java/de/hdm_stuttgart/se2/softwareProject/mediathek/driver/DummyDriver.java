@@ -12,9 +12,10 @@ public class DummyDriver {
 
 	public static void main(String[] args) {
 		String path = "/stud/js329/Documents/testVideos/Sample Videos (52) - Copy.mp4.mp4";
-		Settings s = new Settings(new File("/stud/dk100/Downloads/"));
-		System.out.println("Mehh" + MediaStorage.directoryList(s.getDirectory()));
-		IMedialist[] scannedContent = MediaStorage.mediaScan(s.getDirectory());
+		Settings s = new Settings(new File("/stud/js329/Documents/testVideos/"));
+		MediaStorage.directoryList(s.getDirectory());
+		// TODO: Unterordner müssen noch nach Medien gescannt werden
+		IMedialist[] scannedContent = MediaStorage.mediaScan();
 		IMedialist movies = scannedContent[0];
 		IMedialist audio = scannedContent[1];
 		IMedialist books = scannedContent[2];

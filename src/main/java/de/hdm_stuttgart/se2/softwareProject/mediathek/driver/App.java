@@ -1,6 +1,7 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.driver;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
@@ -14,7 +15,7 @@ public class App {
 		// TODO Dateiverzeichnis manuell vom Benutzer festlegen lassen
 		Settings s = new Settings(new File ("/stud/js329/Documents/testVideos/"));
 		System.out.println("Medien werden eingelesen");
-		IMedialist[] scannedContent = MediaStorage.mediaScan(s.getDirectory());
+		IMedialist[] scannedContent = MediaStorage.mediaScan();
 		IMedialist movies = scannedContent[0];
 		IMedialist audio = scannedContent[1];
 		IMedialist books = scannedContent[2];
