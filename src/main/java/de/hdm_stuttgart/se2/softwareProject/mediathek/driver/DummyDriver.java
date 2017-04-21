@@ -13,18 +13,20 @@ public class DummyDriver {
 	
 	
 	public static void main(String[] args) {
+
 		try(Scanner scan = new Scanner(System.in)) {
-			String path = "/stud/ll040/Documents/testVideos/DB1_Tutorial_gr-1.mp4";
-			Settings s = new Settings(new File("/stud/ll040/Documents/testVideos/"));
-			System.out.println("Mehh" + MediaStorage.directoryList(s.getDirectory()));
-			IMedialist[] scannedContent = MediaStorage.mediaScan(s.getDirectory());
-			IMedialist movies = scannedContent[0];
-			IMedialist audio = scannedContent[1];
-			IMedialist books = scannedContent[2];
-			System.out.println("Was soll angezeigt werden? (0: Filme, 1: Audios)");
-			int input = scan.nextInt();
-			if (input == 0) {
-				movies.printList();
+		String path = "/stud/js329/Documents/testVideos/Sample Videos (52) - Copy.mp4.mp4";
+		Settings s = new Settings(new File("/stud/js329/Documents/testVideos/"));
+		MediaStorage.directoryList(s.getDirectory());
+		// TODO: Unterordner müssen noch nach Medien gescannt werden
+		IMedialist[] scannedContent = MediaStorage.mediaScan();
+		IMedialist movies = scannedContent[0];
+		IMedialist audio = scannedContent[1];
+		IMedialist books = scannedContent[2];
+		System.out.println("Was soll angezeigt werden? (0: Filme, 1: Audios)");
+		int input = scan.nextInt();
+		if (input == 0) {
+			movies.printList();
 			}
 			if (input == 1) {
 				audio.printList();

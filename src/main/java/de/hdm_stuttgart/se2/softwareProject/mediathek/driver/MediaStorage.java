@@ -19,32 +19,32 @@ public class MediaStorage {
 		MediaMeta meta = factory.getMediaMeta(path, true);
 		return meta;
 	}
-	public static ArrayList<File> directories = new ArrayList<File>();
-	
-	public static ArrayList<File> directoryList(File f) {
+
+	private static ArrayList<File> directories = new ArrayList<File>();
+	private static ArrayList<File> files = new ArrayList<File>();
+
+	public static void directoryList(File f) {
 		File[] scannedMedia = f.listFiles();
-		
+
 		try {
 			for (int i = 0; i < scannedMedia.length; i++) {
 				if (scannedMedia[i].isDirectory()) {
-				
+
 					directories.add(scannedMedia[i]);
 					directoryList(scannedMedia[i]);
+				} else {
+					files.add(scannedMedia[i]);
 				}
 			}
 		} catch(NullPointerException e) {
 			throw new NullPointerException();
 			// logging
-			
-		}
-		return directories;
-	}
-		
-	
-	public static IMedialist[] mediaScan(File f) {
 
-		// Angegebener Ordner wird gescannt und alle Dateien in Array geschrieben
-		File[] scannedMedia = f.listFiles();
+		}
+	}
+
+
+	public static IMedialist[] mediaScan() {
 
 		// HashMaps für Medien werden erzeugt
 		IMedialist movies = ListFactory.getInstance("video", "scannedMovies");
@@ -52,27 +52,27 @@ public class MediaStorage {
 		IMedialist books = ListFactory.getInstance("book", "scannedBooks");
 
 		// Aus jeder Datei des Arrays wird ein Objekt erstellt und der richtigen HashMap zugeordnet
-		for (int i = 0; i < scannedMedia.length; i++) {
+		for (int i = 0; i < files.size(); i++) {
 			String typ = null;
-			MediaMeta meta = readMetaData(scannedMedia[i].toString());
+			MediaMeta meta = readMetaData(files.get(i).toString());
 
-			if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")) {
+			if (files.get(i).getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")) {
 				typ = "video";
-				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, scannedMedia[i],
+				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, files.get(i),
 						true, meta.getLength(), meta.getDate(), meta.getArtist(), meta.getGenre(), meta.getDescription());
-				movies.getContent().put(scannedMedia[i], temp);
-			} else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(mp3||wav|wma|aac|ogg)$")) {
+				movies.getContent().put(files.get(i), temp);
+			} else if (files.get(i).getName().toLowerCase().matches("^.*\\.(mp3||wav|wma|aac|ogg)$")) {
 				typ = "audio";
-				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, scannedMedia[i],
+				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, files.get(i),
 						true, meta.getLength(), meta.getDate(), meta.getArtist(), meta.getGenre(), meta.getDescription());
-				audio.getContent().put(scannedMedia[i], temp);
+				audio.getContent().put(files.get(i), temp);
 			} /*else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(doc|docx|pdf|html)$")) {
 				typ = "book";
 				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, scannedMedia[i], size, true);
 				books.getContent().put(scannedMedia[i], temp);
 			}*/ else {
+				System.out.println("Info: Dateityp nicht unterstützt. " + files.get(i) + " wurde nicht eingelesen.");
 				throw new InvalidTypeException();
-				// System.out.println("Info: Dateityp nicht unterstützt. " + scannedMedia[i] + " wurde nicht eingelesen.");
 			}
 			meta.release();
 		}
@@ -152,7 +152,7 @@ public class MediaStorage {
 				System.out.println("Änderungen werden gespeichert...");
 				// Metainformationen werden in Datei gespeichert
 				meta.save();
-				
+
 				// Metainformationen werden in Attribute des IMedia Objekts geschrieben
 				m.setTitle(meta.getTitle());
 				m.setDate(meta.getDate());
