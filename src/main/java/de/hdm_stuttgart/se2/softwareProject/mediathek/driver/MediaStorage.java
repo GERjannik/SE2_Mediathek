@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidTypeException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
@@ -23,17 +24,22 @@ public class MediaStorage {
 	public static ArrayList<File> directoryList(File f) {
 		File[] scannedMedia = f.listFiles();
 		
-		
-		for (int i = 0; i < scannedMedia.length; i++) {
-			if (scannedMedia[i].isDirectory()) {
+		try {
+			for (int i = 0; i < scannedMedia.length; i++) {
+				if (scannedMedia[i].isDirectory()) {
 				
-				directories.add(scannedMedia[i]);
-				directoryList(scannedMedia[i]);
+					directories.add(scannedMedia[i]);
+					directoryList(scannedMedia[i]);
+				}
 			}
+		} catch(NullPointerException e) {
+			throw new NullPointerException();
+			// logging
+			
 		}
 		return directories;
 	}
-	
+		
 	
 	public static IMedialist[] mediaScan(File f) {
 
@@ -65,7 +71,8 @@ public class MediaStorage {
 				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, scannedMedia[i], size, true);
 				books.getContent().put(scannedMedia[i], temp);
 			}*/ else {
-				System.out.println("Info: Dateityp nicht unterstützt. " + scannedMedia[i] + " wurde nicht eingelesen.");
+				throw new InvalidTypeException();
+				// System.out.println("Info: Dateityp nicht unterstützt. " + scannedMedia[i] + " wurde nicht eingelesen.");
 			}
 			meta.release();
 		}

@@ -1,6 +1,7 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.models;
 
 import java.io.File;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidTypeException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
 public class MediaFactory {
@@ -17,7 +18,7 @@ public class MediaFactory {
 		case "book":
 			return new Book(typ, title, favorite, file/*, size*/, visible);
 		default: 
-			return null; // TODO: Statt null soll Exception geworfen werden
+			throw new InvalidTypeException();
 		}
 	}
 }

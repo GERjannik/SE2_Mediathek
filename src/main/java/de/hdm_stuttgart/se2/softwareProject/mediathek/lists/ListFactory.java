@@ -1,5 +1,6 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.lists;
 
+import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidTypeException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 
 public class ListFactory {
@@ -13,7 +14,7 @@ public class ListFactory {
 		case "book":
 			return new Booklist(name);
 		default: 
-			return null; // TODO: Statt null soll Exception geworfen werden
+			throw new InvalidTypeException();
 		}
 	}
 }
