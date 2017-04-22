@@ -12,18 +12,20 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 public class App {
 
 	public static void main(String[] args) {
-		
+
+
 		// TODO Dateiverzeichnis manuell vom Benutzer festlegen lassen
-		Settings s = new Settings(new File ("/stud/js329/Documents/testVideos/"));
+		Settings s = new Settings();
+		s.setDirectory(null);
 		System.out.println("Medien werden eingelesen");
 		IMedialist[] scannedContent = MediaStorage.mediaScan();
 		IMedialist movies = scannedContent[0];
 		IMedialist audio = scannedContent[1];
 		IMedialist books = scannedContent[2];
 		menu(s, movies, audio);
-		
+
 	}
-	
+
 	public static void menu(Settings s, IMedialist movies, IMedialist audio) {
 		System.out.println("Menü: \n"
 				+ "0: Filme anzeigen\n"
@@ -58,7 +60,7 @@ public class App {
 		}
 		menu(s, movies, audio);
 	}
-	
+
 	public static IMedia getInput(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {
 		System.out.println("Gib den Titel des Mediums ein");
 		scan.nextLine();
