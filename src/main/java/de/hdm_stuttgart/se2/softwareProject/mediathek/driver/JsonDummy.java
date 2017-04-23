@@ -7,9 +7,8 @@ public class JsonDummy {
 	public static void main(String[] args) {
 
 		Settings s = new Settings();
-		s.setDirectory("/home/changeme/downloads");
-		System.out.println("da folder" + s.getDirectory());
-
+		s.setDirectory("/home/changeme/Videos/");
+		
 	}
 
 }

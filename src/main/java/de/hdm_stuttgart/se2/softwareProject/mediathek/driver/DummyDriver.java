@@ -17,12 +17,15 @@ public class DummyDriver {
 		try(Scanner scan = new Scanner(System.in)) {
 			//String path = "/stud/js329/Documents/testVideos/Sample Videos (52) - Copy.mp4.mp4";
 			Settings s = new Settings();
+			
 			MediaStorage.directoryList(s.getDirectory());
 			// TODO: Unterordner müssen noch nach Medien gescannt werden
 			IMedialist[] scannedContent = MediaStorage.mediaScan();
 			IMedialist movies = scannedContent[0];
 			IMedialist audio = scannedContent[1];
 			IMedialist books = scannedContent[2];
+			
+		
 			System.out.println("Was soll angezeigt werden? (0: Filme, 1: Audios)");
 			int input = scan.nextInt();
 			if (input == 0) {
@@ -31,9 +34,22 @@ public class DummyDriver {
 			if (input == 1) {
 				audio.printList();
 			}
-			System.out.println("Die Metainformationen welcher Datei sollen geändert werden? (Dateiname)");
+
+			
+			System.out.println("Welcher Film soll gespielt werden?");
 			scan.nextLine();
 			String input2 = scan.nextLine();
+			for (Entry<File, IMedia> i : movies.getContent().entrySet()) {
+				if (i.getValue().getTitle().equals(input2)) {
+					i.getValue().open();
+					break;
+				}
+			}
+
+			
+			System.out.println("Die Metainformationen welcher Datei sollen geändert werden? (Dateiname)");
+			scan.nextLine();
+			//String input2 = scan.nextLine();
 			IMedia m = null;
 			boolean finishedSearch = false;
 			for (Entry<File, IMedia> i : movies.getContent().entrySet()) {

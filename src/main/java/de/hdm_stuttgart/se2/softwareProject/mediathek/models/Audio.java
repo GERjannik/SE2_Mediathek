@@ -76,4 +76,18 @@ class Audio extends Media implements IMedia {
 	public void setRanking(String ranking) {
 		this.ranking = ranking;
 	}
+
+
+	@Override
+	public void open() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void setPath(String path) {
+		// TODO Auto-generated method stub
+		
+	}
 }

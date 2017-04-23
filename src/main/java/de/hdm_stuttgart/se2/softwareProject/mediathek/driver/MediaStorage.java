@@ -71,7 +71,9 @@ public class MediaStorage {
 				typ = "video";
 				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, files.get(i),
 						true, meta.getLength(), meta.getDate(), meta.getArtist(), meta.getGenre(), meta.getDescription());
+				temp.setPath(files.get(i).toString());
 				movies.getContent().put(files.get(i), temp);
+				
 			} else if (files.get(i).getName().toLowerCase().matches("^.*\\.(mp3||wav|wma|aac|ogg)$")) {
 				typ = "audio";
 				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, files.get(i),
@@ -83,7 +85,10 @@ public class MediaStorage {
 				books.getContent().put(scannedMedia[i], temp);
 			}*/ else {
 				log.info("Dateityp nicht unterstützt. " + files.get(i) + " wurde nicht eingelesen.");
-				throw new InvalidTypeException();
+				
+				//TODO 
+				/* Hab die mal zu test zwecken auskommentiert; Daniel */
+				//throw new InvalidTypeException();
 			}
 			meta.release();
 		}

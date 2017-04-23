@@ -1,6 +1,8 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.models;
 
+import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
@@ -14,6 +16,7 @@ class Movie extends Media implements IMedia {
 	private String genre;
 	private String info;
 	private String ranking;
+	private File path;
 
 
 
@@ -25,6 +28,7 @@ class Movie extends Media implements IMedia {
 		this.regisseur = regisseur;
 		this.genre = genre;
 		this.info = info;
+
 	}
 
 
@@ -90,6 +94,25 @@ class Movie extends Media implements IMedia {
 	@Override
 	public void setRanking(String ranking) {
 		this.ranking = ranking;
+	}
+
+
+	@Override
+	public void open() {
+		// TODO Auto-generated method stub
+		Desktop d = Desktop.getDesktop();  
+		try {
+			d.open(path);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+	}
+	@Override
+	public void setPath(String path) {
+		this.path = new File(path);
+		
 	}
 
 }

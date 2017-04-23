@@ -16,49 +16,63 @@ public class App {
 
 		// TODO Dateiverzeichnis manuell vom Benutzer festlegen lassen
 		Settings s = new Settings();
-		s.setDirectory(null);
+		MediaStorage.directoryList(s.getDirectory());
+
 		System.out.println("Medien werden eingelesen");
 		IMedialist[] scannedContent = MediaStorage.mediaScan();
 		IMedialist movies = scannedContent[0];
 		IMedialist audio = scannedContent[1];
 		IMedialist books = scannedContent[2];
-		menu(s, movies, audio);
-
+		loop:while(true) {
+			menu();
+			Scanner scan = new Scanner(System.in);
+			int input = scan.nextInt();
+			switch (input) {
+			case 0:
+				movies.printList();
+				break;
+			case 1:
+				audio.printList();
+				break;
+			case 2:
+				movies.printList();
+				audio.printList();
+				break;
+			case 3:
+				movies.printList();
+				audio.printList();
+				MediaStorage.editMetaInformation(getInput(s, scan, movies, audio), scan);
+				break;
+			case 4:
+				movies.printList();
+				audio.printList();
+				MediaStorage.deleteMedia(getInput(s, scan, movies, audio));
+				break;
+			case 5:
+				System.out.println("Bitte Pfad eingeben");
+				String path = scan.next();
+				s.setDirectory(path);
+				break;
+			case 6:
+				System.out.println("Bye");
+				
+				break loop;
+			}
+			
+		}
 	}
 
-	public static void menu(Settings s, IMedialist movies, IMedialist audio) {
+	public static void menu() {
 		System.out.println("Menü: \n"
 				+ "0: Filme anzeigen\n"
 				+ "1: Audios anzeigen\n"
 				+ "2: Alle Medien anzeigen\n"
 				+ "3: Metadaten bearbeiten\n"
 				+ "4: Medium löschen\n"
-				+ "5: Programm beenden\n");
-		Scanner scan = new Scanner(System.in);
-		int input = scan.nextInt();
-		switch (input) {
-		case 0:
-			movies.printList();
-			break;
-		case 1:
-			audio.printList();
-			break;
-		case 2:
-			movies.printList();
-			audio.printList();
-			break;
-		case 3:
-			movies.printList();
-			audio.printList();
-			MediaStorage.editMetaInformation(getInput(s, scan, movies, audio), scan);
-			break;
-		case 4:
-			movies.printList();
-			audio.printList();
-			MediaStorage.deleteMedia(getInput(s, scan, movies, audio));
-			break;
-		}
-		menu(s, movies, audio);
+				+ "5: Pfad setzen\n"
+				+ "6: Programm beenden\n");
+
+		//menu(s, movies, audio);
 	}
 
 	public static IMedia getInput(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {
@@ -78,7 +92,7 @@ public class App {
 			}
 		} catch (Exception e) {
 			System.out.println("Kein Medium mit diesem Titel gefunden. Kehre zurück ins Hauptmenü");
-			menu(s, movies, audio);
+			menu();
 		}
 		return null;
 	}
