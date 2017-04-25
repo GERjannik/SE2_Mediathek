@@ -43,7 +43,7 @@ class Audiolist implements IMedialist {
 		for (Entry<File, IMedia> m : this.content.entrySet()) {
 			m.getValue().getDetails();
 		}
-		log.debug("Inhalte der Audioliste wurden komplett ausgegeben");
+		log.debug("Inhalte der Audioliste " + this.name + " wurden komplett ausgegeben");
 	}
 
 	@Override

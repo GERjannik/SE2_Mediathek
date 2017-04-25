@@ -5,10 +5,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 
 class Movielist implements IMedialist {
+	
+	private static Logger log = LogManager.getLogger(Movielist.class);
 
 	private Map<File, IMedia> content;
 	private String name;
@@ -38,16 +43,19 @@ class Movielist implements IMedialist {
 		for (Entry<File, IMedia> m : this.content.entrySet()) {
 			m.getValue().getDetails();
 		}
+		log.debug("Inhalte der Movieliste " + this.name + " wurden komplett ausgegeben");
 	}
 	
 	@Override
 	public void setName(String name) {
 		this.name = name;		
+		log.debug("Name der Movieliste auf " + this.name + " geändert");
 	}
 	
 	@Override
 	public void addMedia(IMedia media) {
 		this.content.put(media.getFile(), media);
+		log.debug(media.getTitle() + " wurde zur Liste hinzugefügt");
 	}
 }
 

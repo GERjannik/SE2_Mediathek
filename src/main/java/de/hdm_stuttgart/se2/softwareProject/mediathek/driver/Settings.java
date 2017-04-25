@@ -58,7 +58,6 @@ public class Settings {
 	 * Erstellen eines neuen JSON Objekts und anschließendes schreiben
 	 * @param path Pfad zum Verzeichnis mit den Filmen
 	 */
-	@SuppressWarnings("unchecked")
 	public void setDirectory(String path) {
 		
 		HashMap<String,Object> pfad = new HashMap<String,Object>();

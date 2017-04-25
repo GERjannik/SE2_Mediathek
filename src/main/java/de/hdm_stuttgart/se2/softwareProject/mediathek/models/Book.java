@@ -78,9 +78,4 @@ class Book extends Media implements IMedia {
 		
 	}
 
-	@Override
-	public void setPath(String path) {
-		// TODO Auto-generated method stub
-		
-	}
 }

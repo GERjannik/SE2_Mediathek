@@ -16,8 +16,6 @@ class Movie extends Media implements IMedia {
 	private String genre;
 	private String info;
 	private String ranking;
-	private File path;
-
 
 
 	public Movie(String typ, String title, boolean favorite, File file, boolean visible, long duration,
@@ -99,20 +97,12 @@ class Movie extends Media implements IMedia {
 
 	@Override
 	public void open() {
-		// TODO Auto-generated method stub
 		Desktop d = Desktop.getDesktop();  
 		try {
-			d.open(path);
+			d.open(this.file);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 	}
-	@Override
-	public void setPath(String path) {
-		this.path = new File(path);
-		
-	}
-
 }

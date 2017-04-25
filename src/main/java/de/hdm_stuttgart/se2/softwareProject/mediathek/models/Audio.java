@@ -83,11 +83,4 @@ class Audio extends Media implements IMedia {
 		// TODO Auto-generated method stub
 		
 	}
-
-
-	@Override
-	public void setPath(String path) {
-		// TODO Auto-generated method stub
-		
-	}
 }

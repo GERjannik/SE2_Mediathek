@@ -17,7 +17,6 @@ public interface IMedia {
 	void setGenre(String genre);
 	void setInfo(String info);
 	void setRanking(String ranking);
-	void setPath(String path);
 	void open();
 
 }
