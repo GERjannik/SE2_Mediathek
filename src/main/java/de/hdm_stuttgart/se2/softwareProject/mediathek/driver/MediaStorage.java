@@ -85,10 +85,6 @@ public class MediaStorage {
 				books.getContent().put(scannedMedia[i], temp);
 			}*/ else {
 				log.info("Dateityp nicht unterstützt. " + files.get(i) + " wurde nicht eingelesen.");
-				
-				//TODO 
-				/* Hab die mal zu test zwecken auskommentiert; Daniel */
-				//throw new InvalidTypeException();
 			}
 			meta.release();
 		}
