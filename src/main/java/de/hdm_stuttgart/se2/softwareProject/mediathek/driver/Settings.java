@@ -5,15 +5,18 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 public class Settings {
 
+	private static Logger log = LogManager.getLogger(Settings.class);
+	
 	// Name der Settingsdatei im Prokjekt Stammverzeichnis
 	private File settings = new File("settings.json");
-
 
 	public File getDirectory() {
 
@@ -21,6 +24,7 @@ public class Settings {
 
 		try {
 			/* Settings-Datei wird über den Scanner eingelesen und dann Zeilenweise einen String angehängt */
+			log.info("Settings-datei wird gelesen");
 			Scanner input = new Scanner(settings);
 
 			StringBuilder jsonIn = new StringBuilder();
@@ -35,13 +39,16 @@ public class Settings {
 
 			// Der Dateiname wird aus dem JSON Objekt geholt und ein neues File Objekt erstellt
 			directory = new File(root.get("directory").toString());
-
+			input.close();
+			
 		} catch (FileNotFoundException | ParseException e) {
 			// TODO Auto-generated catch block
-			System.out.println(e.toString());
+			log.info("Einlesen der Settings fehlgeschlagens");
+			log.error(e.toString());
 			e.printStackTrace();
 		}
-
+		
+		log.info("Settings erfolgreich gelesen");
 		return directory;
 
 	}
@@ -50,6 +57,7 @@ public class Settings {
 	 * Erstellen eines neuen JSON Objekts und anschließendes schreiben
 	 * @param path Pfad zum Verzeichnis mit den Filmen
 	 */
+	@SuppressWarnings("unchecked")
 	public void setDirectory(String path) {
 
 		JSONObject root = new JSONObject();       
@@ -57,10 +65,10 @@ public class Settings {
 
 		try (PrintWriter writer = new PrintWriter(settings)) {
 			writer.print(root.toJSONString());
-
+			log.info("Verzeichnis erfolgreich in JSON gespeichert");
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			System.out.println(e.toString());
+			log.info("Speichern des Verzeichnisses in JSON fehlgeschlagen");
+			log.error(e.toString());
 			e.printStackTrace();
 		}
 

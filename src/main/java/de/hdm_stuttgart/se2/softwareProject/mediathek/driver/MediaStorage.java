@@ -6,7 +6,6 @@ import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidTypeException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
@@ -18,7 +17,6 @@ public class MediaStorage {
 
 	private static Logger log = LogManager.getLogger(MediaStorage.class);
 
-	
 	public static MediaMeta readMetaData(String path) {
 		MediaPlayerFactory factory = new MediaPlayerFactory();
 		MediaMeta meta = factory.getMediaMeta(path, true);
@@ -79,7 +77,7 @@ public class MediaStorage {
 				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, files.get(i),
 						true, meta.getLength(), meta.getDate(), meta.getArtist(), meta.getGenre(), meta.getDescription());
 				audio.getContent().put(files.get(i), temp);
-			} /*else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(doc|docx|pdf|html)$")) {
+			} /*else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(doc|docx|pdf|html|txt)$")) {
 				typ = "book";
 				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, scannedMedia[i], size, true);
 				books.getContent().put(scannedMedia[i], temp);
@@ -103,13 +101,13 @@ public class MediaStorage {
 			String input = s.nextLine();
 			if (input.equals("Ja") || input.equals("ja")) {
 				validInput = true;
-				System.out.println("Das Medium " + m.getTitle() + " wurde von der Festplatte gelöscht");
 				m.getFile().delete();
+				log.info("Das Medium " + m.getTitle() + " wurde von der Festplatte gelöscht");
 				m.removeMedia();
 			} else if (input.equals("Nein") || input.equals("nein")) {
 				validInput = true;
-				System.out.println("Das Medium " + m.getTitle() + " wurde aus der Mediathek entfernt");
 				m.removeMedia();
+				log.info("Das Medium " + m.getTitle() + " wurde aus der Mediathek entfernt");
 			} else {
 				System.out.println("ungültige Eingabe - entweder für 'Ja' / 'ja' oder 'Nein' / 'nein' entscheiden");
 			}
@@ -121,6 +119,7 @@ public class MediaStorage {
 		MediaMeta meta = readMetaData(m.getFile().toString());
 
 		if (m.getTyp().equals("video"))	{
+			log.info("Video Metadaten werden bearbeitet");
 			System.out.println("Wie lautet der Titel des Films?");
 			meta.setTitle(s.nextLine());
 			System.out.println("Wann wurde der Film veröffentlicht?");
@@ -135,6 +134,7 @@ public class MediaStorage {
 			meta.setRating(s.nextLine());
 		}
 		if (m.getTyp().equals("audio"))	{
+			log.info("Audio Metadaten werden bearbeitet");
 			System.out.println("Wie lautet der Titel der Audiodatei?");
 			meta.setTitle(s.nextLine());
 			System.out.println("Wann wurde das Audio veröffentlicht?");
@@ -161,7 +161,7 @@ public class MediaStorage {
 			String input = s.nextLine();
 			if (input.equals("Ja") || input.equals("ja")) {
 				validInput = true;
-				System.out.println("Änderungen werden gespeichert...");
+				log.info("Metadaten für " + meta.toString() + " werden gespeichert");
 				// Metainformationen werden in Datei gespeichert
 				meta.save();
 
@@ -173,10 +173,10 @@ public class MediaStorage {
 				m.setInfo(meta.getDescription());
 				m.setRanking(meta.getRating());
 				meta.release();
-				System.out.println("Änderungen erfolgreich gespeichert.");
+				log.info("Änderungen erfolgreich gespeichert.");
 			} else if (input.equals("Nein") || input.equals("nein")) {
 				validInput = true;
-				System.out.println("Änderungen werden verworfen.");
+				log.info("Änderungen werden verworfen.");
 				meta.release();
 			} else {
 				System.out.println("ungültige Eingabe - entweder für 'Ja' / 'ja' oder 'Nein' / 'nein' entscheiden");
