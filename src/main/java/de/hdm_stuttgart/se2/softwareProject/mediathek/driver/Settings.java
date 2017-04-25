@@ -3,6 +3,7 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.driver;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
@@ -59,9 +60,11 @@ public class Settings {
 	 */
 	@SuppressWarnings("unchecked")
 	public void setDirectory(String path) {
-
-		JSONObject root = new JSONObject();       
-		root.put("directory", path);
+		
+		HashMap<String,Object> pfad = new HashMap<String,Object>();
+		pfad.put("directory", path);
+		JSONObject root = new JSONObject(pfad);
+		
 
 		try (PrintWriter writer = new PrintWriter(settings)) {
 			writer.print(root.toJSONString());

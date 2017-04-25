@@ -6,6 +6,7 @@ public class JsonDummy {
 
 		Settings s = new Settings();
 		s.setDirectory("/stud/js329/Documents/testVideos/");
+
 		
 	}
 
