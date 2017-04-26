@@ -15,18 +15,24 @@ import org.json.simple.parser.ParseException;
 public class Settings {
 
 	private static Logger log = LogManager.getLogger(Settings.class);
-	
 	// Name der Settingsdatei im Prokjekt Stammverzeichnis
-	private File settings = new File("settings.json");
+	private File mediaDirectory;
+	
+	public Settings() {
+	}
+	
+	public File getMediaDirectory() {
+		return mediaDirectory;
+	}
 
-	public File getDirectory() {
+	public void readDirectory() {
 
 		File directory = null;
 
 		try {
 			/* Settings-Datei wird über den Scanner eingelesen und dann Zeilenweise einen String angehängt */
-			log.info("Settings-datei wird gelesen");
-			Scanner input = new Scanner(settings);
+			log.info("Settings-Datei wird gelesen");
+			Scanner input = new Scanner(new File ("settings.json"));
 
 			StringBuilder jsonIn = new StringBuilder();
 
@@ -43,14 +49,13 @@ public class Settings {
 			input.close();
 			
 		} catch (FileNotFoundException | ParseException e) {
-			// TODO Auto-generated catch block
 			log.info("Einlesen der Settings fehlgeschlagens");
 			log.catching(e);
 			e.printStackTrace();
 		}
 		
 		log.info("Settings erfolgreich gelesen");
-		return directory;
+		this.mediaDirectory = directory;
 
 	}
 	
@@ -65,7 +70,7 @@ public class Settings {
 		JSONObject root = new JSONObject(pfad);
 		
 
-		try (PrintWriter writer = new PrintWriter(settings)) {
+		try (PrintWriter writer = new PrintWriter(new File ("settings.json"))) {
 			writer.print(root.toJSONString());
 			log.info("Verzeichnis erfolgreich in JSON gespeichert");
 		} catch (FileNotFoundException e) {

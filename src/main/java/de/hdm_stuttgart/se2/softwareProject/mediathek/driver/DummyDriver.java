@@ -18,14 +18,14 @@ public class DummyDriver {
 			//String path = "/stud/js329/Documents/testVideos/Sample Videos (52) - Copy.mp4.mp4";
 			Settings s = new Settings();
 			
-			MediaStorage.directoryList(s.getDirectory());
+			MediaStorage.directoryList(s.getMediaDirectory());
 			// TODO: Unterordner müssen noch nach Medien gescannt werden
 			IMedialist[] scannedContent = MediaStorage.mediaScan();
 			IMedialist movies = scannedContent[0];
 			IMedialist audio = scannedContent[1];
-			IMedialist books = scannedContent[2];
+			/* Implementierung von books nur angedeutet (Interfaces) */
+			//IMedialist books = scannedContent[2];
 			
-		
 			System.out.println("Was soll angezeigt werden? (0: Filme, 1: Audios)");
 			int input = scan.nextInt();
 			if (input == 0) {

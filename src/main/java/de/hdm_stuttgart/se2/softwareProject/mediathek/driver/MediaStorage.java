@@ -25,6 +25,11 @@ public class MediaStorage {
 
 	private static ArrayList<File> directories = new ArrayList<File>();
 	private static ArrayList<File> files = new ArrayList<File>();
+	
+	public static void clearLists() {
+		directories.clear();
+		files.clear();
+	}
 
 	public static void directoryList(File f) {
 		log.info("Ordner " + f.toString() + " wird gescannt");
@@ -114,10 +119,11 @@ public class MediaStorage {
 	}
 
 	public static void editMetaInformation(IMedia m, Scanner s) {
+		
 		MediaMeta meta = readMetaData(m.getFile().toString());
-
+		log.info("Metadaten von " + m.getFile() + " werden bearbeitet");
+		
 		if (m.getTyp().equals("video"))	{
-			log.info("Video Metadaten werden bearbeitet");
 			System.out.println("Wie lautet der Titel des Films?");
 			meta.setTitle(s.nextLine());
 			System.out.println("Wann wurde der Film veröffentlicht?");
@@ -132,7 +138,6 @@ public class MediaStorage {
 			meta.setRating(s.nextLine());
 		}
 		if (m.getTyp().equals("audio"))	{
-			log.info("Audio Metadaten werden bearbeitet");
 			System.out.println("Wie lautet der Titel der Audiodatei?");
 			meta.setTitle(s.nextLine());
 			System.out.println("Wann wurde das Audio veröffentlicht?");
@@ -159,7 +164,7 @@ public class MediaStorage {
 			String input = s.nextLine();
 			if (input.equals("Ja") || input.equals("ja")) {
 				validInput = true;
-				log.info("Metadaten für " + meta.toString() + " werden gespeichert");
+				log.info("Metadaten für " + m.getFile() + " werden gespeichert");
 				// Metainformationen werden in Datei gespeichert
 				meta.save();
 

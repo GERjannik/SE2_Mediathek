@@ -1,10 +1,10 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.driver;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
+import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidInputException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 
@@ -13,19 +13,34 @@ public class App {
 
 	public static void main(String[] args) {
 
-
-		// TODO Dateiverzeichnis manuell vom Benutzer festlegen lassen
 		Settings s = new Settings();
-		MediaStorage.directoryList(s.getDirectory());
+		Scanner scan = new Scanner(System.in);
 
-		System.out.println("Medien werden eingelesen");
+		if (new File ("settings.json").exists() && !(new File ("settings.json").isDirectory())) {
+			s.readDirectory();
+		} else {
+			boolean validInput = false;
+			while (validInput == false) {
+				System.out.println("Welches Verzeichnis soll nach Medien durchsucht werden?");
+				File input = new File (scan.nextLine());
+				if (input.exists() && input.isDirectory()) {
+					validInput = true;
+					s.setDirectory(input.toString());
+				} else {
+					System.out.println("Die Eingabe ist kein gültiges Verzeichnis");
+				}
+			}
+			s.readDirectory();
+		}
+
+		MediaStorage.directoryList(s.getMediaDirectory());
 		IMedialist[] scannedContent = MediaStorage.mediaScan();
 		IMedialist movies = scannedContent[0];
 		IMedialist audio = scannedContent[1];
-		IMedialist books = scannedContent[2];
+		/* Implementierung von books nur angedeutet (Interfaces) */
+		//IMedialist books = scannedContent[2];
 		loop:while(true) {
 			menu();
-			Scanner scan = new Scanner(System.in);
 			int input = scan.nextInt();
 			switch (input) {
 			case 0:
@@ -41,7 +56,14 @@ public class App {
 			case 3:
 				movies.printList();
 				audio.printList();
-				MediaStorage.editMetaInformation(getInput(s, scan, movies, audio), scan);
+				IMedia media;
+				try {
+					media = getInput(s, scan, movies, audio);
+				} catch (InvalidInputException e) {
+					System.out.println("Kein Medium mit diesem Titel gefunden. Kehre zurück ins Hauptmenü");
+					break;
+				}
+				MediaStorage.editMetaInformation(media, scan);
 				break;
 			case 4:
 				movies.printList();
@@ -49,20 +71,35 @@ public class App {
 				MediaStorage.deleteMedia(getInput(s, scan, movies, audio));
 				break;
 			case 5:
-				System.out.println("Bitte Pfad eingeben");
-				String path = scan.next();
-				s.setDirectory(path);
+				boolean validInput = false;
+				while (validInput == false) {
+					System.out.println("Welches Verzeichnis soll nach Medien durchsucht werden?");
+					File f = new File (scan.nextLine());
+					if (f.exists() && f.isDirectory()) {
+						validInput = true;
+						s.setDirectory(f.toString());
+					} else {
+						System.out.println("Die Eingabe ist kein gültiges Verzeichnis");
+					}
+				}
 				break;
 			case 6:
+				MediaStorage.clearLists();
+				MediaStorage.directoryList(s.getMediaDirectory());
+				scannedContent = MediaStorage.mediaScan();
+				movies = scannedContent[0];
+				audio = scannedContent[1];
+				break;
+			case 7:
 				System.out.println("Bye");
-				
+
 				break loop;
 			}
-			
+
 		}
 	}
 
-	public static void menu() {
+	public static void menu() throws InvalidInputException {
 		System.out.println("Menü: \n"
 				+ "0: Filme anzeigen\n"
 				+ "1: Audios anzeigen\n"
@@ -70,31 +107,25 @@ public class App {
 				+ "3: Metadaten bearbeiten\n"
 				+ "4: Medium löschen\n"
 				+ "5: Pfad setzen\n"
-				+ "6: Programm beenden\n");
-
-		//menu(s, movies, audio);
+				+ "6: Medien neu einscannen\n"
+				+ "7: Programm beenden\n");
 	}
 
 	public static IMedia getInput(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {
 		System.out.println("Gib den Titel des Mediums ein");
 		scan.nextLine();
 		String input = scan.nextLine();
-		try {
-			for (Entry<File, IMedia> i : movies.getContent().entrySet()) {
-				if (i.getValue().getTitle().equals(input)) {
-					return i.getValue();
-				}
+		for (Entry<File, IMedia> i : movies.getContent().entrySet()) {
+			if (i.getValue().getTitle().equals(input)) {
+				return i.getValue();
 			}
-			for (Entry<File, IMedia> i : audio.getContent().entrySet()) {
-				if (i.getValue().getTitle().equals(input)) {
-					return i.getValue();
-				}
-			}
-		} catch (Exception e) {
-			System.out.println("Kein Medium mit diesem Titel gefunden. Kehre zurück ins Hauptmenü");
-			menu();
 		}
-		return null;
+		for (Entry<File, IMedia> i : audio.getContent().entrySet()) {
+			if (i.getValue().getTitle().equals(input)) {
+				return i.getValue();
+			}
+		}
+		throw new InvalidInputException();
 	}
 
 } 
