@@ -1,14 +1,17 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.models;
 
-import java.awt.Desktop;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
 class Movie extends Media implements IMedia {
 
+	private static Logger log = LogManager.getLogger(Movie.class);
+	
 	private List<String> actor;
 	private long duration;
 	private String releaseDate;
@@ -29,10 +32,6 @@ class Movie extends Media implements IMedia {
 
 	}
 
-
-	/* (non-Javadoc)
-	 * @see de.hdm_stuttgart.se2.softwareProject.mediathek.models.IMedia#showDetails()
-	 */
 	@Override
 	public void getDetails() {
 		if (this.visible == true) {
@@ -67,42 +66,37 @@ class Movie extends Media implements IMedia {
 			if (this.info != null && !(this.info.equals(""))) {
 				System.out.println("Bewertung: " + this.ranking);
 			}
+		} else {
+			log.debug("Metadaten des Mediums " + this.getFile() + " nicht ausgegeben, da Attribut visible == false");
 		}
 	}
 	@Override
 	public void setDate(String date) {
 		this.releaseDate = date;
+		log.debug("Erscheinungsdatum des Mediums " + this.getFile() + " auf " + this.releaseDate + " geändert");
 	}
 
 	@Override
 	public void setRegisseur(String regisseur) {
 		this.regisseur = regisseur;
+		log.debug("Regisseur des Mediums " + this.getFile() + " auf " + this.regisseur + " geändert");
 	}
 
 	@Override
 	public void setGenre(String genre) {
 		this.genre = genre;
+		log.debug("Genre des Mediums " + this.getFile() + " auf " + this.genre + " geändert");
 	}
 
 	@Override
 	public void setInfo(String info) {
 		this.info = info;
+		log.debug("Beschreibung des Mediums " + this.getFile() + " auf geändert");
 	}
 
 	@Override
 	public void setRanking(String ranking) {
 		this.ranking = ranking;
-	}
-
-
-	@Override
-	public void open() {
-		Desktop d = Desktop.getDesktop();  
-		try {
-			d.open(this.file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
+		log.debug("Bewertung des Mediums " + this.getFile() + " auf " + this.ranking + " geändert");
 	}
 }

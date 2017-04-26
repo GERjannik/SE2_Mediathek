@@ -1,10 +1,17 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.models;
 
+import java.awt.Desktop;
 import java.io.File;
+import java.io.IOException;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
 abstract class Media implements IMedia{
+	
+	private static Logger log = LogManager.getLogger(Media.class);
 	
 	protected String typ;
 	protected String title;
@@ -18,11 +25,6 @@ abstract class Media implements IMedia{
 		this.favorite = favorite;
 		this.file = file;
 		this.visible = visible;
-	}
-	
-	@Override
-	public void openFile() {
-		// TODO Impelementiere mich
 	}
 
 	@Override
@@ -55,11 +57,25 @@ abstract class Media implements IMedia{
 
 	@Override
 	public void setTitle(String title) {
-		this.title = title;		
+		this.title = title;
+		log.debug("Titel des Mediums " + this.file + " auf " + this.title + " geändert");
 	}
 
 	@Override
 	public void setFavorite(boolean favorite) {
 		this.favorite = favorite;
-	}	
+		log.debug("Medium " + this.file + " zu Favoriten hinzugefügt");
+	}
+	
+	@Override
+	public void open() {
+		Desktop d = Desktop.getDesktop();  
+		try {
+			d.open(this.file);
+			log.info("Medium " + this.file + " geöffnet");
+		} catch (IOException e) {
+			log.catching(e);
+			e.printStackTrace();
+		}
+	}
 }

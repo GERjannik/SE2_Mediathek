@@ -42,9 +42,8 @@ public class MediaStorage {
 				}
 			}
 		} catch(NullPointerException e) {
-			throw new NullPointerException();
-			// logging
-
+			log.catching(e);
+			e.printStackTrace();
 		}
 	}
 	
@@ -106,7 +105,7 @@ public class MediaStorage {
 			} else if (input.equals("Nein") || input.equals("nein")) {
 				validInput = true;
 				m.removeMedia();
-				log.info("Das Medium " + m.getTitle() + " wurde aus der Mediathek entfernt");
+				log.info("Das Medium " + m.getTitle() + " wird nicht mehr in der Mediathek angezeigt");
 			} else {
 				System.out.println("ungültige Eingabe - entweder für 'Ja' / 'ja' oder 'Nein' / 'nein' entscheiden");
 			}

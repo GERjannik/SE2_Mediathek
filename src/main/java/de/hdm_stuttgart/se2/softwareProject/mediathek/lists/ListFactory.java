@@ -23,7 +23,7 @@ public class ListFactory {
 			log.debug("Booklist " + name + " erfolgreich erstellt");
 			return new Booklist(name);
 		default:
-			log.error(new InvalidTypeException());
+			log.catching(new InvalidTypeException());
 			throw new InvalidTypeException();
 		}
 	}

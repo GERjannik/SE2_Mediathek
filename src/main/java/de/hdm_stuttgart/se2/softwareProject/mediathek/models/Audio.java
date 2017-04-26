@@ -1,10 +1,16 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.models;
 
 import java.io.File;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
 class Audio extends Media implements IMedia {
 
+	private static Logger log = LogManager.getLogger(Audio.class);
+	
 	private long duration;
 	private String interpret;
 	private String genre;
@@ -40,47 +46,44 @@ class Audio extends Media implements IMedia {
 				System.out.println("Genre: " + this.genre);
 			}
 			if (this.info != null && !(this.info.equals(""))) {
-				System.out.println("Filmbeschreibung: " + this.info);
+				System.out.println("Beschreibung: " + this.info);
 			}
 			if (this.info != null && !(this.info.equals(""))) {
 				System.out.println("Bewertung: " + this.ranking);
 			}
+		} else {
+			log.debug("Metadaten des Medium " + this.getFile() + " nicht angezeigt, da attribut visible == false");
 		}
 	}
 
 	@Override
 	public void setDate(String date) {
 		this.releaseDate = date;
+		log.debug("Erscheinungsdatum des Mediums " + this.getFile() + " auf " + this.releaseDate + " geändert");
 	}
-
 
 	@Override
 	public void setRegisseur(String regisseur) {
 		this.interpret = regisseur;
+		log.debug("Interpret des Mediums " + this.getFile() + " auf " + this.interpret + " geändert");
 	}
-
 
 	@Override
 	public void setGenre(String genre) {
 		this.genre = genre;
+		log.debug("Genre des Mediums " + this.getFile() + " auf " + this.genre + " geändert");
 	}
-
 
 	@Override
 	public void setInfo(String info) {
 		this.info = info;
+		log.debug("Beschreibung des Mediums " + this.getFile() + " geändert");
 	}
 
 
 	@Override
 	public void setRanking(String ranking) {
 		this.ranking = ranking;
-	}
-
-
-	@Override
-	public void open() {
-		// TODO Auto-generated method stub
-		
+		log.debug("Bewertung des Mediums " + this.getFile() + " auf " + this.ranking + " geändert");
 	}
 }

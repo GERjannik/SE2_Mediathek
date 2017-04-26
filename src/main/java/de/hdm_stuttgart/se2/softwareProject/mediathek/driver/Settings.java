@@ -45,7 +45,7 @@ public class Settings {
 		} catch (FileNotFoundException | ParseException e) {
 			// TODO Auto-generated catch block
 			log.info("Einlesen der Settings fehlgeschlagens");
-			log.error(e.toString());
+			log.catching(e);
 			e.printStackTrace();
 		}
 		
@@ -70,7 +70,7 @@ public class Settings {
 			log.info("Verzeichnis erfolgreich in JSON gespeichert");
 		} catch (FileNotFoundException e) {
 			log.info("Speichern des Verzeichnisses in JSON fehlgeschlagen");
-			log.error(e.toString());
+			log.catching(e);;
 			e.printStackTrace();
 		}
 
