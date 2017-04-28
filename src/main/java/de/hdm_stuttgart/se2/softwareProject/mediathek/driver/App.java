@@ -1,6 +1,7 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.driver;
 
 import java.io.File;
+import java.util.InputMismatchException;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
@@ -9,6 +10,7 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidInputException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
 
 // Ansatz - Enthält Fehler
 public class App {
@@ -42,6 +44,7 @@ public class App {
 		//IMedialist books = scannedContent[2];
 		loop:while(true) {
 			menu();
+			boolean validInput = false;
 			int input = scan.nextInt();
 			switch (input) {
 			case 0:
@@ -72,7 +75,6 @@ public class App {
 				MediaStorage.deleteMedia(getInput(s, scan, movies, audio));
 				break;
 			case 5:
-				boolean validInput = false;
 				while (validInput == false) {
 					System.out.println("Welches Verzeichnis soll nach Medien durchsucht werden?");
 					scan.nextLine();
@@ -91,7 +93,34 @@ public class App {
 				movies = scannedContent[0];
 				audio = scannedContent[1];
 				break;
+		// TODO: Dauerschleife beheben (jannik)
 			case 7:
+				validInput = false;
+				String typ = "";
+				while (validInput == false) {
+					System.out.println("Für welche Medien soll die Playlist erstellt werden? (0: Videos, 1: Audios)");
+					int in = -1;
+					try {
+						in = scan.nextInt();
+					} catch (InputMismatchException e) {
+						System.out.println("Eingabe ungültig. Nur '0' oder '1' erlaubt");
+						in = -1;
+					}
+					if (in == 0) {
+						typ = "video";
+						validInput = true;
+					} else if (in == 1) {
+						typ = "audio";
+						validInput = true;
+					} else {
+						System.out.println("Eingabe ungültig. Nur '0' oder '1' erlaubt");
+					}
+				}
+				System.out.println("Wie soll die Playlist heißen?");
+				scan.nextLine();
+				ListFactory.getInstance(typ, scan.nextLine());
+				break;
+			case 8:
 				System.out.println("Bye");
 
 				break loop;
@@ -109,7 +138,8 @@ public class App {
 				+ "4: Medium löschen\n"
 				+ "5: Pfad setzen\n"
 				+ "6: Medien neu einscannen\n"
-				+ "7: Programm beenden\n");
+				+ "7: Playlist erstellen\n"
+				+ "8: Programm beenden\n");
 	}
 
 	public static IMedia getInput(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {
