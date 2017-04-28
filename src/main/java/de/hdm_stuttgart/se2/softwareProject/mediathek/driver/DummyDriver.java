@@ -5,6 +5,8 @@ import java.util.InputMismatchException;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
+import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 
@@ -18,9 +20,7 @@ public class DummyDriver {
 			//String path = "/stud/js329/Documents/testVideos/Sample Videos (52) - Copy.mp4.mp4";
 			Settings s = new Settings();
 			
-			MediaStorage.directoryList(s.getMediaDirectory());
-			// TODO: Unterordner müssen noch nach Medien gescannt werden
-			IMedialist[] scannedContent = MediaStorage.mediaScan();
+			IMedialist[] scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
 			IMedialist movies = scannedContent[0];
 			IMedialist audio = scannedContent[1];
 			/* Implementierung von books nur angedeutet (Interfaces) */

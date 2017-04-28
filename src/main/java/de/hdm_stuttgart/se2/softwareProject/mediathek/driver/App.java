@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
+import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidInputException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
@@ -33,8 +35,7 @@ public class App {
 			s.readDirectory();
 		}
 
-		MediaStorage.directoryList(s.getMediaDirectory());
-		IMedialist[] scannedContent = MediaStorage.mediaScan();
+		IMedialist[] scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
 		IMedialist movies = scannedContent[0];
 		IMedialist audio = scannedContent[1];
 		/* Implementierung von books nur angedeutet (Interfaces) */
@@ -74,19 +75,19 @@ public class App {
 				boolean validInput = false;
 				while (validInput == false) {
 					System.out.println("Welches Verzeichnis soll nach Medien durchsucht werden?");
+					scan.nextLine();
 					File f = new File (scan.nextLine());
 					if (f.exists() && f.isDirectory()) {
 						validInput = true;
 						s.setDirectory(f.toString());
+						s.readDirectory();
 					} else {
 						System.out.println("Die Eingabe ist kein gültiges Verzeichnis");
 					}
 				}
 				break;
 			case 6:
-				MediaStorage.clearLists();
-				MediaStorage.directoryList(s.getMediaDirectory());
-				scannedContent = MediaStorage.mediaScan();
+				scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
 				movies = scannedContent[0];
 				audio = scannedContent[1];
 				break;

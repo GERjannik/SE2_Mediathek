@@ -1,4 +1,4 @@
-package de.hdm_stuttgart.se2.softwareProject.mediathek.driver;
+package de.hdm_stuttgart.se2.softwareProject.mediathek.controller;
 
 import java.io.File;
 import java.io.FileNotFoundException;
