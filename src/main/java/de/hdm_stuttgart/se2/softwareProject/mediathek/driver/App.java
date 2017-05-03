@@ -1,7 +1,7 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.driver;
 
 import java.io.File;
-import java.util.InputMismatchException;
+import java.util.ArrayList;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
@@ -12,13 +12,13 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
 
-// Ansatz - Enthält Fehler
 public class App {
 
 	public static void main(String[] args) {
 
 		Settings s = new Settings();
 		Scanner scan = new Scanner(System.in);
+		ArrayList<IMedialist> allLists = new ArrayList<>();
 
 		if (new File ("settings.json").exists() && !(new File ("settings.json").isDirectory())) {
 			s.readDirectory();
@@ -93,34 +93,47 @@ public class App {
 				movies = scannedContent[0];
 				audio = scannedContent[1];
 				break;
-		// TODO: Dauerschleife beheben (jannik)
 			case 7:
 				validInput = false;
 				String typ = "";
 				while (validInput == false) {
 					System.out.println("Für welche Medien soll die Playlist erstellt werden? (0: Videos, 1: Audios)");
-					int in = -1;
-					try {
-						in = scan.nextInt();
-					} catch (InputMismatchException e) {
-						System.out.println("Eingabe ungültig. Nur '0' oder '1' erlaubt");
-						in = -1;
-					}
-					if (in == 0) {
+					String in = scan.next();
+					if (in.equals("0")) {
 						typ = "video";
 						validInput = true;
-					} else if (in == 1) {
+					} else if (in.equals("1")) {
 						typ = "audio";
 						validInput = true;
 					} else {
 						System.out.println("Eingabe ungültig. Nur '0' oder '1' erlaubt");
 					}
+					scan.nextLine();
 				}
 				System.out.println("Wie soll die Playlist heißen?");
-				scan.nextLine();
-				ListFactory.getInstance(typ, scan.nextLine());
+				IMedialist playlist = ListFactory.getInstance(typ, scan.nextLine());
+				allLists.add(playlist);
+				playlist = editPlaylist(playlist, scan, s, movies, audio);
 				break;
 			case 8:
+				for (IMedialist i : allLists) {
+					System.out.println(i.getName());
+				}
+				break;
+			case 9:
+				System.out.println("Welche Playlist soll berbeitet werden?");
+				for (int i = 0; i < allLists.size(); i++) {
+					System.out.println(i + ": " + allLists.get(i).getName());
+				}
+				scan.nextLine();
+				int choice = scan.nextInt();
+				if (choice >= 0 && choice < allLists.size()) {
+					editPlaylist(allLists.get(choice), scan, s, movies, audio);
+				} else {
+					System.out.println("Ungültige Eingabe");
+				}
+				break;
+			case 10:
 				System.out.println("Bye");
 
 				break loop;
@@ -129,7 +142,7 @@ public class App {
 		}
 	}
 
-	public static void menu() throws InvalidInputException {
+	public static void menu() {
 		System.out.println("Menü: \n"
 				+ "0: Filme anzeigen\n"
 				+ "1: Audios anzeigen\n"
@@ -139,7 +152,9 @@ public class App {
 				+ "5: Pfad setzen\n"
 				+ "6: Medien neu einscannen\n"
 				+ "7: Playlist erstellen\n"
-				+ "8: Programm beenden\n");
+				+ "8: Alle Playlists anzeigen\n"
+				+ "9: Playlist bearbeiten\n"
+				+ "10: Programm beenden\n");
 	}
 
 	public static IMedia getInput(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {
@@ -157,6 +172,24 @@ public class App {
 			}
 		}
 		throw new InvalidInputException();
+	}
+	
+	public static IMedialist editPlaylist(IMedialist playlist, Scanner scan, Settings s, IMedialist movies, IMedialist audio) {
+		while(true) {
+			System.out.println("0: weitere Medien zu Playlist " + playlist.getName() + " hinzufügen\n"
+					+ "1: Playlist nicht weiter bearbeiten");
+			String input = scan.next();
+			switch (input) {
+			case "0":
+				System.out.println("Welches Medium soll zur Playlist " + playlist.getName() + " hinzugefügt werden?");
+				playlist.addMedia(getInput(s, scan, movies, audio));
+				break;
+			case "1":
+				return playlist;
+			default:
+				System.out.println("Ungültige Eingabe!");
+			}
+		}
 	}
 
 } 
