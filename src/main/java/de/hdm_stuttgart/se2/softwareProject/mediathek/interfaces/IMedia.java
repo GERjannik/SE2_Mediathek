@@ -2,6 +2,25 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces;
 
 import java.io.File;
 
+/**
+ * 
+ * @author ll040
+ * 
+ * Interface für alle gängigen Medien-Typen einer Mediathek (Book, Audio,
+ * Movie). Das Interface definiert Methoden zum Auslesen und Setzen folgender
+ * generischer Metadaten: 
+ * 
+ * - Titel
+ * - Erscheinungsdatum
+ * - Regisseur
+ * - Genre
+ * - Info (vom Benutzer definiert)
+ * - Ranking
+ * - Favoriten-Toggle
+ * 
+ * Es enthält zusetzlich eine Methode zum Öffnen des Mediums.
+ *
+ */
 public interface IMedia {
 
 	void getDetails();

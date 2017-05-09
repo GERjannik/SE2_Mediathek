@@ -8,6 +8,19 @@ import java.util.Map.Entry;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 
+/**
+ * 
+ * @author ll040
+ *
+ * Booklist implementiert das Interface IMedialist. Die Klasse
+ * enthält ein Namesattribut und eine Map mit File-Objekten als Key und 
+ * Book-Objekten vom Typ IMedia als Wert.
+ * Über die Methoden der Klasse, können Audio-Objekte hinzugefügt, ge-
+ * löscht und ausgelesen werden. Zudem kann der Inhalt ausgegeben bzw.
+ * aufgelistet werden. Der Name der Liste kann nachträglich geändert 
+ * werden
+ * 
+ */
 class Booklist implements IMedialist {
 	
 	private Map<File, IMedia> content;
