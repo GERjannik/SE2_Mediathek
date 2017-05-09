@@ -2,6 +2,7 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.controller;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -156,6 +157,21 @@ public class MediaStorage {
 			} else {
 				System.out.println("ungültige Eingabe - entweder für 'Ja' / 'ja' oder 'Nein' / 'nein' entscheiden");
 			}
+		}
+	}
+	
+	public static void savePlaylists(ArrayList<IMedialist> allLists) {
+		// TODO: playlists.json muss erstellt/überschrieben werden
+		// Schleife läuft durch Liste, die alle Playlists enthält
+		for (IMedialist i : allLists) {
+			i.getName(); // TODO: Name der jew. Playlist muss gespeichert werden
+			// TODO: Alle Inhalte (Key-Value-Paare) der jew. Playlist müssen gespeichert werden
+			for (Entry<File, IMedia> o : i.getContent().entrySet()) {
+				o.getKey();
+				o.getValue();
+			}
+			// TODO: Überlegen, wie einzelne Playlists voneinander getrennt werden
+			log.info("Playlist " + i.getName() + " mit allen Inhalten erfolgreich in playlists.json geschrieben");
 		}
 	}
 }

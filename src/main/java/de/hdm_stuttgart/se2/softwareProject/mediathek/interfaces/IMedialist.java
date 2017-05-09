@@ -22,5 +22,4 @@ public interface IMedialist {
 	void printList();
 	void setName(String name);
 	void addMedia(IMedia media);
-
 }
