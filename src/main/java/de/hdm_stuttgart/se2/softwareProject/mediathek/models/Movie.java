@@ -8,8 +8,17 @@ import org.apache.logging.log4j.Logger;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
+/**
+ * 
+ * @author ll040
+ * 
+ * Implementiert das IMedia Interface. Erweiterung um medienspezifische
+ * Attribute: actor, duration (Typ an Medium angepasst), releaseDate, regisseur, info
+ * und ranking. Die spezifischen Attribute werden anhand des Constructors 
+ * gesetzt.
+ */
 class Movie extends Media implements IMedia {
-
+	
 	private static Logger log = LogManager.getLogger(Movie.class);
 	
 	private List<String> actor;
@@ -20,7 +29,19 @@ class Movie extends Media implements IMedia {
 	private String info;
 	private String ranking;
 
-
+	/**
+	 * 
+	 * @param typ			Typ des Mediums
+	 * @param title			Titel des Films
+	 * @param favorite		Toggle für Favoriten-Liste
+	 * @param file			Pfad der Film-Datei
+	 * @param visible		Visibilität für die getDetails()-Methode
+	 * @param duration		Dauer
+	 * @param releaseDate	Erscheinungsdatum
+	 * @param regisseur		Regisseur
+	 * @param genre			Film-Genre
+	 * @param info			benutzerspezifische Informationen
+	 */
 	public Movie(String typ, String title, boolean favorite, File file, boolean visible, long duration,
 			String releaseDate, String regisseur, String genre, String info) {
 		super(typ, title, favorite, file, visible);
@@ -33,6 +54,9 @@ class Movie extends Media implements IMedia {
 	}
 
 	@Override
+	/**
+	 * Auslesen der Metadaten, sofern visible == true
+	 */
 	public void getDetails() {
 		if (this.visible == true) {
 			System.out.println(this.title);

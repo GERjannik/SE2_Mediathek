@@ -9,6 +9,14 @@ import org.apache.logging.log4j.Logger;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
+/**
+ * 
+ * @author ll040
+ * 
+ * Implementiert das IMedia Interface. Implentiert zusätzlich generische
+ * Attribute für Medien-Objekte, welche durch den Constructor gesetzt werden.
+ *
+ */
 abstract class Media implements IMedia{
 	
 	private static Logger log = LogManager.getLogger(Media.class);
@@ -19,6 +27,16 @@ abstract class Media implements IMedia{
 	protected File file;
 	protected boolean visible;
 	
+	/**
+	 * 
+	 * @param typ		Objekt-Typ
+	 * @param title		Titel des Mediums
+	 * @param favorite	Toggle für Favoriten-Liste
+	 * @param file		Datei-Pfad des Mediums
+	 * @param visible	true = Objekt wird auf Anfrage aus Liste gelesen; 
+	 * 			  		false = Objekt wurde aus Liste gelöscht und nicht 
+	 * 					durch getDetails()-Methode ausgelesen
+	 */
 	public Media(String typ, String title, boolean favorite, File file, boolean visible) {
 		this.typ = typ;
 		this.title = title;

@@ -7,6 +7,14 @@ import org.apache.logging.log4j.Logger;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
+/**
+ * 
+ * @author ll040
+ * 
+ * Implementiert das IMedia Interface. Erweiterung um medienspezifische
+ * Attribute: duration, interpret, genre, info, ranking und releaseDate.
+ * Die spezifischen Attribute werden anhand des Constructors gesetzt.
+ */
 class Audio extends Media implements IMedia {
 
 	private static Logger log = LogManager.getLogger(Audio.class);
@@ -17,7 +25,20 @@ class Audio extends Media implements IMedia {
 	private String info;
 	private String ranking;
 	private String releaseDate;
-
+	
+	/**
+	 * 
+	 * @param typ			Typ des Mediums
+	 * @param title			Songtitel
+	 * @param favorite		Toggle für Favoriten-Liste
+	 * @param file			Pfad der Musik-Datei
+	 * @param visible		Visibilität für die getDetails()-Methode
+	 * @param duration		Dauer
+	 * @param interpret		Künstler/Band
+	 * @param genre			Musik-Genre
+	 * @param releaseDate	Erscheinungsdatum
+	 * @param info			benutzerspezifische Informationen
+	 */
 	public Audio(String typ, String title, boolean favorite, File file, boolean visible, long duration, String interpret,
 			String genre, String releaseDate, String info) {
 		super(typ, title, favorite, file, visible);
@@ -30,6 +51,9 @@ class Audio extends Media implements IMedia {
 
 
 	@Override
+	/**
+	 * Auslesen der Metadaten, sofern visible == true
+	 */
 	public void getDetails() {
 		if (this.visible == true) {
 			System.out.println(this.title);

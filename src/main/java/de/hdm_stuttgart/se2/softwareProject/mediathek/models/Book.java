@@ -3,6 +3,14 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.models;
 import java.io.File;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
+/**
+ * 
+ * @author ll040
+ * 
+ * Implementiert das IMedia Interface. Erweiterung um medienspezifische
+ * Attribute: pages, author, info, releaseDate, genre und ranking.
+ * Die spezifischen Attribute werden anhand des Constructors gesetzt.
+ */
 class Book extends Media implements IMedia {
 
 	private int pages;
@@ -14,13 +22,23 @@ class Book extends Media implements IMedia {
 
 
 
-
+	/**
+	 * 
+	 * @param typ		Typ des Mediums
+	 * @param title		Titel des Buches
+	 * @param favorite	Toggle für Favoriten-Liste
+	 * @param file		Pfad der Buch-Datei
+	 * @param visible	Visibilität für die getDetails()-Methode
+	 */
 	public Book(String typ, String title, boolean favorite, File file/*, int pages*/, boolean visible) {
 		super(typ, title, favorite, file, visible);
 		//this.pages = pages;
 	}
 
 	@Override
+	/**
+	 * Auslesen der Metadaten, sofern visible == true
+	 */
 	public void getDetails() {
 		if (this.visible == true) {
 			System.out.println(this.title);
