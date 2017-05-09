@@ -2,8 +2,12 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.driver;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Map.Entry;
 import java.util.Scanner;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
@@ -13,6 +17,8 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
 
 public class App {
+
+	private static Logger log = LogManager.getLogger(App.class);
 
 	public static void main(String[] args) {
 
@@ -110,35 +116,52 @@ public class App {
 					}
 					scan.nextLine();
 				}
-				System.out.println("Wie soll die Playlist heißen?");
-				IMedialist playlist = ListFactory.getInstance(typ, scan.nextLine());
+				boolean correctName = false;
+				String nameInput = null;
+				while (correctName == false) {
+					System.out.println("Wie soll die Playlist heißen?");
+					nameInput = scan.nextLine();
+
+					// Schleife prüft, ob gewählter Name für eine Playlist schon existiert.
+					if (!allLists.isEmpty()) {
+						for (int i = 0; i < allLists.size(); i++) {
+							if (allLists.get(i).getName().toLowerCase().equals(nameInput.toLowerCase())) {
+								System.out.println("Playlist mit dem Namen " + allLists.get(i).getName() + " existiert bereits.\n"
+										+ "Bitte wähle einen anderen Namen.");
+								break;
+							}
+							if (i == allLists.size() - 1) {
+								correctName = true;
+							}
+						}
+					} else {
+						break;
+					}
+				}
+				IMedialist playlist = ListFactory.getInstance(typ, nameInput);
 				allLists.add(playlist);
-				playlist = editPlaylist(playlist, scan, s, movies, audio);
 				break;
 			case 8:
-				for (IMedialist i : allLists) {
-					System.out.println(i.getName());
+				try {
+					for (IMedialist i : allLists) {
+						System.out.println(i.getName());
+					}
+				} catch (NullPointerException e) {
+					log.warn(e.getMessage() + "\nPlaylist nicht korrekt gelöscht.");
+					System.out.println("Es existieren keine Playlists.");
 				}
 				break;
 			case 9:
-				System.out.println("Welche Playlist soll berbeitet werden?");
-				for (int i = 0; i < allLists.size(); i++) {
-					System.out.println(i + ": " + allLists.get(i).getName());
-				}
-				scan.nextLine();
-				int choice = scan.nextInt();
-				if (choice >= 0 && choice < allLists.size()) {
-					editPlaylist(allLists.get(choice), scan, s, movies, audio);
-				} else {
-					System.out.println("Ungültige Eingabe");
-				}
+				allLists = editPlaylist(allLists, scan, s, movies, audio);
 				break;
 			case 10:
 				System.out.println("Bye");
+				MediaStorage.savePlaylists(allLists);
 
 				break loop;
+			default:
+				System.out.println("Ungültige Eingabe");
 			}
-
 		}
 	}
 
@@ -173,23 +196,52 @@ public class App {
 		}
 		throw new InvalidInputException();
 	}
-	
-	public static IMedialist editPlaylist(IMedialist playlist, Scanner scan, Settings s, IMedialist movies, IMedialist audio) {
+
+	public static ArrayList<IMedialist> editPlaylist(ArrayList<IMedialist> allLists, Scanner scan, Settings s, IMedialist movies, IMedialist audio) {
+		IMedialist playlist;
+		int choice;
+		while (true) {
+			System.out.println("Welche Playlist soll berbeitet werden?");
+			for (int i = 0; i < allLists.size(); i++) {
+				System.out.println(i + ": " + allLists.get(i).getName());
+			}
+			scan.nextLine();
+			try { 
+				choice = scan.nextInt();
+				if (choice >= 0 && choice < allLists.size()) {
+					playlist = allLists.get(choice);
+					break;
+				} else {
+					System.out.println("Ungültige Eingabe");
+				}
+			} catch (InputMismatchException e) {
+				log.warn("Ungültige Eingabe\n" + e.fillInStackTrace());
+				System.out.println("Ungültige Eingabe");
+			}
+		}
 		while(true) {
 			System.out.println("0: weitere Medien zu Playlist " + playlist.getName() + " hinzufügen\n"
-					+ "1: Playlist nicht weiter bearbeiten");
+					+ "1: Playlist " + playlist.getName() + " nicht weiter bearbeiten\n"
+					+ "2: Playlist " + playlist.getName() + " löschen");
 			String input = scan.next();
 			switch (input) {
 			case "0":
 				System.out.println("Welches Medium soll zur Playlist " + playlist.getName() + " hinzugefügt werden?");
-				playlist.addMedia(getInput(s, scan, movies, audio));
+				try {
+					playlist.addMedia(getInput(s, scan, movies, audio));
+				} catch (InvalidInputException e) {
+					log.warn("Ungültige Eingabe. Eingegebener Titel nicht gefunden");
+					log.catching(e);
+				}
 				break;
 			case "1":
-				return playlist;
+				return allLists;
+			case "2":
+				allLists.remove(choice);
+				return allLists;
 			default:
 				System.out.println("Ungültige Eingabe!");
 			}
 		}
 	}
-
 } 
