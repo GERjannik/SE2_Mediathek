@@ -7,6 +7,7 @@ import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import de.hdm_stuttgart.se2.softwareProject.mediathek.driver.App;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
@@ -67,14 +68,14 @@ public class MediaStorage {
 		return allMedia;
 	}
 
-	public static void deleteMedia(IMedia m) {
-		Scanner s = new Scanner(System.in);
+	public static void deleteMedia(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {
 
+		IMedia m = App.getInput(s, scan, movies, audio);		
 		System.out.println("Möchtest du das Medium " + m.getTitle() +  " von der Festplatte löschen? (Ja/Nein)\n");
 
 		boolean validInput = false;
 		while (validInput == false) {
-			String input = s.nextLine();
+			String input = scan.nextLine();
 			if (input.equals("Ja") || input.equals("ja")) {
 				validInput = true;
 				m.getFile().delete();
@@ -88,7 +89,6 @@ public class MediaStorage {
 				System.out.println("ungültige Eingabe - entweder für 'Ja' / 'ja' oder 'Nein' / 'nein' entscheiden");
 			}
 		}
-		s.close();
 	}
 
 	public static void editMetaInformation(IMedia m, Scanner s) {
@@ -173,5 +173,10 @@ public class MediaStorage {
 			// TODO: Überlegen, wie einzelne Playlists voneinander getrennt werden
 			log.info("Playlist " + i.getName() + " mit allen Inhalten erfolgreich in playlists.json geschrieben");
 		}
+	}
+	
+	public static void playMovie(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {
+		System.out.println("Welcher Film soll gespielt werden?");
+		App.getInput(s, scan, movies, audio).open();
 	}
 }

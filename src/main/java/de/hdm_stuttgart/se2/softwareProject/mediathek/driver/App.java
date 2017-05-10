@@ -26,7 +26,7 @@ public class App {
 		Scanner scan = new Scanner(System.in);
 		ArrayList<IMedialist> allLists = new ArrayList<>();
 
-		if (new File ("settings.json").exists() && !(new File ("settings.json").isDirectory())) {
+		if (new File("settings.json").exists() && !(new File("settings.json").isDirectory())) {
 			s.readDirectory();
 		} else {
 			boolean validInput = false;
@@ -37,6 +37,7 @@ public class App {
 					validInput = true;
 					s.setDirectory(input.toString());
 				} else {
+					log.debug("Kein gültiges Verzeichnis angegeben");
 					System.out.println("Die Eingabe ist kein gültiges Verzeichnis");
 				}
 			}
@@ -51,19 +52,19 @@ public class App {
 		loop:while(true) {
 			menu();
 			boolean validInput = false;
-			int input = scan.nextInt();
+			String input = scan.next();
 			switch (input) {
-			case 0:
+			case "0":
 				movies.printList();
 				break;
-			case 1:
+			case "1":
 				audio.printList();
 				break;
-			case 2:
+			case "2":
 				movies.printList();
 				audio.printList();
 				break;
-			case 3:
+			case "3":
 				movies.printList();
 				audio.printList();
 				IMedia media;
@@ -75,12 +76,12 @@ public class App {
 				}
 				MediaStorage.editMetaInformation(media, scan);
 				break;
-			case 4:
+			case "4":
 				movies.printList();
 				audio.printList();
-				MediaStorage.deleteMedia(getInput(s, scan, movies, audio));
+				MediaStorage.deleteMedia(s, scan, movies, audio);
 				break;
-			case 5:
+			case "5":
 				while (validInput == false) {
 					System.out.println("Welches Verzeichnis soll nach Medien durchsucht werden?");
 					scan.nextLine();
@@ -94,12 +95,12 @@ public class App {
 					}
 				}
 				break;
-			case 6:
+			case "6":
 				scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
 				movies = scannedContent[0];
 				audio = scannedContent[1];
 				break;
-			case 7:
+			case "7":
 				validInput = false;
 				String typ = "";
 				while (validInput == false) {
@@ -141,7 +142,7 @@ public class App {
 				IMedialist playlist = ListFactory.getInstance(typ, nameInput);
 				allLists.add(playlist);
 				break;
-			case 8:
+			case "8":
 				try {
 					for (IMedialist i : allLists) {
 						System.out.println(i.getName());
@@ -151,10 +152,17 @@ public class App {
 					System.out.println("Es existieren keine Playlists.");
 				}
 				break;
-			case 9:
+			case "9":
 				allLists = editPlaylist(allLists, scan, s, movies, audio);
 				break;
-			case 10:
+			case "10":
+				try {
+					MediaStorage.playMovie(s, scan, movies, audio);
+				} catch (InvalidInputException e) {
+					log.error("Kein passendes Medium zum Abspielen gefunden");
+				}
+				break;
+			case "11":
 				System.out.println("Bye");
 				MediaStorage.savePlaylists(allLists);
 
@@ -177,7 +185,8 @@ public class App {
 				+ "7: Playlist erstellen\n"
 				+ "8: Alle Playlists anzeigen\n"
 				+ "9: Playlist bearbeiten\n"
-				+ "10: Programm beenden\n");
+				+ "10: Medium abspielen\n"
+				+ "11: Programm beenden\n");
 	}
 
 	public static IMedia getInput(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {
@@ -221,8 +230,9 @@ public class App {
 		}
 		while(true) {
 			System.out.println("0: weitere Medien zu Playlist " + playlist.getName() + " hinzufügen\n"
-					+ "1: Playlist " + playlist.getName() + " nicht weiter bearbeiten\n"
-					+ "2: Playlist " + playlist.getName() + " löschen");
+					+ "1: Name der Playlist " + playlist.getName() + " ändern\n"
+					+ "2: Playlist " + playlist.getName() + " nicht weiter bearbeiten\n"
+					+ "3: Playlist " + playlist.getName() + " löschen");
 			String input = scan.next();
 			switch (input) {
 			case "0":
@@ -235,8 +245,33 @@ public class App {
 				}
 				break;
 			case "1":
-				return allLists;
+				boolean correctName = false;
+				String nameInput = null;
+				while (correctName == false) {
+					System.out.println("Wie soll die Playlist heißen?");
+					nameInput = scan.nextLine();
+
+					// Schleife prüft, ob gewählter Name für eine Playlist schon existiert.
+					if (!allLists.isEmpty()) {
+						for (int i = 0; i < allLists.size(); i++) {
+							if (allLists.get(i).getName().toLowerCase().equals(nameInput.toLowerCase())) {
+								System.out.println("Playlist mit dem Namen " + allLists.get(i).getName() + " existiert bereits.\n"
+										+ "Bitte wähle einen anderen Namen.");
+								break;
+							}
+							if (i == allLists.size() - 1) {
+								correctName = true;
+							}
+						}
+					} else {
+						break;
+					}
+				}
+				playlist.setName(nameInput);
+				break;
 			case "2":
+				return allLists;
+			case "3":
 				allLists.remove(choice);
 				return allLists;
 			default:

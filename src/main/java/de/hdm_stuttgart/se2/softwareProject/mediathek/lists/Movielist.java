@@ -49,6 +49,7 @@ class Movielist implements IMedialist {
 	@Override
 	public void removeMedia(IMedia m) {
 		this.content.remove(m.getFile());
+		log.info(m.getFile() + " aus Playlist " + this.getName() + " entfernt");
 	}
 	
 	@Override
