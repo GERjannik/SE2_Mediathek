@@ -5,11 +5,12 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
 /**
  * 
- * @author ll040
- * 
  * Implementiert das IMedia Interface. Erweiterung um medienspezifische
  * Attribute: pages, author, info, releaseDate, genre und ranking.
  * Die spezifischen Attribute werden anhand des Constructors gesetzt.
+ * 
+ * @author ll040
+ * 
  */
 class Book extends Media implements IMedia {
 

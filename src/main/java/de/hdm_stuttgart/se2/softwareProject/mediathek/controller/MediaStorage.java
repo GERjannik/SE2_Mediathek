@@ -1,12 +1,15 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.controller;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.InputMismatchException;
-import java.util.Map.Entry;
 import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.simple.JSONObject;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.driver.App;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
@@ -35,7 +38,7 @@ public class MediaStorage {
 		log.info("Liste für Audiodateien erstellt");
 		IMedialist books = ListFactory.getInstance("book", "scannedBooks");
 		log.info("Liste für Textdateien erstellt");
-		
+
 		ArrayList<File> files = ScanDirectoryRecursive.createFileList(file);
 
 		// Aus jeder Datei des Arrays wird ein Objekt erstellt und der richtigen HashMap zugeordnet
@@ -43,13 +46,13 @@ public class MediaStorage {
 			String typ = null;
 			MediaMeta meta = readMetaData(files.get(i).toString());
 			log.info("Metadaten von " + files.get(i) + " werden gelesen");
-			
+
 			if (files.get(i).getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")) {
 				typ = "video";
 				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, files.get(i),
 						true, meta.getLength(), meta.getDate(), meta.getArtist(), meta.getGenre(), meta.getDescription());
 				movies.getContent().put(files.get(i), temp);
-				
+
 			} else if (files.get(i).getName().toLowerCase().matches("^.*\\.(mp3||wav|wma|aac|ogg)$")) {
 				typ = "audio";
 				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, files.get(i),
@@ -93,10 +96,10 @@ public class MediaStorage {
 	}
 
 	public static void editMetaInformation(IMedia m, Scanner s) {
-		
+
 		MediaMeta meta = readMetaData(m.getFile().toString());
 		log.info("Metadaten von " + m.getFile() + " werden bearbeitet");
-		
+
 		if (m.getTyp().equals("video"))	{
 			System.out.println("Wie lautet der Titel des Films?");
 			meta.setTitle(s.nextLine());
@@ -159,7 +162,7 @@ public class MediaStorage {
 			}
 		}
 	}
-	
+
 	private static String rankingInput(Scanner s, String typ) {
 		do {
 			if (typ.equals("video")) {
@@ -173,7 +176,7 @@ public class MediaStorage {
 				log.error("Kein gültiger Typ übergeben.");
 				return "0";
 			}
-			
+
 			int input = 0;
 			try {
 				input = s.nextInt();
@@ -189,22 +192,37 @@ public class MediaStorage {
 			}
 		} while (true);
 	}
-	
+
 	public static void savePlaylists(ArrayList<IMedialist> allLists) {
 		// TODO: playlists.json muss erstellt/überschrieben werden
 		// Schleife läuft durch Liste, die alle Playlists enthält
-		for (IMedialist i : allLists) {
-			i.getName(); // TODO: Name der jew. Playlist muss gespeichert werden
-			// TODO: Alle Inhalte (Key-Value-Paare) der jew. Playlist müssen gespeichert werden
-			for (Entry<File, IMedia> o : i.getContent().entrySet()) {
+		try (PrintWriter writer = new PrintWriter(new File ("playlists.json"))) {
+			for (IMedialist i : allLists) {
+				HashMap<String, Object> obj = new HashMap<>();
+				obj.put("name", i.getName());
+				ArrayList<File> list = new ArrayList<>();
+				for (File f : i.getContent().keySet()) {
+					list.add(f);
+					// TODO: Alle Inhalte (Key-Value-Paare) der jew. Playlist müssen gespeichert werden
+				}
+				obj.put("content", list);
+				JSONObject root = new JSONObject(obj);
+				/*for (Entry<File, IMedia> o : i.getContent().entrySet()) {
 				o.getKey();
 				o.getValue();
+			}*/
+				// TODO: Überlegen, wie einzelne Playlists voneinander getrennt werden
+				writer.println(root.toJSONString());
+				log.info("Playlists erfolgreich in JSON gespeichert");
+				log.info("Playlist " + i.getName() + " mit allen Inhalten erfolgreich in playlists.json geschrieben");
 			}
-			// TODO: Überlegen, wie einzelne Playlists voneinander getrennt werden
-			log.info("Playlist " + i.getName() + " mit allen Inhalten erfolgreich in playlists.json geschrieben");
+		} catch (FileNotFoundException e) {
+			log.info("Speichern der Playlists in JSON fehlgeschlagen");
+			log.catching(e);;
+			e.printStackTrace();
 		}
 	}
-	
+
 	public static void playMovie(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {
 		System.out.println("Welcher Film soll gespielt werden?");
 		App.getInput(s, scan, movies, audio).open();

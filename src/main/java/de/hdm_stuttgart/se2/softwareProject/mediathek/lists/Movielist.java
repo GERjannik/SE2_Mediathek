@@ -12,16 +12,15 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 
 /**
- * 
- * @author ll040
- *
  * Movielist implementiert das Interface IMedialist. Die Klasse
  * enthält ein Namesattribut und eine Map mit File-Objekten als Key und 
  * Movie-Objekten vom Typ IMedia als Wert.
- * Über die Methoden der Klasse, können Movie-Objekte hinzugefügt, ge-
- * löscht und ausgelesen werden. Zudem kann der Inhalt ausgegeben bzw.
+ * Über die Methoden der Klasse, können Movie-Objekte hinzugefügt, gelöscht
+ * und ausgelesen werden. Zudem kann der Inhalt ausgegeben bzw.
  * aufgelistet werden. Der Name der Liste kann nachträglich geändert 
  * werden
+ * 
+ * @author ll040
  * 
  */
 class Movielist implements IMedialist {

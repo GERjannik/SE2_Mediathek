@@ -10,12 +10,11 @@ import org.apache.logging.log4j.Logger;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
 /**
+ * Implementiert das IMedia Interface. Implentiert zusätzlich generische
+ * Attribute für Medien-Objekte, welche durch den Constructor gesetzt werden.
  * 
  * @author ll040
  * 
- * Implementiert das IMedia Interface. Implentiert zusätzlich generische
- * Attribute für Medien-Objekte, welche durch den Constructor gesetzt werden.
- *
  */
 abstract class Media implements IMedia{
 	

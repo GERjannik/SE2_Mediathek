@@ -10,13 +10,13 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
 /**
  * 
- * @author ll040
- * 
  * Factory zur Erzeugung von Movie-, Audio sowie Book-Objekten, wobei Typ und
  * Methadaten beim Aufrufen der getInstance-Methode mit übergeben werden
  * müssen. Nicht-zulässige Listen-Typen haben eine InvalidTypeException zur
  * Folge.
- *
+ * 
+ * @author ll040
+ * 
  */
 public class MediaFactory {
 

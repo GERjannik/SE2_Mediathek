@@ -1,27 +1,24 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.models;
 
 import java.io.File;
-import java.util.List;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
 /**
- * 
- * @author ll040
- * 
  * Implementiert das IMedia Interface. Erweiterung um medienspezifische
  * Attribute: actor, duration (Typ an Medium angepasst), releaseDate, regisseur, info
  * und ranking. Die spezifischen Attribute werden anhand des Constructors 
  * gesetzt.
+ * 
+ * @author ll040
+ *
  */
 class Movie extends Media implements IMedia {
 	
 	private static Logger log = LogManager.getLogger(Movie.class);
 	
-	private List<String> actor;
 	private long duration;
 	private String releaseDate;
 	private String regisseur;
@@ -53,21 +50,14 @@ class Movie extends Media implements IMedia {
 
 	}
 
-	@Override
 	/**
 	 * Auslesen der Metadaten, sofern visible == true
 	 */
+	@Override
 	public void getDetails() {
 		if (this.visible == true) {
 			System.out.println(this.title);
 
-			if (this.actor != null && this.actor.size() != 0) {
-				System.out.println("Schauspieler:");
-				// Schleife, damit alle Schauspieler, die die Liste enthält, ausgegeben werden
-				for (String i : this.actor) {
-					System.out.println(i);
-				}
-			}
 			if (this.duration != 0) {
 				if (this.duration / 60000 != 0)	{
 					System.out.format("Dauer: %d Minuten\n", this.duration / 60000);

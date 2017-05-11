@@ -9,11 +9,12 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
 /**
  * 
- * @author ll040
- * 
  * Implementiert das IMedia Interface. Erweiterung um medienspezifische
  * Attribute: duration, interpret, genre, info, ranking und releaseDate.
  * Die spezifischen Attribute werden anhand des Constructors gesetzt.
+ * 
+ * @author ll040
+ * 
  */
 class Audio extends Media implements IMedia {
 
@@ -50,10 +51,11 @@ class Audio extends Media implements IMedia {
 	}
 
 
-	@Override
+	
 	/**
 	 * Auslesen der Metadaten, sofern visible == true
 	 */
+	@Override
 	public void getDetails() {
 		if (this.visible == true) {
 			System.out.println(this.title);

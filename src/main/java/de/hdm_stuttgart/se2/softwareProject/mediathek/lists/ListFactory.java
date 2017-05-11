@@ -9,13 +9,13 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 
 /**
  * 
- * @author ll040
- * 
  * Factory zur Erzeugung von Movie-, Audio sowie Booklists, wobei Typ und
  * Name der Liste beim Aufrufen der getInstance-Methode mit übergeben werden
  * müssen. Nicht-zulässige Listen-Typen haben eine InvalidTypeException zur
  * Folge.
- *
+ * 
+ * @author ll040
+ * 
  */
 public class ListFactory {
 

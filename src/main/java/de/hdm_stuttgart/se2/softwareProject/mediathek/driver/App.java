@@ -167,8 +167,9 @@ public class App {
 				break;
 			case "11":
 				System.out.println("Bye");
+				if (allLists.size() > 0) {
 				MediaStorage.savePlaylists(allLists);
-
+				}
 				break loop;
 			default:
 				System.out.println("Ungültige Eingabe");

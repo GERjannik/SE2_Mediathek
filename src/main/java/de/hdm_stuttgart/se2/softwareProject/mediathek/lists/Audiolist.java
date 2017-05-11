@@ -13,8 +13,6 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 
 /**
  * 
- * @author ll040
- *
  * Audiolist implementiert das Interface IMedialist. Die Klasse
  * enthält ein Namesattribut und eine Map mit File-Objekten als Key und 
  * Audio-Objekten vom Typ IMedia als Wert.
@@ -23,6 +21,8 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
  * aufgelistet werden. Der Name der Liste kann nachträglich geändert 
  * werden
  * 
+ * @author ll040
+ *
  */
 class Audiolist implements IMedialist {
 	
