@@ -30,10 +30,12 @@ class Audiolist implements IMedialist {
 	
 	private Map<File, IMedia> content;
 	private String name;
+	private String type;
 
-	public Audiolist(String name) {
+	public Audiolist(String name, String typ) {
 		this.content = new HashMap<File, IMedia>();
 		this.name = name;
+		this.type = typ;
 	}
 
 	@Override
@@ -69,5 +71,10 @@ class Audiolist implements IMedialist {
 	public void addMedia(IMedia media) {
 		this.content.put(media.getFile(), media);
 		log.debug(media.getTitle() + " wurde zur Liste hinzugefügt");
+	}
+	
+	@Override
+	public String getType() {
+		return this.type;
 	}
 }

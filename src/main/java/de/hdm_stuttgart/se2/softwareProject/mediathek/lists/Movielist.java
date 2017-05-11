@@ -29,10 +29,12 @@ class Movielist implements IMedialist {
 
 	private Map<File, IMedia> content;
 	private String name;
+	private String type;
 
-	public Movielist(String name) {
+	public Movielist(String name, String typ) {
 		this.content = new HashMap<File, IMedia>();
 		this.name = name;
+		this.type = typ;
 	}
 
 	@Override
@@ -69,6 +71,11 @@ class Movielist implements IMedialist {
 	public void addMedia(IMedia media) {
 		this.content.put(media.getFile(), media);
 		log.debug(media.getTitle() + " wurde zur Liste hinzugefügt");
+	}
+
+	@Override
+	public String getType() {
+		return this.type;
 	}
 }
 

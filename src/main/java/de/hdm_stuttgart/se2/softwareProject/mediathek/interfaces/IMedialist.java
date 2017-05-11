@@ -18,6 +18,7 @@ public interface IMedialist {
 
 	Map<File, IMedia> getContent();
 	String getName();
+	String getType();
 	void removeMedia(IMedia m);
 	void printList();
 	void setName(String name);

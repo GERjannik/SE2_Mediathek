@@ -6,10 +6,13 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.driver.App;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
@@ -200,6 +203,7 @@ public class MediaStorage {
 			for (IMedialist i : allLists) {
 				HashMap<String, Object> obj = new HashMap<>();
 				obj.put("name", i.getName());
+				obj.put("type", i.getType());
 				ArrayList<File> list = new ArrayList<>();
 				for (File f : i.getContent().keySet()) {
 					list.add(f);
@@ -221,6 +225,30 @@ public class MediaStorage {
 			log.catching(e);;
 			e.printStackTrace();
 		}
+	}
+	
+	public static ArrayList<IMedialist> loadPlaylists(IMedialist movies, IMedialist audio) {
+		ArrayList<IMedialist> allLists = new ArrayList<>();
+		try (Scanner input = new Scanner(new File("playlists.json"))) {
+			while (input.hasNextLine()) {
+				String jsonInput = input.nextLine();
+				JSONObject root = (JSONObject) new JSONParser().parse(jsonInput.toString());
+				IMedialist m = ListFactory.getInstance((String)root.get("type"), (String)root.get("name"));
+				for (File f : (ArrayList<File>)root.get("content")) {
+					for  (Entry<File, IMedia> i : movies.getContent().entrySet()) {
+						if (i.getKey().equals(f)) {
+							m.addMedia(i.getValue());
+						}
+					}
+				}
+				allLists.add(m);
+			}
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return allLists;
 	}
 
 	public static void playMovie(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {

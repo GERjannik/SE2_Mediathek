@@ -32,13 +32,13 @@ public class ListFactory {
 		switch (typ) {
 		case "video":
 			log.debug("Movielist " + name + " erfolgreich erstellt");
-			return new Movielist(name);
+			return new Movielist(name, typ);
 		case "audio":
 			log.debug("Audiolist " + name + " erfolgreich erstellt");
-			return new Audiolist(name);
+			return new Audiolist(name, typ);
 		case "book":
 			log.debug("Booklist " + name + " erfolgreich erstellt");
-			return new Booklist(name);
+			return new Booklist(name, typ);
 		default:
 			log.catching(new InvalidTypeException());
 			throw new InvalidTypeException();

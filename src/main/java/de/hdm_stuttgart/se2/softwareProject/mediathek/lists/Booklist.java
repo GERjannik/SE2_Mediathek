@@ -26,10 +26,12 @@ class Booklist implements IMedialist {
 	
 	private Map<File, IMedia> content;
 	private String name;
+	private String type;
 
-	public Booklist(String name) {
+	public Booklist(String name, String typ) {
 		this.content = new HashMap<File, IMedia>();
 		this.name = name;
+		this.type = typ;
 	}
 
 	@Override
@@ -62,5 +64,10 @@ class Booklist implements IMedialist {
 	@Override
 	public void addMedia(IMedia media) {
 		this.content.put(media.getFile(), media);
+	}
+	
+	@Override
+	public String getType() {
+		return this.type;
 	}
 }
