@@ -2,6 +2,7 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.controller;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Map.Entry;
 import java.util.Scanner;
 import org.apache.logging.log4j.LogManager;
@@ -107,8 +108,7 @@ public class MediaStorage {
 			meta.setGenre(s.nextLine());
 			System.out.println("Weitere Infos zum Film?");
 			meta.setDescription(s.nextLine());
-			System.out.println("Welche Bewertung bekommt der Film?");
-			meta.setRating(s.nextLine());
+			meta.setRating(rankingInput(s, m.getTyp()));
 		}
 		if (m.getTyp().equals("audio"))	{
 			System.out.println("Wie lautet der Titel der Audiodatei?");
@@ -121,19 +121,19 @@ public class MediaStorage {
 			meta.setGenre(s.nextLine());
 			System.out.println("Weitere Infos zum Audio?");
 			meta.setDescription(s.nextLine());
-			System.out.println("Welche Bewertung bekommt das Audio?");
-			meta.setRating(s.nextLine());
+			meta.setRating(rankingInput(s, m.getTyp()));
 		}
 		System.out.println("Folgende Eingaben speichern? (Ja/Nein)");
-		System.out.println(meta.getTitle());
-		System.out.println(meta.getDate());
-		System.out.println(meta.getArtist());
-		System.out.println(meta.getGenre());
-		System.out.println(meta.getDescription());
-		System.out.println(meta.getRating());
+		System.out.println("Titel: " + meta.getTitle());
+		System.out.println("Erscheinungsdatum: " + meta.getDate());
+		System.out.println("Regisseur/Verfasser: " + meta.getArtist());
+		System.out.println("Genre: " + meta.getGenre());
+		System.out.println("Infos: " + meta.getDescription());
+		System.out.println("Bewertung: " + meta.getRating());
 
 		boolean validInput = false;
 		while (validInput == false) {
+			s.nextLine();
 			String input = s.nextLine();
 			if (input.equals("Ja") || input.equals("ja")) {
 				validInput = true;
@@ -158,6 +158,36 @@ public class MediaStorage {
 				System.out.println("ungültige Eingabe - entweder für 'Ja' / 'ja' oder 'Nein' / 'nein' entscheiden");
 			}
 		}
+	}
+	
+	private static String rankingInput(Scanner s, String typ) {
+		do {
+			if (typ.equals("video")) {
+				System.out.println("Welche Bewertung bekommt der Film? (1 bis 5)\n"
+						+ "(1 = sehr schlecht, 5 = sehr gut)");
+			} else if (typ.equals("audio")) {
+				System.out.println("Welche Bewertung bekommt das Audio? (1 bis 5)\n"
+						+ "(1 = sehr schlecht, 5 = sehr gut)");
+			} else {
+				System.out.println("Fehler, Bewertung auf 0 gesetzt");
+				log.error("Kein gültiger Typ übergeben.");
+				return "0";
+			}
+			
+			int input = 0;
+			try {
+				input = s.nextInt();
+			} catch (InputMismatchException e) {
+				System.out.println("Ungültige Eingabe. Bewertung erfolgt in Nummern von 1-5");
+				s.nextLine();
+				continue;
+			}
+			if (input > 0 && input <= 5) {
+				return "" + input;
+			} else {
+				System.out.println("Ungültige Eingabe. Bewertung erfolgt in Nummern von 1-5");
+			}
+		} while (true);
 	}
 	
 	public static void savePlaylists(ArrayList<IMedialist> allLists) {

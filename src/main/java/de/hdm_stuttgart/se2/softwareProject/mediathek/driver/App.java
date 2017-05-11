@@ -71,7 +71,7 @@ public class App {
 				try {
 					media = getInput(s, scan, movies, audio);
 				} catch (InvalidInputException e) {
-					System.out.println("Kein Medium mit diesem Titel gefunden. Kehre zurück ins Hauptmenü");
+					System.out.println("Kein Medium mit diesem Titel gefunden. Kehre zurück ins Hauptmenü.");
 					break;
 				}
 				MediaStorage.editMetaInformation(media, scan);
@@ -91,7 +91,7 @@ public class App {
 						s.setDirectory(f.toString());
 						s.readDirectory();
 					} else {
-						System.out.println("Die Eingabe ist kein gültiges Verzeichnis");
+						System.out.println("Die Eingabe ist kein gültiges Verzeichnis.");
 					}
 				}
 				break;
@@ -122,7 +122,10 @@ public class App {
 				while (correctName == false) {
 					System.out.println("Wie soll die Playlist heißen?");
 					nameInput = scan.nextLine();
-
+					if (nameInput.isEmpty() || nameInput == null) {
+						System.out.println("Kein Name für die Playlist eingegeben. Bitte wähle einen Namen.");
+						continue;
+					}
 					// Schleife prüft, ob gewählter Name für eine Playlist schon existiert.
 					if (!allLists.isEmpty()) {
 						for (int i = 0; i < allLists.size(); i++) {
