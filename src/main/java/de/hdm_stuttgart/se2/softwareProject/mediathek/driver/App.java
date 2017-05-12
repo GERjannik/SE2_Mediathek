@@ -47,6 +47,7 @@ public class App {
 		IMedialist[] scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
 		IMedialist movies = scannedContent[0];
 		IMedialist audio = scannedContent[1];
+		allLists = MediaStorage.loadPlaylists(movies, audio);
 		/* Implementierung von books nur angedeutet (Interfaces) */
 		//IMedialist books = scannedContent[2];
 		loop:while(true) {

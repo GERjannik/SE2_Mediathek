@@ -204,9 +204,9 @@ public class MediaStorage {
 				HashMap<String, Object> obj = new HashMap<>();
 				obj.put("name", i.getName());
 				obj.put("type", i.getType());
-				ArrayList<File> list = new ArrayList<>();
+				ArrayList<String> list = new ArrayList<>();
 				for (File f : i.getContent().keySet()) {
-					list.add(f);
+					list.add(f.toString());
 					// TODO: Alle Inhalte (Key-Value-Paare) der jew. Playlist müssen gespeichert werden
 				}
 				obj.put("content", list);
@@ -226,7 +226,7 @@ public class MediaStorage {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static ArrayList<IMedialist> loadPlaylists(IMedialist movies, IMedialist audio) {
 		ArrayList<IMedialist> allLists = new ArrayList<>();
 		try (Scanner input = new Scanner(new File("playlists.json"))) {
@@ -234,17 +234,27 @@ public class MediaStorage {
 				String jsonInput = input.nextLine();
 				JSONObject root = (JSONObject) new JSONParser().parse(jsonInput.toString());
 				IMedialist m = ListFactory.getInstance((String)root.get("type"), (String)root.get("name"));
-				for (File f : (ArrayList<File>)root.get("content")) {
-					for  (Entry<File, IMedia> i : movies.getContent().entrySet()) {
-						if (i.getKey().equals(f)) {
-							m.addMedia(i.getValue());
+				if (((String)root.get("type")).equals("video")) {
+					for (String f : (ArrayList<String>)root.get("content")) {
+						for  (Entry<File, IMedia> i : movies.getContent().entrySet()) {
+							if (i.getKey().equals(new File(f))) {
+								m.addMedia(i.getValue());
+							}
+						}
+					}
+				} else {
+					for (String f : (ArrayList<String>)root.get("content")) {
+						for  (Entry<File, IMedia> i : audio.getContent().entrySet()) {
+							if (i.getKey().equals(new File(f))) {
+								m.addMedia(i.getValue());
+							}
 						}
 					}
 				}
 				allLists.add(m);
 			}
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
+			log.info("Keine Datei mit gespeicherten Playlists gefunden.");
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}

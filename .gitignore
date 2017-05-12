@@ -17,6 +17,9 @@ local.properties
 # Settings-Datei
 settings.json
 
+# Playlists Speicherdatei
+playlists.json
+
 # Eclipse Core
 .project
 
