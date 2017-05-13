@@ -12,6 +12,14 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+/**
+ * @author ll040
+ * 
+ * Klasse zum Auslesen, Wiedergeben und Setzen des Pfades für die 
+ * Medien mittels eines settings.json Datei. Handling mittels eines
+ * JSON Objektes.
+ *
+ */
 public class Settings {
 
 	private static Logger log = LogManager.getLogger(Settings.class);
@@ -21,10 +29,20 @@ public class Settings {
 	public Settings() {
 	}
 	
+	/**
+	 * Rückgabe des Dateipfades der Medien
+	 * @return File Objekt als Handler für den Dateipfad der Medien-
+	 * 		   dateien
+	 */
 	public File getMediaDirectory() {
 		return mediaDirectory;
 	}
 
+	/**
+	 * Einlesen des Dateipfades der Medien-Dateien aus des settings.json.
+	 * Parsen der settings.json zur Erstellung eines JSON Objektes, aus
+	 * dem der Pfad gelesen werden kann.
+	 */
 	public void readDirectory() {
 
 		File directory = null;
