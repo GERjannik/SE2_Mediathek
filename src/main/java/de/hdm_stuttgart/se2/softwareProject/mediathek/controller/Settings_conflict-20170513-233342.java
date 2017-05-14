@@ -15,8 +15,7 @@ import org.json.simple.parser.ParseException;
 /**
  * @author ll040
  * 
- * Klasse mit File Objekt als Repräsentation des Dateipfades. Methoden zum 
- * Auslesen, Wiedergeben und Setzen des Pfades für die 
+ * Klasse zum Auslesen, Wiedergeben und Setzen des Pfades für die 
  * Medien mittels eines settings.json Datei. Handling mittels eines
  * JSON Objektes.
  *
@@ -79,7 +78,12 @@ public class Settings {
 	}
 	
 	/**
-	 * Erstellen eines neuen JSON Objekts und anschließendes schreiben
+	 * Methode erstellt eine HashMap und fügt ein Key/Value Paar mit dem spezifierten
+	 * Pfadnamen hinzu. Konvertiert anschließend die HashMap zu einem JSONObject 
+	 * "root". Erstellen eines PrintWriter Objektes mit settings.json als Ziel-
+	 * Datei. Der spezifizierte Pfad der in JSONObject enthalten ist, wird über
+	 * die toJSONString() Methode in die Ziel-Datei settings.json geschrieben.
+	 * 
 	 * @param path Pfad zum Verzeichnis mit den Filmen
 	 */
 	public void setDirectory(String path) {

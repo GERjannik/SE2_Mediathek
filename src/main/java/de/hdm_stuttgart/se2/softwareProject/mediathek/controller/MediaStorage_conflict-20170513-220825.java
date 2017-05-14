@@ -26,28 +26,12 @@ public class MediaStorage {
 
 	private static Logger log = LogManager.getLogger(MediaStorage.class);
 
-	/**
-	 * Auslesen von Meta Daten aus den übergebenen Medien Dateien
-	 * @param File Objekt der jeweiligen Medien-Datei
-	 * @return MediaMeta Objekt mit Meta Informationen
-	 */
-	public static MediaMeta readMetaData(File file) {
+	public static MediaMeta readMetaData(String path) {
 		MediaPlayerFactory factory = new MediaPlayerFactory();
-		MediaMeta meta = factory.getMediaMeta(file.toString(), true);
+		MediaMeta meta = factory.getMediaMeta(path, true);
 		return meta;
 	}
-	
-	/**
-	 * Erstellen von zunächst leeren Audiolist, Booklist und Movielist Objekten des
-	 * Typs IMedialist. Genererieren einer ArrayList mit File Objekten sämtlicher Dateien
-	 * des übergebenen Pfades. Durchitererieren der ArrayList. Generierung von von MediaMeta
-	 * Objekten zu den jeweiligen File Objekten. Zuordnung des File/Media Meta Paares
-	 * zu den eingangs generierten IMedialist Objekten und den darin enthaltenen HashMaps
-	 * entsprechend ihres Dateityps.
-	 * @param File Objekt des Pfades mit den enthaltenen Medien Dateien
-	 * @return Array mit jeweils einem Audiolist, Booklist und Movielist Objekt 
-	 * des Typen IMedialist
-	 */
+
 	public static IMedialist[] mediaScan(File file) {
 
 		// HashMaps für Medien werden erzeugt
@@ -58,13 +42,12 @@ public class MediaStorage {
 		IMedialist books = ListFactory.getInstance("book", "scannedBooks");
 		log.info("Liste für Textdateien erstellt");
 
-		// Array mit File Objekten zu allen Medien Dateien, unabhängig vom Typ
 		ArrayList<File> files = ScanDirectoryRecursive.createFileList(file);
 
 		// Aus jeder Datei des Arrays wird ein Objekt erstellt und der richtigen HashMap zugeordnet
 		for (int i = 0; i < files.size(); i++) {
 			String typ = null;
-			MediaMeta meta = readMetaData(files.get(i));
+			MediaMeta meta = readMetaData(files.get(i).toString());
 			log.info("Metadaten von " + files.get(i) + " werden gelesen");
 
 			if (files.get(i).getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")) {
@@ -117,7 +100,7 @@ public class MediaStorage {
 
 	public static void editMetaInformation(IMedia m, Scanner s) {
 
-		MediaMeta meta = readMetaData(m.getFile());
+		MediaMeta meta = readMetaData(m.getFile().toString());
 		log.info("Metadaten von " + m.getFile() + " werden bearbeitet");
 
 		if (m.getTyp().equals("video"))	{
