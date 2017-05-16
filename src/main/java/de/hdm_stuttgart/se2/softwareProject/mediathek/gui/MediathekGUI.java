@@ -52,20 +52,14 @@ public class MediathekGUI extends Application {
 		right.getChildren().addAll(cover,metadata);
 		left.getChildren().add(comboBox);
 
-		
 
-		
-
-		
-
-		
 		root.setTop(menubar);
 		root.setLeft(left);
 		root.setCenter(view);
 		root.setRight(right); 
 		root.setBottom(statusbar);
 
-		primaryStage.setTitle("Mediathek by DYLB");
+		primaryStage.setTitle("Mediathek by DJLB");
 		primaryStage.setScene(MediaGUI);
 		primaryStage.show();
 	}
