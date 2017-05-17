@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.Tab?>
+
+
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="root">
+	<top>
+		<Button fx:id="settingsBtn" BorderPane.alignment="TOP_RIGHT">Einstellungen</Button>
+	</top>
+	<left>
+		<VBox>
+
+		<TabPane>
+			<tabs>
+				<Tab text="Filme">
+					<content>
+						<fx:include fx:id="filme" source="filme.fxml" />
+					</content>
+				</Tab>
+				<Tab text="Musik">
+					<content>
+						<fx:include fx:id="musik" source="musik.fxml" />
+					</content>
+				</Tab>
+			</tabs>
+		</TabPane>
+		<Button>+</Button>
+		</VBox>
+	</left>
+	<center>
+		<VBox>
+		<HBox>
+		  <Label>    Suche: </Label>
+		  <TextField fx:id="textField"/>
+		</HBox>
+		<TableView>
+			<columns>
+				<TableColumn text="Titel"></TableColumn>
+				<TableColumn text="Jahr"></TableColumn>
+				<TableColumn text="Genre"></TableColumn>
+				<TableColumn text="Director"></TableColumn>
+
+			</columns>
+		</TableView>
+		</VBox>
+	</center>
+	<right>
+		<VBox fx:id="right_vbox">
+			<Label>Cover Art</Label>
+			<Label>Metadaten</Label>
+			<Label>Artist</Label>
+			<Label>Titel</Label>
+			<Label>Jahr</Label>
+			<Label></Label>
+			<Label></Label>
+			<Label></Label>
+			<HBox BorderPane.alignment="BOTTOM_RIGHT">
+				<Button>Bearbeiten</Button>
+				<Button>Speichern</Button>
+			</HBox>
+		</VBox>
+	</right>
+	<bottom></bottom>
+</BorderPane>

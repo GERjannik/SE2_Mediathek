@@ -1,0 +1,17 @@
+.button {
+
+}
+.borderpane .top {
+    -fx-alignment: TOP_RIGHT;
+}
+.vbox.label {
+	-fx-background-color: gray;
+	-fx-padding: 20 5 0 5;
+}
+#right_vbox {
+	-fx-background-color: lightgray;
+
+}
+#right_vbox .label {
+	-fx-padding: 20 5 0 5;
+}

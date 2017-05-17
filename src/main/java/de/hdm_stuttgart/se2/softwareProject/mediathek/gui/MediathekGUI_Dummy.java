@@ -26,11 +26,14 @@ public class MediathekGUI_Dummy extends Application {
 		try {
 			//Load root layout from fxml file.
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MediathekGUI_Dummy.class.getResource("MediathekOverview.fxml"));
+			loader.setLocation(MediathekGUI_Dummy.class.getResource("mediathek.fxml"));
+			//loader.setLocation(MediathekGUI_Dummy.class.getResource("MediathekOverview.fxml"));
 			rootLayout = (BorderPane) loader.load();
 			
 			//Show the scene containing the root layout.
 			Scene scene = new Scene(rootLayout);
+			scene.getStylesheets().add(getClass().getResource("main.css").toExternalForm());
+			
 			primaryStage.setScene(scene);
 			primaryStage.show();
 		} catch (IOException e) {
