@@ -2,7 +2,10 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 
 import java.io.IOException;
 
+import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -44,6 +47,8 @@ public class MediathekGUI_Dummy extends Application {
 
 
 	public static void main(String[] args) {
+		
+		ObservableList<IMedia> Media = FXCollections.observableArrayList();
 		launch(args);
 	}
 }
