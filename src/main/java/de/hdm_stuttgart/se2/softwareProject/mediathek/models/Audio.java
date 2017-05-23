@@ -24,7 +24,7 @@ class Audio extends Media implements IMedia {
 	private String interpret;
 	private String genre;
 	private String info;
-	private String ranking;
+	private int ranking;
 	private String releaseDate;
 	
 	/**
@@ -41,13 +41,25 @@ class Audio extends Media implements IMedia {
 	 * @param info			benutzerspezifische Informationen
 	 */
 	public Audio(String typ, String title, File file, long duration, String interpret,
-			String genre, String releaseDate, String info, boolean favorite, boolean visible) {
+			String genre, String releaseDate, String info, boolean favorite, boolean visible, String ranking) {
 		super(typ, title, favorite, file, visible);
 		this.duration = duration;
 		this.interpret = interpret;
 		this.genre = genre;
 		this.releaseDate = releaseDate;
 		this.info = info;
+		try {
+			int rankInt = Integer.parseInt(ranking);
+			if (rankInt > 0 && rankInt < 6) {
+				this.ranking = rankInt;
+			} else {
+				this.ranking = 1;
+			}
+		} catch (NumberFormatException e) {
+			log.catching(e);
+			log.error("Ungültige Bewertung in Metadaten");
+			this.ranking = 1;
+		}
 	}
 
 
@@ -108,8 +120,13 @@ class Audio extends Media implements IMedia {
 
 
 	@Override
-	public void setRanking(String ranking) {
+	public void setRanking(int ranking) {
 		this.ranking = ranking;
 		log.debug("Bewertung des Mediums " + this.getFile() + " auf " + this.ranking + " geändert");
+	}
+
+	@Override
+	public boolean getFavorite() {
+		return this.favorite;
 	}
 }

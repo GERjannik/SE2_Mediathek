@@ -24,7 +24,7 @@ class Movie extends Media implements IMedia {
 	private String regisseur;
 	private String genre;
 	private String info;
-	private String ranking;
+	private int ranking;
 
 	/**
 	 * 
@@ -40,14 +40,25 @@ class Movie extends Media implements IMedia {
 	 * @param info			benutzerspezifische Informationen
 	 */
 	public Movie(String typ, String title, File file, long duration,
-			String releaseDate, String regisseur, String genre, String info, boolean favorite, boolean visible) {
+			String releaseDate, String regisseur, String genre, String info, boolean favorite, boolean visible, String ranking) {
 		super(typ, title, favorite, file, visible);
 		this.duration = duration;
 		this.releaseDate = releaseDate;
 		this.regisseur = regisseur;
 		this.genre = genre;
 		this.info = info;
-
+		try {
+			int rankInt = Integer.parseInt(ranking);
+			if (rankInt > 0 && rankInt < 6) {
+				this.ranking = rankInt;
+			} else {
+				this.ranking = 1;
+			}
+		} catch (NumberFormatException e) {
+			log.catching(e);
+			log.error("Ungültige Bewertung in Metadaten");
+			this.ranking = 1;
+		}
 	}
 
 	/**
@@ -109,8 +120,13 @@ class Movie extends Media implements IMedia {
 	}
 
 	@Override
-	public void setRanking(String ranking) {
+	public void setRanking(int ranking) {
 		this.ranking = ranking;
 		log.debug("Bewertung des Mediums " + this.getFile() + " auf " + this.ranking + " geändert");
+	}
+	
+	@Override
+	public boolean getFavorite() {
+		return this.favorite;
 	}
 }

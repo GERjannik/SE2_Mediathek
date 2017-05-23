@@ -68,25 +68,47 @@ public class MediaStorage {
 			log.info("Metadaten von " + files.get(i) + " werden gelesen");
 			JSONObject root = new JSONObject();
 			try {
-				root = readFilmMeta(meta);
+				if (meta.getDescription()!= null && meta.getDescription().startsWith("{")) {
+					root = (JSONObject) new JSONParser().parse(meta.getDescription());
+				} else {
+					if (meta.getDescription() == null) {
+						root.put("infos", "Keine weiteren Infos vorhanden");
+					} else {
+						root.put("infos", meta.getDescription());
+					}
+					root.put("favorite", false);
+					root.put("visible", true);
+					root.put("ranking", "1");
+				}
 			} catch (ParseException e) {
-				log.info("Film Settings Metadaten konnten nicht in JSON geparst werden");
-				e.printStackTrace();
+				log.warn("Medien-Description Metadaten konnten nicht in JSON geparst werden");
 				log.catching(e);
+				if (meta.getDescription() == null) {
+					root.put("infos", "Keine weiteren Infos vorhanden");
+				} else {
+					root.put("infos", meta.getDescription());
+				}
+				root.put("favorite", false);
+				root.put("visible", true);
+				root.put("ranking", "1");
 			}
-			// TODO: Nullpointerexception beheben
 			if (files.get(i).getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")) {
 				typ = "video";
 				IMedia temp = MediaFactory.getInstance(
 						typ, meta.getTitle(), files.get(i), meta.getLength(),meta.getDate(),
-								meta.getArtist(), meta.getGenre(), meta.getDescription(), (boolean)root.get("favorite"), (boolean)root.get("visible"));
+						meta.getArtist(),
+						meta.getGenre(),
+						(String)root.get("infos"),
+						(boolean)root.get("favorite"),
+						(boolean)root.get("visible"),
+						(String)root.get("ranking"));
 				movies.getContent().put(files.get(i), temp);
 
 			} else if (files.get(i).getName().toLowerCase().matches("^.*\\.(mp3||wav|wma|aac|ogg)$")) {
 				typ = "audio";
 				IMedia temp = MediaFactory.getInstance(
 						typ, meta.getTitle(), files.get(i), meta.getLength(), meta.getDate(),
-						meta.getArtist(), meta.getGenre(), meta.getDescription(), (boolean)root.get("favorite"), (boolean)root.get("visible"));
+						meta.getArtist(), meta.getGenre(), (String)root.get("infos"), (boolean)root.get("favorite"), (boolean)root.get("visible"), (String)root.get("ranking"));
 				audio.getContent().put(files.get(i), temp);
 			} /*else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(doc|docx|pdf|html|txt)$")) {
 				typ = "book";
@@ -100,12 +122,6 @@ public class MediaStorage {
 		// Die drei Maps werden in ein Array geschrieben und zurückgegeben
 		IMedialist[] allMedia = {movies, audio, books};
 		return allMedia;
-	}
-	
-	private static JSONObject readFilmMeta(MediaMeta meta) throws ParseException {
-		String metaSettings = meta.getSetting();
-		return (JSONObject) new JSONParser().parse(metaSettings);
-		
 	}
 
 	public static void deleteMedia(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {
@@ -131,11 +147,10 @@ public class MediaStorage {
 		}
 	}
 
-	public static void editMetaInformation(IMedia m, Scanner s) {
+	public static void editMetaInformation(IMedia m, Scanner s) throws ParseException {
 
 		MediaMeta meta = readMetaData(m.getFile());
 		log.info("Metadaten von " + m.getFile() + " werden bearbeitet");
-		JSONObject metaSettings = new JSONObject();
 
 		if (m.getTyp().equals("video"))	{
 			do {
@@ -149,24 +164,31 @@ public class MediaStorage {
 			System.out.println("Welchem Genre gehört der Film an?");
 			meta.setGenre(s.nextLine());
 			System.out.println("Weitere Infos zum Film?");
-			meta.setDescription(s.nextLine());
-			meta.setRating(rankingInput(s, m.getTyp()));
-			do {
-				System.out.println("Film zu Favoriten hinzufügen? (0: nein, 1: ja");
-				if (s.next().equals("0")) {
-					HashMap<String, Boolean> root = new HashMap<>();
-					root.put("favorite", false);
-					metaSettings = new JSONObject(root);
-					break;
-				} else if (s.next().equals("1")) {
-					HashMap<String, Boolean> root = new HashMap<>();
-					root.put("favorite", true);
-					metaSettings = new JSONObject(root);
-					break;
+			String infos = s.nextLine();
+			String ranking = rankingInput(s, m.getTyp());
+			boolean favorite = false;
+			boolean valid = false;
+			while (valid == false) {
+				System.out.println("Film zu Favoriten hinzufügen? (0: nein, 1: ja)");
+				s.nextLine();
+				String input = s.nextLine();
+				if (input.equals("0")) {
+					favorite = false;
+					valid = true;
+				} else if (input.equals("1")) {
+					favorite = true;
+					valid = true;
 				} else {
 					log.debug("Ungültige Eingabe");
 				}
-			} while (true);
+			}
+			HashMap<String, Object> root = new HashMap<>();
+			root.put("infos", infos);
+			root.put("ranking", ranking);
+			root.put("favorite", favorite);
+			root.put("visible", true);
+			JSONObject metaInfos = new JSONObject(root);
+			meta.setDescription(metaInfos.toString());
 		}
 		if (m.getTyp().equals("audio"))	{
 			do {
@@ -180,37 +202,44 @@ public class MediaStorage {
 			System.out.println("Welchem Genre gehört das Audio an?");
 			meta.setGenre(s.nextLine());
 			System.out.println("Weitere Infos zum Audio?");
-			meta.setDescription(s.nextLine());
-			meta.setRating(rankingInput(s, m.getTyp()));
-			do {
-				System.out.println("Film zu Favoriten hinzufügen? (0: nein, 1: ja");
-				if (s.next().equals("0")) {
-					HashMap<String, Boolean> root = new HashMap<>();
-					root.put("favorite", false);
-					metaSettings = new JSONObject(root);
-					break;
-				} else if (s.next().equals("1")) {
-					HashMap<String, Boolean> root = new HashMap<>();
-					root.put("favorite", true);
-					metaSettings = new JSONObject(root);
-					break;
+			String infos = s.nextLine();
+			String ranking = rankingInput(s, m.getTyp());
+			boolean favorite = false;
+			boolean valid = false;
+			while (valid == false) {
+				System.out.println("Audio zu Favoriten hinzufügen? (0: nein, 1: ja)");
+				s.nextLine();
+				String input = s.nextLine();
+				if (input.equals("0")) {
+					favorite = false;
+					valid = true;
+				} else if (input.equals("1")) {
+					favorite = true;
+					valid = true;
 				} else {
 					log.debug("Ungültige Eingabe");
 				}
-			} while (true);
+			}
+			HashMap<String, Object> root = new HashMap<>();
+			root.put("infos", infos);
+			root.put("ranking", ranking);
+			root.put("favorite", favorite);
+			root.put("visible", true);
+			JSONObject metaInfos = new JSONObject(root);
+			meta.setDescription(metaInfos.toString());
 		}
 		System.out.println("Folgende Eingaben speichern? (Ja/Nein)");
 		System.out.println("Titel: " + meta.getTitle());
 		System.out.println("Erscheinungsdatum: " + meta.getDate());
 		System.out.println("Regisseur/Verfasser: " + meta.getArtist());
 		System.out.println("Genre: " + meta.getGenre());
-		System.out.println("Infos: " + meta.getDescription());
-		System.out.println("Bewertung: " + meta.getRating() + "/5");
-		System.out.println("Favorit? " + metaSettings.get("favorite"));
+		JSONObject root = (JSONObject) new JSONParser().parse(meta.getDescription());
+		System.out.println("Infos: " + root.get("infos"));
+		System.out.println("Bewertung: " + root.get("ranking") + "/5");
+		System.out.println("Favorit? " + root.get("favorite"));
 
 		boolean validInput = false;
 		while (validInput == false) {
-			s.nextLine();
 			String input = s.nextLine();
 			if (input.equals("Ja") || input.equals("ja")) {
 				validInput = true;
@@ -223,8 +252,9 @@ public class MediaStorage {
 				m.setDate(meta.getDate());
 				m.setRegisseur(meta.getArtist());
 				m.setGenre(meta.getGenre());
-				m.setInfo(meta.getDescription());
-				m.setRanking(meta.getRating());
+				m.setInfo((String) root.get("infos"));
+				m.setRanking(Integer.parseInt((String)root.get("ranking")));
+				m.setFavorite((Boolean)root.get("favorite"));
 				meta.release();
 				log.info("Änderungen erfolgreich gespeichert.");
 			} else if (input.equals("Nein") || input.equals("nein")) {
@@ -268,29 +298,31 @@ public class MediaStorage {
 	}
 
 	public static void savePlaylists(ArrayList<IMedialist> allLists) {
-		// TODO: playlists.json muss erstellt/überschrieben werden
+		// playlists.json muss erstellt/überschrieben werden
 		// Schleife läuft durch Liste, die alle Playlists enthält
 		try (PrintWriter writer = new PrintWriter(new File ("playlists.json"))) {
 			for (IMedialist i : allLists) {
-				HashMap<String, Object> obj = new HashMap<>();
-				obj.put("name", i.getName());
-				obj.put("type", i.getType());
-				ArrayList<String> list = new ArrayList<>();
-				for (File f : i.getContent().keySet()) {
-					list.add(f.toString());
-					// TODO: Alle Inhalte (Key-Value-Paare) der jew. Playlist müssen gespeichert werden
+				if (!i.getName().equals("Favoriten (Video)") && !i.getName().equals("Favoriten (Audio)")) {
+					HashMap<String, Object> obj = new HashMap<>();
+					obj.put("name", i.getName());
+					obj.put("type", i.getType());
+					ArrayList<String> list = new ArrayList<>();
+					for (File f : i.getContent().keySet()) {
+						list.add(f.toString());
+						// Alle Inhalte (Key-Value-Paare) der jew. Playlist müssen gespeichert werden
+					}
+					obj.put("content", list);
+					JSONObject root = new JSONObject(obj);
+					/*for (Entry<File, IMedia> o : i.getContent().entrySet()) {
+					o.getKey();
+					o.getValue();
+					}*/
+					// Überlegen, wie einzelne Playlists voneinander getrennt werden
+					writer.println(root.toJSONString());
+					log.info("Playlists erfolgreich in JSON gespeichert");
+					log.info("Playlist " + i.getName() + " mit allen Inhalten erfolgreich in playlists.json geschrieben");
 				}
-				obj.put("content", list);
-				JSONObject root = new JSONObject(obj);
-				/*for (Entry<File, IMedia> o : i.getContent().entrySet()) {
-				o.getKey();
-				o.getValue();
-			}*/
-				// TODO: Überlegen, wie einzelne Playlists voneinander getrennt werden
-				writer.println(root.toJSONString());
-				log.info("Playlists erfolgreich in JSON gespeichert");
-				log.info("Playlist " + i.getName() + " mit allen Inhalten erfolgreich in playlists.json geschrieben");
-			}
+			}	
 		} catch (FileNotFoundException e) {
 			log.info("Speichern der Playlists in JSON fehlgeschlagen");
 			log.catching(e);;

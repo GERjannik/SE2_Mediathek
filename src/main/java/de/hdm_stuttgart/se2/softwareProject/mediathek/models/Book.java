@@ -19,7 +19,7 @@ class Book extends Media implements IMedia {
 	private String info;
 	private String releaseDate;
 	private String genre;
-	private String ranking;
+	private int ranking;
 
 
 
@@ -87,14 +87,18 @@ class Book extends Media implements IMedia {
 
 
 	@Override
-	public void setRanking(String ranking) {
+	public void setRanking(int ranking) {
 		this.ranking = ranking;
 	}
 
 	@Override
 	public void open() {
-		// TODO Auto-generated method stub
-		
+
+	}
+	
+	@Override
+	public boolean getFavorite() {
+		return this.favorite;
 	}
 
 }

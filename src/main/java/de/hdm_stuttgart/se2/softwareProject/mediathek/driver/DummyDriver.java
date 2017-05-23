@@ -7,6 +7,7 @@ import java.util.Map.Entry;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.simple.parser.ParseException;
 
 import java.util.Scanner;
 
@@ -16,6 +17,7 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidInputExc
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
+import uk.co.caprica.vlcj.player.MediaMeta;
 
 
 public class DummyDriver {
@@ -49,7 +51,7 @@ public class DummyDriver {
 		IMedialist[] scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
 		IMedialist movies = scannedContent[0];
 		IMedialist audio = scannedContent[1];
-		/* Implementierung von books nur angedeutet (Interfaces) */
+		// Implementierung von books nur angedeutet (Interfaces) 
 		//IMedialist books = scannedContent[2];
 		loop:while(true) {
 			menu();
@@ -76,7 +78,12 @@ public class DummyDriver {
 					System.out.println("Kein Medium mit diesem Titel gefunden. Kehre zurück ins Hauptmenü.");
 					break;
 				}
-				MediaStorage.editMetaInformation(media, scan);
+				try {
+					MediaStorage.editMetaInformation(media, scan);
+				} catch (ParseException e1) {
+					log.catching(e1);
+					log.error("Fehler beim Parsen in JSON Objekt beim Bearbeiten der Metadaten");
+				}
 				break;
 			case "4":
 				movies.printList();

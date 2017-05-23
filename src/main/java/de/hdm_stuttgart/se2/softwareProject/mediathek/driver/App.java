@@ -2,12 +2,16 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.driver;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Map.Entry;
 import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
@@ -15,6 +19,7 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidInputExc
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
+import uk.co.caprica.vlcj.player.MediaMeta;
 
 public class App {
 
@@ -50,6 +55,22 @@ public class App {
 		allLists = MediaStorage.loadPlaylists(movies, audio);
 		/* Implementierung von books nur angedeutet (Interfaces) */
 		//IMedialist books = scannedContent[2];
+		
+		IMedialist movieFavorites = ListFactory.getInstance("video", "Favoriten (Video)");
+		for (Entry<File, IMedia> i : movies.getContent().entrySet()) {
+			if (i.getValue().getFavorite()) {
+				movieFavorites.getContent().put(i.getKey(), i.getValue());
+			}
+		}
+		IMedialist audioFavorites = ListFactory.getInstance("audio", "Favoriten (Audio)");
+		for (Entry<File, IMedia> i : audio.getContent().entrySet()) {
+			if (i.getValue().getFavorite()) {
+				audioFavorites.getContent().put(i.getKey(), i.getValue());
+			}
+		}
+		allLists.add(movieFavorites);
+		allLists.add(audioFavorites);
+		
 		loop:while(true) {
 			menu();
 			boolean validInput = false;
@@ -75,7 +96,12 @@ public class App {
 					System.out.println("Kein Medium mit diesem Titel gefunden. Kehre zurück ins Hauptmenü.");
 					break;
 				}
-				MediaStorage.editMetaInformation(media, scan);
+				try {
+					MediaStorage.editMetaInformation(media, scan);
+				} catch (ParseException e1) {
+					log.catching(e1);
+					log.error("Fehler beim Parsen in JSON Objekt beim Bearbeiten der Metadaten");
+				}
 				break;
 			case "4":
 				movies.printList();
@@ -243,10 +269,25 @@ public class App {
 			case "0":
 				System.out.println("Welches Medium soll zur Playlist " + playlist.getName() + " hinzugefügt werden?");
 				try {
+					if (playlist.getName().equals("Favoriten (Video)") || playlist.getName().equals("Favoriten (Audio)")) {
+						IMedia in = getInput(s, scan, movies, audio);
+						in.setFavorite(true);
+						MediaMeta meta = MediaStorage.readMetaData(in.getFile());
+						String settings = meta.getSetting();
+						JSONObject root = (JSONObject) new JSONParser().parse(settings);
+						root.replace("favorite", true);
+						meta.setSetting(root.toString());
+						meta.save();
+						meta.release();
+						playlist.addMedia(in);
+					}
 					playlist.addMedia(getInput(s, scan, movies, audio));
 				} catch (InvalidInputException e) {
 					log.warn("Ungültige Eingabe. Eingegebener Titel nicht gefunden");
 					log.catching(e);
+				} catch (ParseException e) {
+					log.catching(e);
+					log.error("Parsen in JSON Objekt fehlgeschlagen");
 				}
 				break;
 			case "1":
@@ -277,7 +318,11 @@ public class App {
 			case "2":
 				return allLists;
 			case "3":
-				allLists.remove(choice);
+				if (!playlist.getName().equals("Favoriten (Video)") && !playlist.getName().equals("Favoriten (Audio)")) {
+					allLists.remove(choice);
+				} else {
+					log.info("Playlists mit Favoriten kann nicht gelöscht werden");
+				}
 				return allLists;
 			default:
 				System.out.println("Ungültige Eingabe!");

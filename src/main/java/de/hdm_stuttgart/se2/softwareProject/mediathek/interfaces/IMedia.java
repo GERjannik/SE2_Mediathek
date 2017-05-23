@@ -34,7 +34,8 @@ public interface IMedia {
 	void setRegisseur(String regisseur);
 	void setGenre(String genre);
 	void setInfo(String info);
-	void setRanking(String ranking);
+	void setRanking(int ranking);
 	void open();
+	boolean getFavorite();
 
 }
