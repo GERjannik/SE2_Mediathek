@@ -58,7 +58,7 @@ class Book extends Media implements IMedia {
 			if (this.info != null && !(this.info.equals(""))) {
 				System.out.println("Klappentext: " + this.info);
 			}
-			System.out.println("Bewertung: " + this.ranking);
+			System.out.println("Bewertung: " + this.ranking + "/5");
 		}
 	}
 

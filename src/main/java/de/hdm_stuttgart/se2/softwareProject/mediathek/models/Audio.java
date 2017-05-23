@@ -75,7 +75,7 @@ class Audio extends Media implements IMedia {
 				System.out.println("Beschreibung: " + this.info);
 			}
 			if (this.info != null && !(this.info.equals(""))) {
-				System.out.println("Bewertung: " + this.ranking);
+				System.out.println("Bewertung: " + this.ranking + "/5");
 			}
 		} else {
 			log.debug("Metadaten des Medium " + this.getFile() + " nicht angezeigt, da attribut visible == false");

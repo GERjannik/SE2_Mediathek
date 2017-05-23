@@ -36,7 +36,7 @@ public class MediaStorage {
 		MediaMeta meta = factory.getMediaMeta(file.toString(), true);
 		return meta;
 	}
-	
+
 	/**
 	 * Erstellen von zunächst leeren Audiolist, Booklist und Movielist Objekten des
 	 * Typs IMedialist. Genererieren einer ArrayList mit File Objekten sämtlicher Dateien
@@ -121,8 +121,10 @@ public class MediaStorage {
 		log.info("Metadaten von " + m.getFile() + " werden bearbeitet");
 
 		if (m.getTyp().equals("video"))	{
-			System.out.println("Wie lautet der Titel des Films?");
-			meta.setTitle(s.nextLine());
+			do {
+				System.out.println("Wie lautet der Titel des Films?");
+				meta.setTitle(s.nextLine());
+			} while (meta.getTitle().isEmpty() || meta.getTitle().matches("^\\s*$"));
 			System.out.println("Wann wurde der Film veröffentlicht?");
 			meta.setDate(s.nextLine());
 			System.out.println("Wer ist Regisseur des Films?");
@@ -134,8 +136,10 @@ public class MediaStorage {
 			meta.setRating(rankingInput(s, m.getTyp()));
 		}
 		if (m.getTyp().equals("audio"))	{
-			System.out.println("Wie lautet der Titel der Audiodatei?");
-			meta.setTitle(s.nextLine());
+			do {
+				System.out.println("Wie lautet der Titel der Audiodatei?");
+				meta.setTitle(s.nextLine());
+			} while (meta.getTitle().isEmpty() || meta.getTitle().matches("^\\s*$"));
 			System.out.println("Wann wurde das Audio veröffentlicht?");
 			meta.setDate(s.nextLine());
 			System.out.println("Wer ist der Verfasser der Audios?");
@@ -152,7 +156,7 @@ public class MediaStorage {
 		System.out.println("Regisseur/Verfasser: " + meta.getArtist());
 		System.out.println("Genre: " + meta.getGenre());
 		System.out.println("Infos: " + meta.getDescription());
-		System.out.println("Bewertung: " + meta.getRating());
+		System.out.println("Bewertung: " + meta.getRating() + "/5");
 
 		boolean validInput = false;
 		while (validInput == false) {

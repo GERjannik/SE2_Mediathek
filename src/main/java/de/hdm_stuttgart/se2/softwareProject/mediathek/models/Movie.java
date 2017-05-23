@@ -78,7 +78,7 @@ class Movie extends Media implements IMedia {
 				System.out.println("Filmbeschreibung: " + this.info);
 			}
 			if (this.info != null && !(this.info.equals(""))) {
-				System.out.println("Bewertung: " + this.ranking);
+				System.out.println("Bewertung: " + this.ranking + "/5");
 			}
 		} else {
 			log.debug("Metadaten des Mediums " + this.getFile() + " nicht ausgegeben, da Attribut visible == false");
