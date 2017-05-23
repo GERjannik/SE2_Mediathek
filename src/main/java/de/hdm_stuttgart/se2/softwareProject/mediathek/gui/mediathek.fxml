@@ -21,7 +21,9 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="root" fx:controller="de.hdm_stuttgart.se2.softwareProject.mediathek.gui.MOController">
 	<top>
-		<Button fx:id="btn_settings" mnemonicParsing="false" text="Einstellungen" BorderPane.alignment="TOP_RIGHT" onAction="#handleButtonClick"/>
+		<Button fx:id="btn_settings" mnemonicParsing="false" text="Einstellungen" BorderPane.alignment="TOP_RIGHT" onAction="#btn_settings_clicked">
+			
+		</Button>
 	
 	</top>
 	<left>
@@ -80,8 +82,8 @@
 			<Label></Label>
 			<Label></Label>
 			<HBox BorderPane.alignment="BOTTOM_RIGHT">
-				<Button fx:id="btn_edit" onAction="#btn_edit_clicked">Bearbeiten</Button>
-				<Button fx:id="btn_save" onAction="#btn_save_clicked">Speichern</Button>
+				<Button fx:id="btn_edit" >Bearbeiten</Button>
+				<Button fx:id="btn_save" >Speichern</Button>
 			</HBox>
 		</VBox>
 	</right>

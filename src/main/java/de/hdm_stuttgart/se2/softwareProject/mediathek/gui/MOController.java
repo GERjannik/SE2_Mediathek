@@ -24,7 +24,7 @@ public class MOController {
 	public TableView<IMedia> table;
 	public Label list;
 		
-	public void handleButtonClick() {
+	public void btn_settings_clicked() {
 		
 		new SettingWindow().show();
 	}
