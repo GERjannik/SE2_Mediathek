@@ -13,12 +13,16 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.cell.*?> 
+<?import javafx.collections.*?> 
+<?import fxmltableview.*?> 
 
 
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="root">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="root" fx:controller="de.hdm_stuttgart.se2.softwareProject.mediathek.gui.MOController">
 	<top>
-		<Button fx:id="settingsBtn" BorderPane.alignment="TOP_RIGHT">Einstellungen</Button>
+		<Button fx:id="btn_settings" mnemonicParsing="false" text="Einstellungen" BorderPane.alignment="TOP_RIGHT" onAction="#handleButtonClick"/>
+	
 	</top>
 	<left>
 		<VBox>
@@ -46,12 +50,20 @@
 		  <Label>    Suche: </Label>
 		  <TextField fx:id="textField"/>
 		</HBox>
-		<TableView>
+		<TableView fx:id="tableview">
 			<columns>
 				<TableColumn text="Titel"></TableColumn>
+					<!-- cellValueFactory><PropertyValueFactory property="titelTable" />
+        </cellValueFactory-->
 				<TableColumn text="Jahr"></TableColumn>
+					<!-- cellValueFactory><PropertyValueFactory property="yearTable" />
+        </cellValueFactory-->
 				<TableColumn text="Genre"></TableColumn>
+					<!-- cellValueFactory><PropertyValueFactory property="genreTable" />
+        </cellValueFactory-->
 				<TableColumn text="Director"></TableColumn>
+					<!-- cellValueFactory><PropertyValueFactory property="directorTable" />
+        </cellValueFactory-->
 
 			</columns>
 		</TableView>
@@ -59,17 +71,17 @@
 	</center>
 	<right>
 		<VBox fx:id="right_vbox">
-			<Label>Cover Art</Label>
-			<Label>Metadaten</Label>
-			<Label>Artist</Label>
-			<Label>Titel</Label>
-			<Label>Jahr</Label>
+			<Label fx:id="coverArtLaber">Cover Art</Label>
+			<Label fx:id="titelLabel">Titel</Label>
+			<Label fx:id="directorLabel">Director</Label>
+			<Label fx:id="yearLabel">Jahr</Label>
+			<Label fx:id="genreLabel">Genre</Label>
 			<Label></Label>
 			<Label></Label>
 			<Label></Label>
 			<HBox BorderPane.alignment="BOTTOM_RIGHT">
-				<Button>Bearbeiten</Button>
-				<Button>Speichern</Button>
+				<Button fx:id="btn_edit" onAction="#btn_edit_clicked">Bearbeiten</Button>
+				<Button fx:id="btn_save" onAction="#btn_save_clicked">Speichern</Button>
 			</HBox>
 		</VBox>
 	</right>
