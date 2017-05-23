@@ -66,17 +66,27 @@ public class MediaStorage {
 			String typ = null;
 			MediaMeta meta = readMetaData(files.get(i));
 			log.info("Metadaten von " + files.get(i) + " werden gelesen");
-
+			JSONObject root = new JSONObject();
+			try {
+				root = readFilmMeta(meta);
+			} catch (ParseException e) {
+				log.info("Film Settings Metadaten konnten nicht in JSON geparst werden");
+				e.printStackTrace();
+				log.catching(e);
+			}
+			// TODO: Nullpointerexception beheben
 			if (files.get(i).getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")) {
 				typ = "video";
-				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, files.get(i),
-						true, meta.getLength(), meta.getDate(), meta.getArtist(), meta.getGenre(), meta.getDescription());
+				IMedia temp = MediaFactory.getInstance(
+						typ, meta.getTitle(), files.get(i), meta.getLength(),meta.getDate(),
+								meta.getArtist(), meta.getGenre(), meta.getDescription(), (boolean)root.get("favorite"), (boolean)root.get("visible"));
 				movies.getContent().put(files.get(i), temp);
 
 			} else if (files.get(i).getName().toLowerCase().matches("^.*\\.(mp3||wav|wma|aac|ogg)$")) {
 				typ = "audio";
-				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, files.get(i),
-						true, meta.getLength(), meta.getDate(), meta.getArtist(), meta.getGenre(), meta.getDescription());
+				IMedia temp = MediaFactory.getInstance(
+						typ, meta.getTitle(), files.get(i), meta.getLength(), meta.getDate(),
+						meta.getArtist(), meta.getGenre(), meta.getDescription(), (boolean)root.get("favorite"), (boolean)root.get("visible"));
 				audio.getContent().put(files.get(i), temp);
 			} /*else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(doc|docx|pdf|html|txt)$")) {
 				typ = "book";
@@ -90,6 +100,12 @@ public class MediaStorage {
 		// Die drei Maps werden in ein Array geschrieben und zurückgegeben
 		IMedialist[] allMedia = {movies, audio, books};
 		return allMedia;
+	}
+	
+	private static JSONObject readFilmMeta(MediaMeta meta) throws ParseException {
+		String metaSettings = meta.getSetting();
+		return (JSONObject) new JSONParser().parse(metaSettings);
+		
 	}
 
 	public static void deleteMedia(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {
@@ -119,6 +135,7 @@ public class MediaStorage {
 
 		MediaMeta meta = readMetaData(m.getFile());
 		log.info("Metadaten von " + m.getFile() + " werden bearbeitet");
+		JSONObject metaSettings = new JSONObject();
 
 		if (m.getTyp().equals("video"))	{
 			do {
@@ -134,6 +151,22 @@ public class MediaStorage {
 			System.out.println("Weitere Infos zum Film?");
 			meta.setDescription(s.nextLine());
 			meta.setRating(rankingInput(s, m.getTyp()));
+			do {
+				System.out.println("Film zu Favoriten hinzufügen? (0: nein, 1: ja");
+				if (s.next().equals("0")) {
+					HashMap<String, Boolean> root = new HashMap<>();
+					root.put("favorite", false);
+					metaSettings = new JSONObject(root);
+					break;
+				} else if (s.next().equals("1")) {
+					HashMap<String, Boolean> root = new HashMap<>();
+					root.put("favorite", true);
+					metaSettings = new JSONObject(root);
+					break;
+				} else {
+					log.debug("Ungültige Eingabe");
+				}
+			} while (true);
 		}
 		if (m.getTyp().equals("audio"))	{
 			do {
@@ -149,6 +182,22 @@ public class MediaStorage {
 			System.out.println("Weitere Infos zum Audio?");
 			meta.setDescription(s.nextLine());
 			meta.setRating(rankingInput(s, m.getTyp()));
+			do {
+				System.out.println("Film zu Favoriten hinzufügen? (0: nein, 1: ja");
+				if (s.next().equals("0")) {
+					HashMap<String, Boolean> root = new HashMap<>();
+					root.put("favorite", false);
+					metaSettings = new JSONObject(root);
+					break;
+				} else if (s.next().equals("1")) {
+					HashMap<String, Boolean> root = new HashMap<>();
+					root.put("favorite", true);
+					metaSettings = new JSONObject(root);
+					break;
+				} else {
+					log.debug("Ungültige Eingabe");
+				}
+			} while (true);
 		}
 		System.out.println("Folgende Eingaben speichern? (Ja/Nein)");
 		System.out.println("Titel: " + meta.getTitle());
@@ -157,6 +206,7 @@ public class MediaStorage {
 		System.out.println("Genre: " + meta.getGenre());
 		System.out.println("Infos: " + meta.getDescription());
 		System.out.println("Bewertung: " + meta.getRating() + "/5");
+		System.out.println("Favorit? " + metaSettings.get("favorite"));
 
 		boolean validInput = false;
 		while (validInput == false) {

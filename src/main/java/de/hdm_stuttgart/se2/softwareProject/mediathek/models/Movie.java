@@ -39,8 +39,8 @@ class Movie extends Media implements IMedia {
 	 * @param genre			Film-Genre
 	 * @param info			benutzerspezifische Informationen
 	 */
-	public Movie(String typ, String title, boolean favorite, File file, boolean visible, long duration,
-			String releaseDate, String regisseur, String genre, String info) {
+	public Movie(String typ, String title, File file, long duration,
+			String releaseDate, String regisseur, String genre, String info, boolean favorite, boolean visible) {
 		super(typ, title, favorite, file, visible);
 		this.duration = duration;
 		this.releaseDate = releaseDate;

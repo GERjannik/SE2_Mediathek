@@ -40,8 +40,8 @@ class Audio extends Media implements IMedia {
 	 * @param releaseDate	Erscheinungsdatum
 	 * @param info			benutzerspezifische Informationen
 	 */
-	public Audio(String typ, String title, boolean favorite, File file, boolean visible, long duration, String interpret,
-			String genre, String releaseDate, String info) {
+	public Audio(String typ, String title, File file, long duration, String interpret,
+			String genre, String releaseDate, String info, boolean favorite, boolean visible) {
 		super(typ, title, favorite, file, visible);
 		this.duration = duration;
 		this.interpret = interpret;

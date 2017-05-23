@@ -12,25 +12,25 @@ public class MediaFactoryTest {
 
 	@Test
 	public void testMediaFactoryMovie() {
-	IMedia media = MediaFactory.getInstance("video", "aaa", false, new File("bbb.avi"), true, 5454, "2005", null, null, null);
+	IMedia media = MediaFactory.getInstance("video", "aaa", new File("bbb.avi"), 5454, "2005", null, null, null, false, true);
 	Assert.assertEquals("Movie", media.getClass().getSimpleName());
 	}
 	
 	@Test
 	public void testMediaFactoryAudio() {
-	IMedia media = MediaFactory.getInstance("audio", "aaa", false, new File("bbb.avi"), true, 5454, "2005", null, null, null);
+	IMedia media = MediaFactory.getInstance("audio", "aaa", new File("bbb.avi"), 5454, "2005", null, null, null, false, true);
 	Assert.assertEquals("Audio", media.getClass().getSimpleName());
 	}
 	
 	@Test
 	public void testMediaFactoryBook() {
-	IMedia media = MediaFactory.getInstance("book", "aaa", false, new File("bbb.avi"), true, 5454, "2005", null, null, null);
+	IMedia media = MediaFactory.getInstance("book", "aaa", new File("bbb.avi"), 5454, "2005", null, null, null, false, true);
 	Assert.assertEquals("Book", media.getClass().getSimpleName());
 	}
 	
 	@Test
 	public void testMediaFactoryNegative() {
-	IMedia media = MediaFactory.getInstance("falseType", "aaa", false, new File("bbb.avi"), true, 5454, "2005", null, null, null);
+	IMedia media = MediaFactory.getInstance("falseType", "aaa", new File("bbb.avi"), 5454, "2005", null, null, null, false, true);
 	Assert.assertEquals(null, media);
 	}
 }

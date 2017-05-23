@@ -36,17 +36,17 @@ public class MediaFactory {
 	 * @param info			Anmerkungen vom Benutzer
 	 * @return				Book-, Audio- oder Movie-Objekte mit entsprechendem Pfad und Metadaten
 	 */
-	public static IMedia getInstance (String typ, String title, boolean favorite, File file, boolean visible, long duration,
-			String releaseDate, String regisseur, String genre, String info) {
+	public static IMedia getInstance (String typ, String title, File file, long duration,
+			String releaseDate, String regisseur, String genre, String info, boolean favorite, boolean visible) {
 		switch (typ) {
 		case "video":
 			log.debug("Neues Objekt vom Typ Video erstellt");
-			return new Movie(typ, title, favorite, file, visible, duration,
-					releaseDate, regisseur, genre, info);
+			return new Movie(typ, title, file, duration,
+					releaseDate, regisseur, genre, info, favorite, visible);
 		case "audio":
 			log.debug("Neues Objekt vom Typ Audio erstellt");
-			return new Audio(typ, title, favorite, file, visible, duration, regisseur,
-					genre, releaseDate, info);
+			return new Audio(typ, title, file, duration, regisseur,
+					genre, releaseDate, info, favorite, visible);
 		case "book":
 			log.debug("Neues Objekt vom Typ Buch erstellt");
 			return new Book(typ, title, favorite, file/*, size*/, visible);
