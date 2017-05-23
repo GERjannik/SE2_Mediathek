@@ -16,9 +16,10 @@
 
 
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="root">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="root" fx:controller="de.hdm_stuttgart.se2.softwareProject.mediathek.gui.MOController">
 	<top>
-		<Button fx:id="settingsBtn" BorderPane.alignment="TOP_RIGHT">Einstellungen</Button>
+		<Button fx:id="btn_settings" mnemonicParsing="false" text="Einstellungen" BorderPane.alignment="TOP_RIGHT" onAction="#handleButtonClick"/>
+	
 	</top>
 	<left>
 		<VBox>
