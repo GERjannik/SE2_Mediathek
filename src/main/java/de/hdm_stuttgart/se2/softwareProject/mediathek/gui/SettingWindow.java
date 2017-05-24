@@ -58,35 +58,8 @@ public class SettingWindow extends Stage{
 		/* Überprüfung ob eine settings.json vorhanden ist und wenn ja, wird der dort enthaltene Pfad in das Texfeld eingefügt */
 		if (new File("settings.json").exists() && !(new File("settings.json").isDirectory())) {
 
-			File directory = null;
-
-			try {
-				/* Settings-Datei wird über den Scanner eingelesen und dann Zeilenweise einen String angehängt */
-				log.info("Settings-Datei wird gelesen");
-				Scanner input = new Scanner(new File ("settings.json"));
-
-				StringBuilder jsonIn = new StringBuilder();
-
-				while (input.hasNextLine()) {
-					jsonIn.append(input.nextLine());
-				}
-
-				// Der String wird über einen JSON Parser geparst und anschließend an ein JSON objekt übergeben
-				JSONParser parser = new JSONParser();
-				JSONObject root1 = (JSONObject) parser.parse(jsonIn.toString());
-
-				// Der Dateiname wird aus dem JSON Objekt geholt und ein neues File Objekt erstellt
-				directory = new File(root1.get("directory").toString());
-				input.close();
-
-			} catch (FileNotFoundException | ParseException e) {
-				log.info("Einlesen der Settings fehlgeschlagens");
-				log.catching(e);
-				e.printStackTrace();
-			}
-
-			log.info("Settings erfolgreich gelesen");
-			tf_path.setText(directory.toString());
+			s.readDirectory();
+			tf_path.setText(s.getMediaDirectory().toString());
 		} else {
 			tf_path.setPromptText("C:/Pfad/...");
 		}
