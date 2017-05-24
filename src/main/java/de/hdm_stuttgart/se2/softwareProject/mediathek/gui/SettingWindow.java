@@ -10,7 +10,10 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.driver.App;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import javafx.event.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -79,6 +82,9 @@ public class SettingWindow extends Stage{
 
 		Button btn_end = new Button("Beenden");
 		btn_end.setId("btn_end");
+		
+		Button btn_scan = new Button("Rescan");
+		btn_scan.setId("btn_scan");
 
 
 		btn_accept.setOnAction(new EventHandler<ActionEvent>() {
@@ -105,9 +111,17 @@ public class SettingWindow extends Stage{
 				close();
 			}
 		});
+		
+		btn_scan.setOnAction(new EventHandler<ActionEvent>() {
+			
+			@Override
+			public void handle(ActionEvent event) {
+								
+			}
+		});
 
 		v_path.getChildren().addAll(l_path,tf_path,h_path,l_path_succes,l_path_warning,l_path_error);
-		h_path.getChildren().addAll(btn_accept,btn_end);
+		h_path.getChildren().addAll(btn_accept,btn_end,btn_scan);
 
 		//root.setTop();
 		//root.setLeft();

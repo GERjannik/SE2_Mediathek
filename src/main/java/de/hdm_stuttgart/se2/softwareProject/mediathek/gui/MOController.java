@@ -3,6 +3,7 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 import java.awt.List;
 import java.io.IOException;
 
+import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.driver.App;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
@@ -27,6 +28,7 @@ public class MOController {
 	public void btn_settings_clicked() {
 		
 		new SettingWindow().show();
+				
 	}
 
 

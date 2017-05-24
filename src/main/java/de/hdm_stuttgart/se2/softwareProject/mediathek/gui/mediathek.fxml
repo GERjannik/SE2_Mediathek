@@ -20,6 +20,7 @@
 
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" styleClass="root" fx:controller="de.hdm_stuttgart.se2.softwareProject.mediathek.gui.MOController">
+
 	<top>
 		<Button fx:id="btn_settings" mnemonicParsing="false" text="Einstellungen" BorderPane.alignment="TOP_RIGHT" onAction="#btn_settings_clicked"/>
 	
@@ -53,18 +54,25 @@
 		<TableView fx:id="tableview">
 			<columns>
 				<TableColumn text="Titel"></TableColumn>
-					<!-- cellValueFactory><PropertyValueFactory property="titelTable" />
-        </cellValueFactory-->
+					<!--
+					<cellValueFactory><PropertyValueFactory property="titelTable" />
+        			</cellValueFactory>
+        			-->
 				<TableColumn text="Jahr"></TableColumn>
-					<!-- cellValueFactory><PropertyValueFactory property="yearTable" />
-        </cellValueFactory-->
+					<!--
+					<cellValueFactory><PropertyValueFactory property="yearTable" />
+       				</cellValueFactory>
+       				-->
 				<TableColumn text="Genre"></TableColumn>
-					<!-- cellValueFactory><PropertyValueFactory property="genreTable" />
-        </cellValueFactory-->
+					<!--
+					<cellValueFactory><PropertyValueFactory property="genreTable" />
+        			</cellValueFactory>
+        			-->
 				<TableColumn text="Director"></TableColumn>
-					<!-- cellValueFactory><PropertyValueFactory property="directorTable" />
-        </cellValueFactory-->
-
+					<!--
+					<cellValueFactory><PropertyValueFactory property="directorTable" />
+       				</cellValueFactory>
+					-->
 			</columns>
 		</TableView>
 		</VBox>
