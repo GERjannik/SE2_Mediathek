@@ -1,19 +1,8 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
-import de.hdm_stuttgart.se2.softwareProject.mediathek.driver.App;
-import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import javafx.event.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -28,7 +17,7 @@ import javafx.stage.Stage;
 
 public class SettingWindow extends Stage{
 
-	private static Logger log = LogManager.getLogger(SettingWindow.class);
+	// private static Logger log = LogManager.getLogger(SettingWindow.class);
 	public SettingWindow(){
 
 		//Aufbau des Einstellungsfenster
@@ -116,7 +105,7 @@ public class SettingWindow extends Stage{
 			
 			@Override
 			public void handle(ActionEvent event) {
-								
+				MediaStorage.mediaScan(s);
 			}
 		});
 

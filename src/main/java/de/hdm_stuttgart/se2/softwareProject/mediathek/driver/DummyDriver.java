@@ -4,12 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Map.Entry;
+import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.parser.ParseException;
-
-import java.util.Scanner;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
@@ -17,7 +16,6 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidInputExc
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
-import uk.co.caprica.vlcj.player.MediaMeta;
 
 
 public class DummyDriver {
@@ -48,9 +46,7 @@ public class DummyDriver {
 			s.readDirectory();
 		}
 
-		IMedialist[] scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
-		IMedialist movies = scannedContent[0];
-		IMedialist audio = scannedContent[1];
+		MediaStorage.mediaScan(s);
 		// Implementierung von books nur angedeutet (Interfaces) 
 		//IMedialist books = scannedContent[2];
 		loop:while(true) {
@@ -59,21 +55,21 @@ public class DummyDriver {
 			String input = scan.next();
 			switch (input) {
 			case "0":
-				movies.printList();
+				s.getMovies().printList();
 				break;
 			case "1":
-				audio.printList();
+				s.getAudios().printList();
 				break;
 			case "2":
-				movies.printList();
-				audio.printList();
+				s.getMovies().printList();
+				s.getAudios().printList();
 				break;
 			case "3":
-				movies.printList();
-				audio.printList();
+				s.getMovies().printList();
+				s.getAudios().printList();
 				IMedia media;
 				try {
-					media = getInput(s, scan, movies, audio);
+					media = getInput(s, scan, s.getMovies(), s.getAudios());
 				} catch (InvalidInputException e) {
 					System.out.println("Kein Medium mit diesem Titel gefunden. Kehre zurück ins Hauptmenü.");
 					break;
@@ -86,9 +82,9 @@ public class DummyDriver {
 				}
 				break;
 			case "4":
-				movies.printList();
-				audio.printList();
-				MediaStorage.deleteMedia(s, scan, movies, audio);
+				s.getMovies().printList();
+				s.getAudios().printList();
+				MediaStorage.deleteMedia(s, scan, s.getMovies(), s.getAudios());
 				break;
 			case "5":
 				while (validInput == false) {
@@ -105,9 +101,7 @@ public class DummyDriver {
 				}
 				break;
 			case "6":
-				scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
-				movies = scannedContent[0];
-				audio = scannedContent[1];
+				MediaStorage.mediaScan(s);
 				break;
 			case "7":
 				validInput = false;
@@ -165,11 +159,11 @@ public class DummyDriver {
 				}
 				break;
 			case "9":
-				allLists = editPlaylist(allLists, scan, s, movies, audio);
+				allLists = editPlaylist(allLists, scan, s, s.getMovies(), s.getAudios());
 				break;
 			case "10":
 				try {
-					MediaStorage.playMovie(s, scan, movies, audio);
+					MediaStorage.playMovie(s, scan, s.getMovies(), s.getAudios());
 				} catch (InvalidInputException e) {
 					log.error("Kein passendes Medium zum Abspielen gefunden");
 				}

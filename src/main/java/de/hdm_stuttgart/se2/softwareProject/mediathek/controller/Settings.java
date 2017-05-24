@@ -12,13 +12,19 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
+
 /**
- * @author ll040
+ * 
  * 
  * Klasse mit File Objekt als Repräsentation des Dateipfades. Methoden zum 
  * Auslesen, Wiedergeben und Setzen des Pfades für die 
  * Medien mittels eines settings.json Datei. Handling mittels eines
  * JSON Objektes.
+ * Enthält IMedialist Objekte zum Speichern aller eingelesenen Medien. 
+ *
+ *@author ll040
  *
  */
 public class Settings {
@@ -26,8 +32,13 @@ public class Settings {
 	private static Logger log = LogManager.getLogger(Settings.class);
 	// Name der Settingsdatei im Prokjekt Stammverzeichnis
 	private File mediaDirectory;
+	private IMedialist movies;
+	private IMedialist audios;
+	// private IMedialist books;
 	
 	public Settings() {
+		this.movies = ListFactory.getInstance("video", "allMovies");
+		this.audios = ListFactory.getInstance("audio", "allAudio");
 	}
 	
 	/**
@@ -38,7 +49,25 @@ public class Settings {
 	public File getMediaDirectory() {
 		return mediaDirectory;
 	}
+	
+	/**
+	 * @return IMedialist Objekt das alle Audiodateien der Mediathek enthält.
+	 */
+	public IMedialist getAudios() {
+		return audios;
+	}
+	
+	/**
+	 * @return IMedialist Objekt das alle Videodateien der Mediathek enthält.
+	 */
+	public IMedialist getMovies() {
+		return movies;
+	}
 
+	/* public IMedialist getBooks() {
+		return books;
+	} */
+	
 	/**
 	 * Einlesen des Dateipfades der Medien-Dateien aus des settings.json.
 	 * Parsen der settings.json zur Erstellung eines JSON Objektes, aus

@@ -49,21 +49,19 @@ public class App {
 			s.readDirectory();
 		}
 
-		IMedialist[] scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
-		IMedialist movies = scannedContent[0];
-		IMedialist audio = scannedContent[1];
-		allLists = MediaStorage.loadPlaylists(movies, audio);
-		/* Implementierung von books nur angedeutet (Interfaces) */
-		//IMedialist books = scannedContent[2];
+		MediaStorage.mediaScan(s);
+		
+		allLists = MediaStorage.loadPlaylists(s.getMovies(), s.getAudios());
+
 		
 		IMedialist movieFavorites = ListFactory.getInstance("video", "Favoriten (Video)");
-		for (Entry<File, IMedia> i : movies.getContent().entrySet()) {
+		for (Entry<File, IMedia> i : s.getMovies().getContent().entrySet()) {
 			if (i.getValue().getFavorite()) {
 				movieFavorites.getContent().put(i.getKey(), i.getValue());
 			}
 		}
 		IMedialist audioFavorites = ListFactory.getInstance("audio", "Favoriten (Audio)");
-		for (Entry<File, IMedia> i : audio.getContent().entrySet()) {
+		for (Entry<File, IMedia> i : s.getAudios().getContent().entrySet()) {
 			if (i.getValue().getFavorite()) {
 				audioFavorites.getContent().put(i.getKey(), i.getValue());
 			}
@@ -77,21 +75,21 @@ public class App {
 			String input = scan.next();
 			switch (input) {
 			case "0":
-				movies.printList();
+				s.getMovies().printList();
 				break;
 			case "1":
-				audio.printList();
+				s.getAudios().printList();
 				break;
 			case "2":
-				movies.printList();
-				audio.printList();
+				s.getMovies().printList();
+				s.getAudios().printList();
 				break;
 			case "3":
-				movies.printList();
-				audio.printList();
+				s.getMovies().printList();
+				s.getAudios().printList();
 				IMedia media;
 				try {
-					media = getInput(s, scan, movies, audio);
+					media = getInput(s, scan, s.getMovies(), s.getAudios());
 				} catch (InvalidInputException e) {
 					System.out.println("Kein Medium mit diesem Titel gefunden. Kehre zurück ins Hauptmenü.");
 					break;
@@ -104,9 +102,9 @@ public class App {
 				}
 				break;
 			case "4":
-				movies.printList();
-				audio.printList();
-				MediaStorage.deleteMedia(s, scan, movies, audio);
+				s.getMovies().printList();
+				s.getAudios().printList();
+				MediaStorage.deleteMedia(s, scan, s.getMovies(), s.getAudios());
 				break;
 			case "5":
 				while (validInput == false) {
@@ -123,9 +121,7 @@ public class App {
 				}
 				break;
 			case "6":
-				scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
-				movies = scannedContent[0];
-				audio = scannedContent[1];
+				MediaStorage.mediaScan(s);
 				break;
 			case "7":
 				validInput = false;
@@ -183,11 +179,11 @@ public class App {
 				}
 				break;
 			case "9":
-				allLists = editPlaylist(allLists, scan, s, movies, audio);
+				allLists = editPlaylist(allLists, scan, s, s.getMovies(), s.getAudios());
 				break;
 			case "10":
 				try {
-					MediaStorage.playMovie(s, scan, movies, audio);
+					MediaStorage.playMovie(s, scan, s.getMovies(), s.getAudios());
 				} catch (InvalidInputException e) {
 					log.error("Kein passendes Medium zum Abspielen gefunden");
 				}
@@ -273,10 +269,16 @@ public class App {
 						IMedia in = getInput(s, scan, movies, audio);
 						in.setFavorite(true);
 						MediaMeta meta = MediaStorage.readMetaData(in.getFile());
-						String settings = meta.getSetting();
+						String settings = meta.getDescription();
+						HashMap<String, Object> out = new HashMap<>();
 						JSONObject root = (JSONObject) new JSONParser().parse(settings);
-						root.replace("favorite", true);
-						meta.setSetting(root.toString());
+						out.put("infos", root.get("infos"));
+						out.put("favorite", root.get("favorite"));
+						out.put("visible", root.get("visible"));
+						out.put("ranking", root.get("ranking"));
+						out.replace("favorite", true);
+						root = new JSONObject(out);
+						meta.setDescription(root.toString());
 						meta.save();
 						meta.release();
 						playlist.addMedia(in);
