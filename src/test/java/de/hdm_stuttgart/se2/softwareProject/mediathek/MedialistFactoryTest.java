@@ -4,6 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidTypeException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
 
@@ -27,7 +28,7 @@ public class MedialistFactoryTest {
 		assertEquals("Booklist", list.getClass().getSimpleName());
 	}
 	
-	@Test
+	@Test(expected=InvalidTypeException.class)
 	public void testMedialistNegative() {
 		IMedialist list = ListFactory.getInstance("falseType", "testListe");
 		assertEquals(null, list);

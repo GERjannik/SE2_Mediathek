@@ -5,6 +5,7 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Test;
 
+import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidTypeException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.models.MediaFactory;
 
@@ -28,9 +29,8 @@ public class MediaFactoryTest {
 	Assert.assertEquals("Book", media.getClass().getSimpleName());
 	}
 	
-	@Test
+	@Test(expected=InvalidTypeException.class)
 	public void testMediaFactoryNegative() {
-	IMedia media = MediaFactory.getInstance("falseType", "aaa", new File("bbb.avi"), 5454, "2005", null, null, null, false, true, "4");
-	Assert.assertEquals(null, media);
+	MediaFactory.getInstance("falseType", "aaa", new File("bbb.avi"), 5454, "2005", null, null, null, false, true, "4");
 	}
 }
