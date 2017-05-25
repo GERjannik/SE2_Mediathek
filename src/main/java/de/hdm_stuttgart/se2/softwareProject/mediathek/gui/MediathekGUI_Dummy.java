@@ -54,16 +54,6 @@ public class MediathekGUI_Dummy extends Application {
 	}
 
 	public static void main(String[] args) {
-		//TODO 
-		// DANI????
-		// Settings
-		//Settings s = new Settings();
-		//ArrayList<IMedialist> allLists = new ArrayList<>();
-		//s.readDirectory();
-		//IMedialist[] scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
-		//IMedialist movies = scannedContent[0];
-		//System.out.println(movies);
-		//ObservableList<IMedia> Media = FXCollections.observableArrayList();
 				
 		launch(args);
 		

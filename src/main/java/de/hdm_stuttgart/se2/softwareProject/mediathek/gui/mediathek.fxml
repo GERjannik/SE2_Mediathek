@@ -53,22 +53,22 @@
 		</HBox>
 		<TableView fx:id="tableview">
 			<columns>
-				<TableColumn text="Titel"></TableColumn>
+				<TableColumn text="Titel" fx:id="col_title"></TableColumn>
 					<!--
 					<cellValueFactory><PropertyValueFactory property="titelTable" />
         			</cellValueFactory>
         			-->
-				<TableColumn text="Jahr"></TableColumn>
+				<TableColumn text="Jahr" fx:id="col_year"></TableColumn>
 					<!--
 					<cellValueFactory><PropertyValueFactory property="yearTable" />
        				</cellValueFactory>
        				-->
-				<TableColumn text="Genre"></TableColumn>
+				<TableColumn text="Genre" fx:id="col_genre"></TableColumn>
 					<!--
 					<cellValueFactory><PropertyValueFactory property="genreTable" />
         			</cellValueFactory>
         			-->
-				<TableColumn text="Director"></TableColumn>
+				<TableColumn text="Director" fx:id="col_director"></TableColumn>
 					<!--
 					<cellValueFactory><PropertyValueFactory property="directorTable" />
        				</cellValueFactory>
@@ -88,8 +88,8 @@
 			<Label></Label>
 			<Label></Label>
 			<HBox BorderPane.alignment="BOTTOM_RIGHT">
-				<Button fx:id="btn_edit" >Bearbeiten</Button>
-				<Button fx:id="btn_save" >Speichern</Button>
+				<Button fx:id="btn_edit" onAction="#btn_edit_clicked">Bearbeiten</Button>
+				<Button fx:id="btn_save" onAction="#btn_save_clicked">Speichern</Button>
 			</HBox>
 		</VBox>
 	</right>
