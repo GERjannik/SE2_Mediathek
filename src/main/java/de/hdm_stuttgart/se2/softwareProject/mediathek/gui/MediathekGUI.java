@@ -25,39 +25,17 @@ public class MediathekGUI extends Application {
 		BorderPane root = new BorderPane();
 		Scene MediaGUI = new Scene(root,600,400);
 
-		ToolBar toolbar = new ToolBar();
-		MenuBar menubar = new MenuBar();
-		VBox left = new VBox();
-		VBox right = new VBox();
-		HBox statusbar = new HBox();
 		TableView view = new TableView();
-		
-		Label cover = new Label("Cover");
-		Label metadata = new Label("Metadata");
-		Label playlist = new Label ("Playlist");
-		
+				
 		TableColumn titel = new TableColumn("Titel");
 		TableColumn large = new TableColumn("Länge");
 
 		view.getColumns().addAll(titel,large);
 		
-		ObservableList<String> options = 
-			    FXCollections.observableArrayList(
-			        "Filme",
-			        "Musik",
-			        "Bücher"
-			    );
-			final ComboBox comboBox = new ComboBox(options);
 		
-		right.getChildren().addAll(cover,metadata);
-		left.getChildren().add(comboBox);
 
 
-		root.setTop(menubar);
-		root.setLeft(left);
 		root.setCenter(view);
-		root.setRight(right); 
-		root.setBottom(statusbar);
 
 		primaryStage.setTitle("Mediathek by DJLB");
 		primaryStage.setScene(MediaGUI);

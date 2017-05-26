@@ -49,19 +49,19 @@ public class App {
 			s.readDirectory();
 		}
 
-		MediaStorage.mediaScan(s);
-		
-		allLists = MediaStorage.loadPlaylists(s.getMovies(), s.getAudios());
-
+		IMedialist[] scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
+		IMedialist movies = scannedContent[0];
+		IMedialist audio = scannedContent[1];	
+		allLists = MediaStorage.loadPlaylists(movies, audio);
 		
 		IMedialist movieFavorites = ListFactory.getInstance("video", "Favoriten (Video)");
-		for (Entry<File, IMedia> i : s.getMovies().getContent().entrySet()) {
+		for (Entry<File, IMedia> i : movies.getContent().entrySet()) {
 			if (i.getValue().getFavorite()) {
 				movieFavorites.getContent().put(i.getKey(), i.getValue());
 			}
 		}
 		IMedialist audioFavorites = ListFactory.getInstance("audio", "Favoriten (Audio)");
-		for (Entry<File, IMedia> i : s.getAudios().getContent().entrySet()) {
+		for (Entry<File, IMedia> i : audio.getContent().entrySet()) {
 			if (i.getValue().getFavorite()) {
 				audioFavorites.getContent().put(i.getKey(), i.getValue());
 			}
@@ -75,21 +75,21 @@ public class App {
 			String input = scan.next();
 			switch (input) {
 			case "0":
-				s.getMovies().printList();
+				movies.printList();
 				break;
 			case "1":
-				s.getAudios().printList();
+				audio.printList();
 				break;
 			case "2":
-				s.getMovies().printList();
-				s.getAudios().printList();
+				movies.printList();
+				audio.printList();
 				break;
 			case "3":
-				s.getMovies().printList();
-				s.getAudios().printList();
+				movies.printList();
+				audio.printList();
 				IMedia media;
 				try {
-					media = getInput(s, scan, s.getMovies(), s.getAudios());
+					media = getInput(s, scan, movies, audio);
 				} catch (InvalidInputException e) {
 					System.out.println("Kein Medium mit diesem Titel gefunden. Kehre zurück ins Hauptmenü.");
 					break;
@@ -102,9 +102,9 @@ public class App {
 				}
 				break;
 			case "4":
-				s.getMovies().printList();
-				s.getAudios().printList();
-				MediaStorage.deleteMedia(s, scan, s.getMovies(), s.getAudios());
+				movies.printList();
+				audio.printList();
+				MediaStorage.deleteMedia(s, scan, movies, audio);
 				break;
 			case "5":
 				while (validInput == false) {
@@ -121,7 +121,7 @@ public class App {
 				}
 				break;
 			case "6":
-				MediaStorage.mediaScan(s);
+				MediaStorage.mediaScan(s.getMediaDirectory());
 				break;
 			case "7":
 				validInput = false;
@@ -179,11 +179,11 @@ public class App {
 				}
 				break;
 			case "9":
-				allLists = editPlaylist(allLists, scan, s, s.getMovies(), s.getAudios());
+				allLists = editPlaylist(allLists, scan, s, movies, audio);
 				break;
 			case "10":
 				try {
-					MediaStorage.playMovie(s, scan, s.getMovies(), s.getAudios());
+					MediaStorage.playMovie(s, scan, movies, audio);
 				} catch (InvalidInputException e) {
 					log.error("Kein passendes Medium zum Abspielen gefunden");
 				}

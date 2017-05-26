@@ -55,7 +55,7 @@
 			<columns>
 				<TableColumn text="Titel" fx:id="col_title"></TableColumn>
 					<!--
-					<cellValueFactory><PropertyValueFactory property="titelTable" />
+					<cellValueFactory><PropertyValueFactory property="titel" />
         			</cellValueFactory>
         			-->
 				<TableColumn text="Jahr" fx:id="col_year"></TableColumn>
@@ -65,7 +65,7 @@
        				-->
 				<TableColumn text="Genre" fx:id="col_genre"></TableColumn>
 					<!--
-					<cellValueFactory><PropertyValueFactory property="genreTable" />
+					<cellValueFactory><PropertyValueFactory property="genre" />
         			</cellValueFactory>
         			-->
 				<TableColumn text="Director" fx:id="col_director"></TableColumn>

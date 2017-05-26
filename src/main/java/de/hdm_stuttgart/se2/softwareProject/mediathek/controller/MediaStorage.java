@@ -47,10 +47,20 @@ public class MediaStorage {
 	 * @return Array mit jeweils einem Audiolist, Booklist und Movielist Objekt 
 	 * des Typen IMedialist
 	 */
-	public static void mediaScan(Settings s) {
+	public static IMedialist[] mediaScan(File file) {
+		
+		//HashMaps für Medien werden erzeugt
+		IMedialist movies = ListFactory.getInstance("video", "scannedMovies");
+		log.info("Liste für Videodateien erstellt");
 
+		IMedialist audio = ListFactory.getInstance("audio", "scannedMovies");
+		log.info("Liste für Musikdateien erstellt");
+/*
+		IMedialist books = ListFactory.getInstance("books", "scannedMovies");
+		log.info("Liste für Textdateien erstellt");
+*/	
 		// Array mit File Objekten zu allen Medien Dateien, unabhängig vom Typ
-		ArrayList<File> files = ScanDirectoryRecursive.createFileList(s.getMediaDirectory());
+		ArrayList<File> files = ScanDirectoryRecursive.createFileList(file);
 
 		// Aus jeder Datei des Arrays wird ein Objekt erstellt und der richtigen HashMap zugeordnet
 		for (int i = 0; i < files.size(); i++) {
@@ -93,23 +103,27 @@ public class MediaStorage {
 						(boolean)root.get("favorite"),
 						(boolean)root.get("visible"),
 						(String)root.get("ranking"));
-				s.getMovies().getContent().put(files.get(i), temp);
+				movies.getContent().put(files.get(i), temp);
 
 			} else if (files.get(i).getName().toLowerCase().matches("^.*\\.(mp3||wav|wma|aac|ogg)$")) {
 				typ = "audio";
 				IMedia temp = MediaFactory.getInstance(
 						typ, meta.getTitle(), files.get(i), meta.getLength(), meta.getDate(),
 						meta.getArtist(), meta.getGenre(), (String)root.get("infos"), (boolean)root.get("favorite"), (boolean)root.get("visible"), (String)root.get("ranking"));
-				s.getAudios().getContent().put(files.get(i), temp);
+				audio.getContent().put(files.get(i), temp);
 			} /*else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(doc|docx|pdf|html|txt)$")) {
 				typ = "book";
 				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, scannedMedia[i], size, true);
-				s.getBooks().getContent().put(files.get(i), temp);
+				books.getContent().put(files.get(i), temp);
 			}*/ else {
 				log.info("Dateityp nicht unterstützt. " + files.get(i) + " wurde nicht eingelesen.");
 			}
 			meta.release();
 		}
+		
+		//Die drei Maps werden in ein Array geschrieben und zrückgegeben
+		IMedialist[] allMedia = {movies,audio};
+		return allMedia;
 	}
 
 	public static void deleteMedia(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {

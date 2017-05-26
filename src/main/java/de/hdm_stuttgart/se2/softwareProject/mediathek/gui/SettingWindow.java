@@ -105,7 +105,7 @@ public class SettingWindow extends Stage{
 			
 			@Override
 			public void handle(ActionEvent event) {
-				MediaStorage.mediaScan(s);
+				MediaStorage.mediaScan(s.getMediaDirectory());
 			}
 		});
 

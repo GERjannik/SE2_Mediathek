@@ -32,13 +32,9 @@ public class Settings {
 	private static Logger log = LogManager.getLogger(Settings.class);
 	// Name der Settingsdatei im Prokjekt Stammverzeichnis
 	private File mediaDirectory;
-	private IMedialist movies;
-	private IMedialist audios;
-	// private IMedialist books;
 	
 	public Settings() {
-		this.movies = ListFactory.getInstance("video", "allMovies");
-		this.audios = ListFactory.getInstance("audio", "allAudio");
+		
 	}
 	
 	/**
@@ -50,23 +46,6 @@ public class Settings {
 		return mediaDirectory;
 	}
 	
-	/**
-	 * @return IMedialist Objekt das alle Audiodateien der Mediathek enthält.
-	 */
-	public IMedialist getAudios() {
-		return audios;
-	}
-	
-	/**
-	 * @return IMedialist Objekt das alle Videodateien der Mediathek enthält.
-	 */
-	public IMedialist getMovies() {
-		return movies;
-	}
-
-	/* public IMedialist getBooks() {
-		return books;
-	} */
 	
 	/**
 	 * Einlesen des Dateipfades der Medien-Dateien aus des settings.json.
