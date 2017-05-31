@@ -8,6 +8,9 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
+import uk.co.caprica.vlcj.player.MediaMeta;
+
+import static de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage.readMetaData;
 
 /**
  * Implementiert das IMedia Interface. Implentiert zusätzlich generische
@@ -25,6 +28,9 @@ abstract class Media implements IMedia{
 	protected boolean favorite;
 	protected File file;
 	protected boolean visible;
+	MediaMeta metaData;
+	Long length;
+	String artist;
 	
 	/**
 	 * 
@@ -36,12 +42,18 @@ abstract class Media implements IMedia{
 	 * 			  		false = Objekt wurde aus Liste gelöscht und nicht 
 	 * 					durch getDetails()-Methode ausgelesen
 	 */
-	public Media(String typ, String title, boolean favorite, File file, boolean visible) {
-		this.typ = typ;
-		this.title = title;
-		this.favorite = favorite;
+//	public Media(String typ, String title, boolean favorite, File file, boolean visible) {
+//		this.typ = typ;
+//		this.title = title;
+//		this.favorite = favorite;
+//		this.file = file;
+//		this.visible = visible;
+//	}
+	
+	public Media(File file) {
+		this.metaData = readMetaData(file);
+		this.title = metaData.getTitle();
 		this.file = file;
-		this.visible = visible;
 	}
 
 	@Override
@@ -85,6 +97,12 @@ abstract class Media implements IMedia{
 	}
 	
 	@Override
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+		log.debug("Medium " + this.file + " auf sichtbar gesetzt");
+	}
+	
+	@Override
 	public void open() {
 		Desktop d = Desktop.getDesktop();  
 		try {
@@ -94,5 +112,15 @@ abstract class Media implements IMedia{
 			log.catching(e);
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public void setLength(Long length) {
+		this.length = length;
+	}
+	
+	public void setArtist(String artist) {
+		this.artist = artist;
+		log.debug("Artist des Mediums " + this.getFile() + " auf " + this.artist + " geändert");
 	}
 }

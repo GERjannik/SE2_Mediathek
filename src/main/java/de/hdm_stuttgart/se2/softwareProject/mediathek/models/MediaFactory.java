@@ -36,20 +36,17 @@ public class MediaFactory {
 	 * @param info			Anmerkungen vom Benutzer
 	 * @return				Book-, Audio- oder Movie-Objekte mit entsprechendem Pfad und Metadaten
 	 */
-	public static IMedia getInstance (String typ, String title, File file, long duration,
-			String releaseDate, String regisseur, String genre, String info, boolean favorite, boolean visible, String ranking) {
+	public static IMedia getInstance (String typ, File file) {
 		switch (typ) {
 		case "video":
 			log.debug("Neues Objekt vom Typ Video erstellt");
-			return new Movie(typ, title, file, duration,
-					releaseDate, regisseur, genre, info, favorite, visible, ranking);
+			return new Movie(file);
 		case "audio":
 			log.debug("Neues Objekt vom Typ Audio erstellt");
-			return new Audio(typ, title, file, duration, regisseur,
-					genre, releaseDate, info, favorite, visible, ranking);
+			return new Audio(file);
 		case "book":
 			log.debug("Neues Objekt vom Typ Buch erstellt");
-			return new Book(typ, title, favorite, file/*, size*/, visible);
+			return new Book(file);
 		default: 
 			log.catching(new InvalidTypeException());
 			throw new InvalidTypeException();

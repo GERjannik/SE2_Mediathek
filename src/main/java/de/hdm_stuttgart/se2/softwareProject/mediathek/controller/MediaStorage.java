@@ -96,21 +96,23 @@ public class MediaStorage {
 			if (files.get(i).getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")) {
 				typ = "video";
 				IMedia temp = MediaFactory.getInstance(
-						typ, meta.getTitle(), files.get(i), meta.getLength(),meta.getDate(),
-						meta.getArtist(),
-						meta.getGenre(),
-						(String)root.get("infos"),
-						(boolean)root.get("favorite"),
-						(boolean)root.get("visible"),
-						(String)root.get("ranking"));
+						typ, files.get(i));
+				temp.setTitle(meta.getTitle());
+//				temp.setLength( ); TODO Length aus MetaDaten lesen: Problem Book;
+				temp.setDate(meta.getDate());
+				temp.setArtist(meta.getArtist()); // TODO richtige Methode?
+				temp.setGenre(meta.getGenre());
 				movies.getContent().put(files.get(i), temp);
 
 			} else if (files.get(i).getName().toLowerCase().matches("^.*\\.(mp3||wav|wma|aac|ogg)$")) {
 				typ = "audio";
 				IMedia temp = MediaFactory.getInstance(
-						typ, meta.getTitle(), files.get(i), meta.getLength(), meta.getDate(),
-						meta.getArtist(), meta.getGenre(), (String)root.get("infos"), (boolean)root.get("favorite"), (boolean)root.get("visible"), (String)root.get("ranking"));
-				audio.getContent().put(files.get(i), temp);
+						typ, files.get(i));
+				temp.setTitle(meta.getTitle());
+//				temp.setLength( ); TODO Length aus MetaDaten lesen: Problem Book;
+				temp.setDate(meta.getDate());
+				temp.setArtist(meta.getArtist()); // TODO richtige Methode?
+				temp.setGenre(meta.getGenre());
 			} /*else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(doc|docx|pdf|html|txt)$")) {
 				typ = "book";
 				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, scannedMedia[i], size, true);
@@ -252,7 +254,7 @@ public class MediaStorage {
 				// Metainformationen werden in Attribute des IMedia Objekts geschrieben
 				m.setTitle(meta.getTitle());
 				m.setDate(meta.getDate());
-				m.setRegisseur(meta.getArtist());
+				m.setArtist(meta.getArtist());
 				m.setGenre(meta.getGenre());
 				m.setInfo((String) root.get("infos"));
 				m.setRanking(Integer.parseInt((String)root.get("ranking")));

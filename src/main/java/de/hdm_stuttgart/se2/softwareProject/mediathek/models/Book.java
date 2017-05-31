@@ -14,8 +14,7 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
  */
 class Book extends Media implements IMedia {
 
-	private int pages;
-	private String author;
+	private String artist;
 	private String info;
 	private String releaseDate;
 	private String genre;
@@ -31,9 +30,17 @@ class Book extends Media implements IMedia {
 	 * @param file		Pfad der Buch-Datei
 	 * @param visible	Visibilität für die getDetails()-Methode
 	 */
-	public Book(String typ, String title, boolean favorite, File file/*, int pages*/, boolean visible) {
-		super(typ, title, favorite, file, visible);
-		//this.pages = pages;
+//	public Book(String typ, String title, boolean favorite, File file/*, int pages*/, boolean visible) {
+//		super(typ, title, favorite, file, visible);
+//		this.pages = pages;
+//	}
+	
+	public Book(File file) {
+		super(file);
+//		this.pages = super.metaData.get...;
+		this.artist = super.metaData.getArtist(); // TODO testen ob richtige Methode getArtist()
+		this.genre = super.metaData.getGenre();
+		this.releaseDate = super.metaData.getDate();		
 	}
 
 	@Override
@@ -43,14 +50,14 @@ class Book extends Media implements IMedia {
 	public void getDetails() {
 		if (this.visible == true) {
 			System.out.println(this.title);
-			if (this.pages != 0) {
-				System.out.println("Seitenzahl: " + this.pages);
+			if (this.length != 0) {
+				System.out.println("Seitenzahl: " + this.length);
 			}
 			if (this.releaseDate != null && !(this.releaseDate.equals(""))) {
 				System.out.println("Erscheinungsdatum: " + this.releaseDate);
 			}
-			if (this.author != null && !(this.author.equals(""))) {
-				System.out.println("Autor: " + this.author);
+			if (this.artist != null && !(this.artist.equals(""))) {
+				System.out.println("Autor: " + this.artist);
 			}
 			if (this.genre != null && !(this.genre.equals(""))) {
 				System.out.println("Genre: " + this.genre);
@@ -66,13 +73,6 @@ class Book extends Media implements IMedia {
 	public void setDate(String date) {
 		this.releaseDate = date;
 	}
-
-
-	@Override
-	public void setRegisseur(String regisseur) {
-		this.author = regisseur;
-	}
-
 
 	@Override
 	public void setGenre(String genre) {

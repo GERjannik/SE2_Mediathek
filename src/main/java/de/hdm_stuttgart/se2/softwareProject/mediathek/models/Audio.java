@@ -20,8 +20,7 @@ class Audio extends Media implements IMedia {
 
 	private static Logger log = LogManager.getLogger(Audio.class);
 	
-	private long duration;
-	private String interpret;
+	private String artist;
 	private String genre;
 	private String info;
 	private int ranking;
@@ -34,32 +33,40 @@ class Audio extends Media implements IMedia {
 	 * @param favorite		Toggle für Favoriten-Liste
 	 * @param file			Pfad der Musik-Datei
 	 * @param visible		Visibilität für die getDetails()-Methode
-	 * @param duration		Dauer
-	 * @param interpret		Künstler/Band
+	 * @param length		Dauer
+	 * @param artist		Künstler/Band
 	 * @param genre			Musik-Genre
 	 * @param releaseDate	Erscheinungsdatum
 	 * @param info			benutzerspezifische Informationen
 	 */
-	public Audio(String typ, String title, File file, long duration, String interpret,
-			String genre, String releaseDate, String info, boolean favorite, boolean visible, String ranking) {
-		super(typ, title, favorite, file, visible);
-		this.duration = duration;
-		this.interpret = interpret;
-		this.genre = genre;
-		this.releaseDate = releaseDate;
-		this.info = info;
-		try {
-			int rankInt = Integer.parseInt(ranking);
-			if (rankInt > 0 && rankInt < 6) {
-				this.ranking = rankInt;
-			} else {
-				this.ranking = 1;
-			}
-		} catch (NumberFormatException e) {
-			log.catching(e);
-			log.error("Ungültige Bewertung in Metadaten");
-			this.ranking = 1;
-		}
+//	public Audio(String typ, String title, File file, long duration, String interpret,
+//			String genre, String releaseDate, String info, boolean favorite, boolean visible, String ranking) {
+//		super(file);
+//		this.duration = duration;
+//		this.interpret = interpret;
+//		this.genre = genre;
+//		this.releaseDate = releaseDate;
+//		this.info = info;
+//		try {
+//			int rankInt = Integer.parseInt(ranking);
+//			if (rankInt > 0 && rankInt < 6) {
+//				this.ranking = rankInt;
+//			} else {
+//				this.ranking = 1;
+//			}
+//		} catch (NumberFormatException e) {
+//			log.catching(e);
+//			log.error("Ungültige Bewertung in Metadaten");
+//			this.ranking = 1;
+//		}
+//	}
+	
+	public Audio(File file) {
+		super(file);
+		this.length = super.metaData.getLength();
+		this.artist = super.metaData.getArtist(); // TODO testen ob richtige Methode getArtist()
+		this.genre = super.metaData.getGenre();
+		this.releaseDate = super.metaData.getDate();		
 	}
 
 
@@ -71,14 +78,14 @@ class Audio extends Media implements IMedia {
 	public void getDetails() {
 		if (this.visible == true) {
 			System.out.println(this.title);
-			if (this.duration != 0) {
-				System.out.format("Dauer: %d:%02d Minuten\n", this.duration / 60000, (this.duration % 60000) / 1000 );
+			if (this.length != 0) {
+				System.out.format("Dauer: %d:%02d Minuten\n", this.length / 60000, (this.length % 60000) / 1000 );
 			}
 			if (this.releaseDate != null && !(this.releaseDate.equals("")) && !(this.releaseDate.equals("0"))) {
 				System.out.println("Erscheinungsdatum: " + this.releaseDate);
 			}
-			if (this.interpret != null && !(this.interpret.equals(""))) {
-				System.out.println("Interpret: " + this.interpret);
+			if (this.artist != null && !(this.artist.equals(""))) {
+				System.out.println("Interpret: " + this.artist);
 			}
 			if (this.genre != null && !(this.genre.equals(""))) {
 				System.out.println("Genre: " + this.genre);
@@ -98,12 +105,6 @@ class Audio extends Media implements IMedia {
 	public void setDate(String date) {
 		this.releaseDate = date;
 		log.debug("Erscheinungsdatum des Mediums " + this.getFile() + " auf " + this.releaseDate + " geändert");
-	}
-
-	@Override
-	public void setRegisseur(String regisseur) {
-		this.interpret = regisseur;
-		log.debug("Interpret des Mediums " + this.getFile() + " auf " + this.interpret + " geändert");
 	}
 
 	@Override

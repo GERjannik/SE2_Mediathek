@@ -31,10 +31,12 @@ public interface IMedia {
 	void setTitle(String title);
 	void setFavorite(boolean favorite);
 	void setDate(String date);
-	void setRegisseur(String regisseur);
 	void setGenre(String genre);
 	void setInfo(String info);
 	void setRanking(int ranking);
+	void setVisible(boolean visible);
+	void setLength(Long length);
+	void setArtist(String artist);
 	void open();
 	boolean getFavorite();
 
