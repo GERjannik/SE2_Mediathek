@@ -2,6 +2,7 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
@@ -9,8 +10,11 @@ import org.apache.logging.log4j.Logger;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
@@ -91,7 +95,7 @@ public class MediathekGUI_Dummy extends Application {
 			IMedialist[] scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
 			setMovies(scannedContent[0]);
 			setAudio(scannedContent[1]);
-			
+									
 			//Load root layout from fxml file.
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MediathekGUI_Dummy.class.getResource("mediathek.fxml"));

@@ -62,13 +62,12 @@ public class MOController implements Initializable {
         col_genre.setCellValueFactory(new PropertyValueFactory<IMedia, String>("genre"));
         
         final ObservableList<IMedia> table = FXCollections.observableArrayList();
-        Map<File, IMedia> x = MediathekGUI_Dummy.getInstance().getMovies().getContent();
+        /* Map<File, IMedia> x = MediathekGUI_Dummy.getInstance().getMovies().getContent();
         table.addAll(x.values());
-        /* for (Entry<File, IMedia> e : MediathekGUI_Dummy.getInstance().getMovies().getContent().entrySet()) {
+        for (Entry<File, IMedia> e : MediathekGUI_Dummy.getInstance().getMovies().getContent().entrySet()) {
         	table.add(e.getValue());
         }*/
 
-        tableview.getItems().setAll(table);
     }
 
 	

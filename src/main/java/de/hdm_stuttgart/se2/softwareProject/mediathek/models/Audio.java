@@ -129,4 +129,36 @@ class Audio extends Media implements IMedia {
 	public boolean getFavorite() {
 		return this.favorite;
 	}
+
+
+
+	@Override
+	public long getDuration() {
+		// TODO Auto-generated method stub
+		return this.duration;
+	}
+
+
+
+	@Override
+	public String getDate() {
+		// TODO Auto-generated method stub
+		return this.releaseDate;
+	}
+
+
+
+	@Override
+	public String getArtist() {
+		// TODO Auto-generated method stub
+		return this.interpret;
+	}
+
+
+
+	@Override
+	public String getGenre() {
+		// TODO Auto-generated method stub
+		return this.genre;
+	}
 }
