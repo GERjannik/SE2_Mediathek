@@ -100,6 +100,7 @@ import java.util.Scanner;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.gui.MediathekGUI.Media;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import javafx.application.Application;
@@ -157,7 +158,7 @@ public class MediathekGUI extends Application {
 		
         Scene scene = new Scene(new Group());
         stage.setTitle("Mediathek");
-        stage.setWidth(450);
+        stage.setWidth(600);
         stage.setHeight(500);
  
         final Label label = new Label("Medien Liste");
@@ -165,30 +166,30 @@ public class MediathekGUI extends Application {
  
         table.setEditable(true);
  
-        TableColumn title_col = new TableColumn("Titel");
+        TableColumn<Media, String> title_col = new TableColumn<>("Titel");
         title_col.setMinWidth(100);
         title_col.setCellValueFactory(
                 new PropertyValueFactory<Media, String>("title"));
         
-        TableColumn length_col = new TableColumn("Länge");
+        TableColumn<Media, String> length_col = new TableColumn<Media, String>("Länge");
         length_col.setMinWidth(100);
         length_col.setCellValueFactory(
                 new PropertyValueFactory<Media, String>("length"));
         
 
-        TableColumn date_col = new TableColumn("Erscheinung");
+        TableColumn<Media, String> date_col = new TableColumn<Media, String>("Erscheinung");
         date_col.setMinWidth(100);
         date_col.setCellValueFactory(
                 new PropertyValueFactory<Media, String>("date"));
         
 
-        TableColumn artist_col = new TableColumn("Schauspieler");
+        TableColumn<Media, String> artist_col = new TableColumn<Media, String>("Director");
         artist_col.setMinWidth(100);
         artist_col.setCellValueFactory(
                 new PropertyValueFactory<Media, String>("artist"));
         
 
-        TableColumn genre_col = new TableColumn("Genre");
+        TableColumn<Media, String> genre_col = new TableColumn<Media, String>("Genre");
         genre_col.setMinWidth(100);
         genre_col.setCellValueFactory(
                 new PropertyValueFactory<Media, String>("genre"));
@@ -230,6 +231,22 @@ public class MediathekGUI extends Application {
 
 		public String getTitle() {
 			return title.get();
+		}
+
+		public String getLength() {
+			return length.get();
+		}
+
+		public String getDate() {
+			return date.get();
+		}
+
+		public String getArtist() {
+			return artist.get();
+		}
+
+		public String getGenre() {
+			return genre.get();
 		}
 		
 		
