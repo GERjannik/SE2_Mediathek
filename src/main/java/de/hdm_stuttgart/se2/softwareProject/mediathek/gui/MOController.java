@@ -4,6 +4,7 @@ import java.awt.List;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +37,7 @@ import javafx.stage.Stage;
 public class MOController implements Initializable {
 	
 	Settings s = new Settings();
+	private static MOController instance;
 	
 	@FXML ToggleButton btn_movie;
 	@FXML Label playlist;
@@ -75,7 +77,7 @@ public class MOController implements Initializable {
 	public void btn_settings_clicked() {
 		
 		
-		//new SettingWindow().show();
+		new SettingWindow().show();
 				
 	}
 
@@ -89,6 +91,8 @@ public class MOController implements Initializable {
 		System.out.println("Edit");
 	}
 	
-
+	public static MOController getInstance() {
+		return instance;
+	}
 	
 }

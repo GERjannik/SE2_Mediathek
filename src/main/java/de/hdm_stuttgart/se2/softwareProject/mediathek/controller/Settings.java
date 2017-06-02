@@ -100,6 +100,7 @@ public class Settings {
 		try (PrintWriter writer = new PrintWriter(new File ("settings.json"))) {
 			writer.print(root.toJSONString());
 			log.info("Verzeichnis erfolgreich in JSON gespeichert");
+			writer.close();
 		} catch (FileNotFoundException e) {
 			log.info("Speichern des Verzeichnisses in JSON fehlgeschlagen");
 			log.catching(e);;

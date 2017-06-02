@@ -3,6 +3,7 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 import java.io.File;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import javafx.event.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -81,10 +82,10 @@ public class SettingWindow extends Stage{
 			@Override
 			public void handle(ActionEvent event) {
 
-
 				File input = new File (tf_path.getText());
 				if (input.exists() && input.isDirectory()) {
 					s.setDirectory(input.toString());
+					s.readDirectory();
 					l_path_succes.setText("Pfad wurde gespeichert");
 				} else {
 					l_path_error.setText("Die Eingabe ist kein gültiges Verzeichnis");
@@ -103,9 +104,19 @@ public class SettingWindow extends Stage{
 		
 		btn_scan.setOnAction(new EventHandler<ActionEvent>() {
 			
+			class RescanCommand implements Runnable {
+
+				@Override
+				public void run() {
+					IMedialist[] returns = MediaStorage.mediaScan(s.getMediaDirectory());
+					IMedialist movies = returns[0];
+					IMedialist audio = returns[1];
+				}
+				
+			}
 			@Override
 			public void handle(ActionEvent event) {
-				MediaStorage.mediaScan(s.getMediaDirectory());
+				new Thread(new RescanCommand()).start();
 			}
 		});
 

@@ -28,6 +28,7 @@ public class App {
 	public static void main(String[] args) {
 
 		Settings s = new Settings();
+		
 		Scanner scan = new Scanner(System.in);
 		ArrayList<IMedialist> allLists = new ArrayList<>();
 
@@ -52,6 +53,7 @@ public class App {
 		IMedialist[] scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
 		IMedialist movies = scannedContent[0];
 		IMedialist audio = scannedContent[1];	
+		
 		allLists = MediaStorage.loadPlaylists(movies, audio);
 		
 		IMedialist movieFavorites = ListFactory.getInstance("video", "Favoriten (Video)");
@@ -199,6 +201,7 @@ public class App {
 			}
 		}
 	}
+	
 
 	public static void menu() {
 		System.out.println("Menü: \n"
