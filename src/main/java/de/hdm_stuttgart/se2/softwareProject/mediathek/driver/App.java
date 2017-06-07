@@ -31,6 +31,7 @@ public class App {
 	public static void main(String[] args) {
 
 		Settings s = new Settings();
+		
 		Scanner scan = new Scanner(System.in);
 		ArrayList<IMedialist> allLists = new ArrayList<>();
 
@@ -54,10 +55,9 @@ public class App {
 
 		IMedialist[] scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
 		IMedialist movies = scannedContent[0];
-		IMedialist audio = scannedContent[1];
+		IMedialist audio = scannedContent[1];	
+		
 		allLists = MediaStorage.loadPlaylists(movies, audio);
-		/* Implementierung von books nur angedeutet (Interfaces) */
-		//IMedialist books = scannedContent[2];
 		
 		IMedialist movieFavorites = ListFactory.getInstance("video", "Favoriten (Video)");
 		for (Entry<File, IMedia> i : movies.getContent().entrySet()) {
@@ -126,9 +126,7 @@ public class App {
 				}
 				break;
 			case "6":
-				scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
-				movies = scannedContent[0];
-				audio = scannedContent[1];
+				MediaStorage.mediaScan(s.getMediaDirectory());
 				break;
 			case "7":
 				validInput = false;
@@ -206,6 +204,7 @@ public class App {
 			}
 		}
 	}
+	
 
 	public static void menu() {
 		System.out.println("Menü: \n"
@@ -276,10 +275,16 @@ public class App {
 						IMedia in = getInput(s, scan, movies, audio);
 						in.setFavorite(true);
 						MediaMeta meta = MediaStorage.readMetaData(in.getFile());
-						String settings = meta.getSetting();
+						String settings = meta.getDescription();
+						HashMap<String, Object> out = new HashMap<>();
 						JSONObject root = (JSONObject) new JSONParser().parse(settings);
-						root.replace("favorite", true);
-						meta.setSetting(root.toString());
+						out.put("infos", root.get("infos"));
+						out.put("favorite", root.get("favorite"));
+						out.put("visible", root.get("visible"));
+						out.put("ranking", root.get("ranking"));
+						out.replace("favorite", true);
+						root = new JSONObject(out);
+						meta.setDescription(root.toString());
 						meta.save();
 						meta.release();
 						playlist.addMedia(in);

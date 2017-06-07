@@ -12,13 +12,19 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
+
 /**
- * @author ll040
+ * 
  * 
  * Klasse mit File Objekt als Repräsentation des Dateipfades. Methoden zum 
  * Auslesen, Wiedergeben und Setzen des Pfades für die 
  * Medien mittels eines settings.json Datei. Handling mittels eines
  * JSON Objektes.
+ * Enthält IMedialist Objekte zum Speichern aller eingelesenen Medien. 
+ *
+ *@author ll040
  *
  */
 public class Settings {
@@ -28,6 +34,7 @@ public class Settings {
 	private File mediaDirectory;
 	
 	public Settings() {
+		
 	}
 	
 	/**
@@ -38,7 +45,8 @@ public class Settings {
 	public File getMediaDirectory() {
 		return mediaDirectory;
 	}
-
+	
+	
 	/**
 	 * Einlesen des Dateipfades der Medien-Dateien aus des settings.json.
 	 * Parsen der settings.json zur Erstellung eines JSON Objektes, aus
@@ -92,6 +100,7 @@ public class Settings {
 		try (PrintWriter writer = new PrintWriter(new File ("settings.json"))) {
 			writer.print(root.toJSONString());
 			log.info("Verzeichnis erfolgreich in JSON gespeichert");
+			writer.close();
 		} catch (FileNotFoundException e) {
 			log.info("Speichern des Verzeichnisses in JSON fehlgeschlagen");
 			log.catching(e);;

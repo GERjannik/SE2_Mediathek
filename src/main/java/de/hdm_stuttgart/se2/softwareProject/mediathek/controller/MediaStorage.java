@@ -38,26 +38,27 @@ public class MediaStorage {
 	}
 
 	/**
-	 * Erstellen von zunächst leeren Audiolist, Booklist und Movielist Objekten des
-	 * Typs IMedialist. Genererieren einer ArrayList mit File Objekten sämtlicher Dateien
+	 * Genererieren einer ArrayList mit File Objekten sämtlicher Dateien
 	 * des übergebenen Pfades. Durchitererieren der ArrayList. Generierung von von MediaMeta
 	 * Objekten zu den jeweiligen File Objekten. Zuordnung des File/Media Meta Paares
-	 * zu den eingangs generierten IMedialist Objekten und den darin enthaltenen HashMaps
+	 * zu den IMedialist Objekten von Settings und den darin enthaltenen HashMaps
 	 * entsprechend ihres Dateityps.
-	 * @param File Objekt des Pfades mit den enthaltenen Medien Dateien
+	 * @param Settings Globale Einstellungen, mit Dateipfad und IMedialistobjekten für alle Filme und Audios
 	 * @return Array mit jeweils einem Audiolist, Booklist und Movielist Objekt 
 	 * des Typen IMedialist
 	 */
 	public static IMedialist[] mediaScan(File file) {
-
-		// HashMaps für Medien werden erzeugt
+		
+		//HashMaps für Medien werden erzeugt
 		IMedialist movies = ListFactory.getInstance("video", "scannedMovies");
 		log.info("Liste für Videodateien erstellt");
-		IMedialist audio = ListFactory.getInstance("audio", "scannedAudio");
-		log.info("Liste für Audiodateien erstellt");
-		IMedialist books = ListFactory.getInstance("book", "scannedBooks");
-		log.info("Liste für Textdateien erstellt");
 
+		IMedialist audio = ListFactory.getInstance("audio", "scannedMovies");
+		log.info("Liste für Musikdateien erstellt");
+/*
+		IMedialist books = ListFactory.getInstance("books", "scannedMovies");
+		log.info("Liste für Textdateien erstellt");
+*/	
 		// Array mit File Objekten zu allen Medien Dateien, unabhängig vom Typ
 		ArrayList<File> files = ScanDirectoryRecursive.createFileList(file);
 
@@ -113,14 +114,15 @@ public class MediaStorage {
 			} /*else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(doc|docx|pdf|html|txt)$")) {
 				typ = "book";
 				IMedia temp = MediaFactory.getInstance(typ, meta.getTitle(), false, scannedMedia[i], size, true);
-				books.getContent().put(scannedMedia[i], temp);
+				books.getContent().put(files.get(i), temp);
 			}*/ else {
 				log.info("Dateityp nicht unterstützt. " + files.get(i) + " wurde nicht eingelesen.");
 			}
 			meta.release();
 		}
-		// Die drei Maps werden in ein Array geschrieben und zurückgegeben
-		IMedialist[] allMedia = {movies, audio, books};
+		
+		//Die drei Maps werden in ein Array geschrieben und zrückgegeben
+		IMedialist[] allMedia = {movies,audio};
 		return allMedia;
 	}
 
