@@ -1,9 +1,18 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 
+import java.util.ArrayList;
+
+import com.sun.jna.NativeLibrary;
+
+import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -12,59 +21,40 @@ import javafx.scene.control.MenuBar;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToolBar;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 
 public class MediathekGUI extends Application {
 
-	@Override
-	public void start(Stage primaryStage) {
 
-		BorderPane root = new BorderPane();
-		Scene MediaGUI = new Scene(root,600,400);
-
-		ToolBar toolbar = new ToolBar();
-		MenuBar menubar = new MenuBar();
-		VBox left = new VBox();
-		VBox right = new VBox();
-		HBox statusbar = new HBox();
-		TableView view = new TableView();
+	
+	public static void main(String[] args) {
+				
+		launch(args);	
 		
-		Label cover = new Label("Cover");
-		Label metadata = new Label("Metadata");
-		Label playlist = new Label ("Playlist");
-		
-		TableColumn titel = new TableColumn("Titel");
-		TableColumn large = new TableColumn("Länge");
-
-		view.getColumns().addAll(titel,large);
-		
-		ObservableList<String> options = 
-			    FXCollections.observableArrayList(
-			        "Filme",
-			        "Musik",
-			        "Bücher"
-			    );
-			final ComboBox comboBox = new ComboBox(options);
-		
-		right.getChildren().addAll(cover,metadata);
-		left.getChildren().add(comboBox);
-
-
-		root.setTop(menubar);
-		root.setLeft(left);
-		root.setCenter(view);
-		root.setRight(right); 
-		root.setBottom(statusbar);
-
-		primaryStage.setTitle("Mediathek by DJLB");
-		primaryStage.setScene(MediaGUI);
-		primaryStage.show();
 	}
 
-	public static void main(String[] args) {
-		launch(args);
+	@Override
+	public void start(Stage s) throws Exception {
+
+		ObservableList<IMedia> Media = FXCollections.observableArrayList();
+
+		BorderPane layout = new BorderPane();
+
+		TableView<Node> table = new TableView<Node>();
+		table.setItems(layout.getChildren());
+
+		TableColumn<Node, String> column = new TableColumn<Node, String>("Test");
+		column.setCellValueFactory(new PropertyValueFactory<Node, String>());
+		table.getColumns().add(column);
+
+		layout.setCenter(table);
+
+		s.setScene(new Scene(layout));
+		s.show();
 	}
 }

@@ -53,23 +53,24 @@
 		</HBox>
 		<TableView fx:id="tableview">
 			<columns>
-				<TableColumn text="Titel"></TableColumn>
+				<TableColumn fx:id="titel" text="Titel"></TableColumn>
 					<!--
 					<cellValueFactory><PropertyValueFactory property="titelTable" />
         			</cellValueFactory>
         			-->
+        			<!--
 				<TableColumn text="Jahr"></TableColumn>
-					<!--
+					
 					<cellValueFactory><PropertyValueFactory property="yearTable" />
        				</cellValueFactory>
-       				-->
+       			
 				<TableColumn text="Genre"></TableColumn>
-					<!--
+					
 					<cellValueFactory><PropertyValueFactory property="genreTable" />
         			</cellValueFactory>
-        			-->
+        			
 				<TableColumn text="Director"></TableColumn>
-					<!--
+				
 					<cellValueFactory><PropertyValueFactory property="directorTable" />
        				</cellValueFactory>
 					-->
