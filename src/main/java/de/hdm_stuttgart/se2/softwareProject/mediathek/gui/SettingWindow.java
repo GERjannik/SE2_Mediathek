@@ -1,17 +1,9 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 
 import java.io.File;
-<<<<<<< HEAD
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
-import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
-=======
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
->>>>>>> a1381fcf753878609eda00b54e8a495aae8be211
 import javafx.event.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;

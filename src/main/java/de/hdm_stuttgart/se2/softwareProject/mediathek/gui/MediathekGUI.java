@@ -1,24 +1,11 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
-<<<<<<< HEAD
-
-import java.util.ArrayList;
-
-import com.sun.jna.NativeLibrary;
-
-import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
-import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
-import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
-import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
-=======
 /*
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
->>>>>>> a1381fcf753878609eda00b54e8a495aae8be211
 import javafx.application.Application;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
@@ -32,26 +19,15 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 
 public class MediathekGUI extends Application {
 
-
-<<<<<<< HEAD
-	
-	public static void main(String[] args) {
-				
-		launch(args);	
-		
-	}
-
 	@Override
-	public void start(Stage s) throws Exception {
+	public void start(Stage primaryStage) {
 
-		ObservableList<IMedia> Media = FXCollections.observableArrayList();
+		BorderPane root = new BorderPane();
+		Scene MediaGUI = new Scene(root,600,400);
 
-		BorderPane layout = new BorderPane();
-=======
 		TableView view = new TableView();
 				
 		TableColumn titel = new TableColumn("Titel");
@@ -68,19 +44,14 @@ public class MediathekGUI extends Application {
 		view.setItems(Olist);
 		view.getColumns().addAll(titel);
 		root.setCenter(view);
->>>>>>> a1381fcf753878609eda00b54e8a495aae8be211
 
-		TableView<Node> table = new TableView<Node>();
-		table.setItems(layout.getChildren());
+		primaryStage.setTitle("Mediathek by DJLB");
+		primaryStage.setScene(MediaGUI);
+		primaryStage.show();
+	}
 
-		TableColumn<Node, String> column = new TableColumn<Node, String>("Test");
-		column.setCellValueFactory(new PropertyValueFactory<Node, String>());
-		table.getColumns().add(column);
-
-		layout.setCenter(table);
-
-		s.setScene(new Scene(layout));
-		s.show();
+	public static void main(String[] args) {
+		launch(args);
 	}
 	
 	public static class Person {
