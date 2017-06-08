@@ -15,8 +15,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class SettingWindow extends Stage{
+	
+	private static SettingWindow instance;
 
 	// private static Logger log = LogManager.getLogger(SettingWindow.class);
 	public SettingWindow(){
@@ -113,6 +116,7 @@ public class SettingWindow extends Stage{
 					IMedialist audio = returns[1];
 				}
 				
+				
 			}
 			@Override
 			public void handle(ActionEvent event) {
@@ -131,6 +135,10 @@ public class SettingWindow extends Stage{
 
 		setScene(SettingGUI);
 
+	}
+	
+	public static SettingWindow getInstance() {
+		return instance;
 	}
 }
 
