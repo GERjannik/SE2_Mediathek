@@ -89,14 +89,17 @@
 	</center>
 	<right>
 		<VBox fx:id="right_vbox">
-			<Label fx:id="coverArtLaber">Cover Art</Label>
-			<Label fx:id="titelLabel">Titel</Label>
-			<Label fx:id="directorLabel">Director</Label>
-			<Label fx:id="yearLabel">Jahr</Label>
-			<Label fx:id="genreLabel">Genre</Label>
-			<Label></Label>
-			<Label></Label>
-			<Label></Label>
+			<Label fx:id="lab_titel">Titel</Label>
+			<TextField fx:id ="tf_title" promptText="Titel"/>
+			<Label fx:id="lab_artist">Artist</Label>
+			<TextField fx:id ="tf_artist"/>
+			<Label fx:id="lab_year">Year</Label>
+			<TextField fx:id ="tf_year"/>
+			<Label fx:id="lab_duration">Duration</Label>
+			<TextField fx:id ="tf_duration"/>
+			<Label fx:id="lab_genre">Genre</Label>
+			<TextField fx:id ="tf_genre"/>
+			
 			<HBox BorderPane.alignment="BOTTOM_RIGHT">
 				<Button fx:id="btn_edit" onAction="#btn_edit_clicked">Bearbeiten</Button>
 				<Button fx:id="btn_save" onAction="#btn_save_clicked">Speichern</Button>

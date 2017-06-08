@@ -1,5 +1,6 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 
+import java.awt.TextField;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -53,6 +54,8 @@ public class MOController implements Initializable {
 	@FXML Label list;
 	@FXML Button btn_save;
 	@FXML Button btn_edit;
+	@FXML
+	javafx.scene.control.TextField tf_title;
 	// Table FXML
 	@FXML TableView<Media> tableview = new TableView<Media>();
 	@FXML TableColumn<Media, String> col_title = new TableColumn<>("Titel");
@@ -107,14 +110,13 @@ public class MOController implements Initializable {
 						for (IMedia i : audio.getContent().values()) {
 							data.add(new Media(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
 						}
-
 					} 
-
 					tableview.setItems(data);  
 
 					try {Thread.sleep(3000);} catch (InterruptedException e) {}
 				}
 			}}).start();
+		
 
 	}
 
@@ -127,11 +129,13 @@ public class MOController implements Initializable {
 	@FXML
 	public void btn_save_clicked(ActionEvent event){
 		System.out.println("Saved");
+		
 	}
 
 	@FXML
 	public void btn_edit_clicked(ActionEvent event){
-		System.out.println("Edit");
+		
+		new MetaWindow().show();
 	}
 
 
