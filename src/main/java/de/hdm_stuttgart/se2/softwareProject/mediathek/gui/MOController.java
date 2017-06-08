@@ -5,12 +5,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Scanner;
+import java.util.Map.Entry;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.driver.App;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidInputException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.gui.MOController.Media;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
@@ -28,6 +30,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
@@ -61,27 +64,9 @@ public class MOController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
-		// Erstellen der ObservableList zum füllen der TableView
-		ObservableList<Media> data = FXCollections.observableArrayList();
-		
-		// Zuweisung der Spalten, für das passende füllen der TableView
-		col_title.setMinWidth(100);
-		col_title.setCellValueFactory(
-				new PropertyValueFactory<Media, String>("title"));
-		col_length.setMinWidth(100);
-		col_length.setCellValueFactory(
-				new PropertyValueFactory<Media, Long>("length"));
-		col_date.setMinWidth(100);
-		col_date.setCellValueFactory(
-				new PropertyValueFactory<Media, String>("date"));
-		col_artist.setMinWidth(100);
-		col_artist.setCellValueFactory(
-				new PropertyValueFactory<Media, String>("artist"));
-		col_genre.setMinWidth(100);
-		col_genre.setCellValueFactory(
-				new PropertyValueFactory<Media, String>("genre"));
-		
+
+		//TODO Liste wird immer neuer erzeugt, daher Verlust des Focus. Muss geändert werden!
+
 		//Abfrage ob Pfad eingetragen ist, wenn ja füllen der ObservableList für die Tableview
 		//Thread läuft alle 3 Sekunden geänderte Film oder Audio Listen anzupassen und neu in der 
 		//Tableview anzuzeigen.
@@ -89,17 +74,40 @@ public class MOController implements Initializable {
 			public void run() {
 				while (true) {
 
+					// Erstellen der ObservableList zum füllen der TableView
+					ObservableList<Media> data = FXCollections.observableArrayList();
+
 					if (new File("settings.json").exists() && !(new File("settings.json").isDirectory())) {
 						s.readDirectory();
 
 						IMedialist[] scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
 						movies = scannedContent[0];
-						audio = scannedContent[1];    	
+						audio = scannedContent[1];						
 
+						// Zuweisung der Spalten, für das passende füllen der TableView
+						col_title.setMinWidth(100);
+						col_title.setCellValueFactory(
+								new PropertyValueFactory<Media, String>("title"));
+						col_length.setMinWidth(100);
+						col_length.setCellValueFactory(
+								new PropertyValueFactory<Media, Long>("length"));
+						col_date.setMinWidth(100);
+						col_date.setCellValueFactory(
+								new PropertyValueFactory<Media, String>("date"));
+						col_artist.setMinWidth(100);
+						col_artist.setCellValueFactory(
+								new PropertyValueFactory<Media, String>("artist"));
+						col_genre.setMinWidth(100);
+						col_genre.setCellValueFactory(
+								new PropertyValueFactory<Media, String>("genre"));
 
 						for (IMedia i : movies.getContent().values()) {
 							data.add(new Media(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
 						}
+						for (IMedia i : audio.getContent().values()) {
+							data.add(new Media(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
+						}
+
 					} 
 
 					tableview.setItems(data);  
@@ -126,40 +134,42 @@ public class MOController implements Initializable {
 		System.out.println("Edit");
 	}
 
+
 	//TODO
 	@FXML
 	public void btn_play_clicked(ActionEvent event){
 
-		//		System.out.println(tableview.getSelectionModel().getSelectedItem());
-		//		
-		//		System.out.println(tableview.getSelectionModel().getSelectedItem().getTitle());
-		//		
+		String play_data = tableview.getSelectionModel().getSelectedItem().getTitle();
 
-		//		tableview.getSelectionModel().setCellSelectionEnabled(true);
+		playMovie(s, play_data, movies, audio);
 
-		//		 ObservableList<Media> data = FXCollections.observableArrayList();
-		//	        for (IMedia i : movies.getContent().values()) {
-		//	        	data.add(new Media(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
-		//	        	System.out.println(i);
-		//	        	
-		//	        }
+	}
+	
+	public static void playMovie(Settings s, String play_data, IMedialist movies, IMedialist audio) {
 
-		//              ObservableList<TablePosition> cells = tableview.getSelectionModel().getSelectedCells();
+		new Thread(new Runnable() {
+			public void run() {
 
-		//              System.out.println(tableview.getSelectionModel().getSelectedCells());
-		//             for (@SuppressWarnings("rawtypes")
-		//             TablePosition p : cells) {
-		//            	
+				getInput(s, play_data, movies, audio).open();
 
-		//                 int r = p.getRow();
-		//                 int c = p.getColumn();
-		//
-		//                 System.err.println(r + " " + c);
-		//
-		//                 
-		//                 
-		//                
-		//             }
+			}
+		}).start();
+
+	}
+
+	public static IMedia getInput(Settings s, String play_data, IMedialist movies, IMedialist audio) {
+
+		for (Entry<File, IMedia> i : movies.getContent().entrySet()) {
+			if (i.getValue().getTitle().equals((play_data))) {
+				return i.getValue();
+			}
+		}
+		for (Entry<File, IMedia> i : audio.getContent().entrySet()) {
+			if (i.getValue().getTitle().equals(play_data)) {
+				return i.getValue();
+			}
+		}
+		throw new InvalidInputException();
 	}
 
 	@FXML

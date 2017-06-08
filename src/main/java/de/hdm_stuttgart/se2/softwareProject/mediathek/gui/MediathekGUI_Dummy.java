@@ -34,7 +34,7 @@ public class MediathekGUI_Dummy extends Application {
 
 	private Stage primaryStage;
 	private BorderPane rootLayout;
-	
+
 
 	@FXML ToggleButton btn_movie;
 	@FXML Label playlist;
@@ -58,7 +58,7 @@ public class MediathekGUI_Dummy extends Application {
 
 		this.primaryStage = primaryStage;
 		this.primaryStage.setTitle("Mediathek");
-		
+
 		initRootLayout();
 	}
 
@@ -87,7 +87,7 @@ public class MediathekGUI_Dummy extends Application {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(MediathekGUI_Dummy.class.getResource("mediathek.fxml"));
 			//loader.setLocation(MediathekGUI_Dummy.class.getResource("MediathekOverview.fxml"));
-			
+
 			//Sprung in die MOController initialize Methode
 			rootLayout = (BorderPane) loader.load();
 
@@ -96,14 +96,14 @@ public class MediathekGUI_Dummy extends Application {
 			scene.getStylesheets().add(getClass().getResource("main.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.show();	
-			
+
 			if (scanSuccessful == false) {
 				new SettingWindow().show();
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}		
-		
+
 	}
 
 	public Stage getPrimaryStage() {
