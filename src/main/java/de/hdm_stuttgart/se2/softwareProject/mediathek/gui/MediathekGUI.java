@@ -26,10 +26,10 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
-public class MediathekGUI_Dummy extends Application {
+public class MediathekGUI extends Application {
 
-	private static MediathekGUI_Dummy instance;
-	private static Logger log = LogManager.getLogger(MediathekGUI_Dummy.class);
+	private static MediathekGUI instance;
+	private static Logger log = LogManager.getLogger(MediathekGUI.class);
 
 	private Stage primaryStage;
 	private BorderPane rootLayout;
@@ -70,7 +70,7 @@ public class MediathekGUI_Dummy extends Application {
 
 			//Load root layout from fxml file.
 			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MediathekGUI_Dummy.class.getResource("MediathekOverview.fxml"));
+			loader.setLocation(MediathekGUI.class.getResource("MediathekOverview.fxml"));
 
 			//Sprung in die MOController initialize Methode
 			rootLayout = (BorderPane) loader.load();
@@ -116,7 +116,7 @@ public class MediathekGUI_Dummy extends Application {
 		this.audio = audio;
 	}
 
-	public static MediathekGUI_Dummy getInstance() {
+	public static MediathekGUI getInstance() {
 		return instance;
 	}
 }

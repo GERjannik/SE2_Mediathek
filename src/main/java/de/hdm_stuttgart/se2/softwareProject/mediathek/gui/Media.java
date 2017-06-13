@@ -10,10 +10,15 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+/**
+ * Hilfsklasse für MOController
+ * Auslagerung aller extra Methoden und Klassen
+ *
+ */
 public class Media {
-	
+
 	private static Media instance;
-	
+
 	private final SimpleStringProperty title;
 	private final SimpleLongProperty length;
 	private final SimpleStringProperty date;
@@ -48,7 +53,7 @@ public class Media {
 		return genre.get();
 	}
 
-	
+
 	public static Media getInstance() {
 		return instance;
 	}
@@ -86,5 +91,4 @@ public class Media {
 		}
 		throw new InvalidInputException();
 	}
-
 }

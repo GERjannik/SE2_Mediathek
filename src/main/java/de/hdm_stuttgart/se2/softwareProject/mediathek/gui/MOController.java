@@ -102,7 +102,7 @@ public class MOController implements Initializable {
 					} 
 					tableview.setItems(data); 
 
-					try {Thread.sleep(3000);} catch (InterruptedException e) {}
+					try {Thread.sleep(6000);} catch (InterruptedException e) {}
 
 				}
 			}}).start();
