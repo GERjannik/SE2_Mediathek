@@ -142,8 +142,8 @@ class Movie extends Media implements IMedia {
 	}
 
 	@Override
-	public long getDuration() {
-		return this.duration;
+	public long getLength() {
+		return this.length;
 	}
 
 	@Override
@@ -153,11 +153,12 @@ class Movie extends Media implements IMedia {
 
 	@Override
 	public String getArtist() {
-		return this.regisseur;
+		return this.artist;
 	}
 
 	@Override
 	public String getGenre() {
 		return this.genre;
 	}
+
 }

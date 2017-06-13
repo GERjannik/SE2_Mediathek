@@ -102,12 +102,6 @@ class Book extends Media implements IMedia {
 	}
 
 	@Override
-	public long getDuration() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public String getDate() {
 		// TODO Auto-generated method stub
 		return null;
@@ -123,5 +117,11 @@ class Book extends Media implements IMedia {
 	public String getGenre() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public long getLength() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

@@ -196,7 +196,7 @@ public class MediathekGUI extends Application {
         
         ObservableList<Media> data = FXCollections.observableArrayList();
         for (IMedia i : movies.getContent().values()) {
-        	data.add(new Media(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
+        	data.add(new Media(i.getTitle(), i.getLength(), i.getDate(), i.getArtist(), i.getGenre()));
         }
  
         table.setItems(data);

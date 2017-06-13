@@ -134,14 +134,6 @@ class Audio extends Media implements IMedia {
 
 
 	@Override
-	public long getDuration() {
-		// TODO Auto-generated method stub
-		return this.duration;
-	}
-
-
-
-	@Override
 	public String getDate() {
 		// TODO Auto-generated method stub
 		return this.releaseDate;
@@ -152,7 +144,7 @@ class Audio extends Media implements IMedia {
 	@Override
 	public String getArtist() {
 		// TODO Auto-generated method stub
-		return this.interpret;
+		return this.artist;
 	}
 
 
@@ -161,5 +153,13 @@ class Audio extends Media implements IMedia {
 	public String getGenre() {
 		// TODO Auto-generated method stub
 		return this.genre;
+	}
+
+
+
+	@Override
+	public long getLength() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 }

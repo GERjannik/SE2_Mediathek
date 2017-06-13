@@ -28,10 +28,10 @@ public interface IMedia {
 	String getTitle();
 	File getFile();
 	String getTyp();
-	long getDuration();
 	String getDate();
 	String getArtist();
 	String getGenre();
+	long getLength();
 	void setTitle(String title);
 	void setFavorite(boolean favorite);
 	void setDate(String date);

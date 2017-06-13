@@ -105,10 +105,10 @@ public class MOController implements Initializable {
 								new PropertyValueFactory<Media, String>("genre"));
 
 						for (IMedia i : movies.getContent().values()) {
-							data.add(new Media(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
+							data.add(new Media(i.getTitle(), i.getLength(), i.getDate(), i.getArtist(), i.getGenre()));
 						}
 						for (IMedia i : audio.getContent().values()) {
-							data.add(new Media(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
+							data.add(new Media(i.getTitle(), i.getLength(), i.getDate(), i.getArtist(), i.getGenre()));
 						}
 					} 
 					tableview.setItems(data);  
