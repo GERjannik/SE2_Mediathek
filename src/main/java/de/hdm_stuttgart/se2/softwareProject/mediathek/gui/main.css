@@ -15,7 +15,3 @@
 #right_vbox .label {
 	-fx-padding: 20 5 0 5;
 }
-
-#btn_settings {
-   -fx-background-image: url("settings.png"); 
-}
