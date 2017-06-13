@@ -14,6 +14,7 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.driver.App;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidInputException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
@@ -126,12 +127,13 @@ public class Media {
 			meta.setDate(save_year);
 			meta.setArtist(save_artist);
 			meta.setGenre(save_genre);
-			meta.setRating(ranking);
+			//meta.setRating(ranking);
+
 			
 			
 			HashMap<String, Object> root = new HashMap<>();
 			root.put("infos", meta);
-			root.put("ranking", ranking);
+			//root.put("ranking", ranking);
 			root.put("visible", true);
 			JSONObject metaInfos = new JSONObject(root);
 			meta.setDescription(metaInfos.toString());
@@ -143,11 +145,11 @@ public class Media {
 			meta.setDate(save_year);
 			meta.setArtist(save_artist);
 			meta.setGenre(save_genre);
-			meta.setRating(ranking.toString());
+			//meta.setRating(ranking.toString());
 
 			HashMap<String, Object> root = new HashMap<>();
 			root.put("infos", meta);
-			root.put("ranking", ranking);
+			//root.put("ranking", ranking);
 			root.put("visible", true);
 			JSONObject metaInfos = new JSONObject(root);
 			meta.setDescription(metaInfos.toString());
@@ -157,7 +159,9 @@ public class Media {
 		//JSONObject root = (JSONObject) new JSONParser().parse(meta.getDescription());
 
 				// Metainformationen werden in Datei gespeichert
+				
 				meta.save();
+			
 
 				// Metainformationen werden in Attribute des IMedia Objekts geschrieben
 //				m.setTitle(meta.getTitle());
@@ -172,4 +176,5 @@ public class Media {
 			
 		
 	}
+
 }

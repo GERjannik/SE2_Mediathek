@@ -66,28 +66,21 @@
 	<center>
 		<VBox>
 			<HBox>
-				<Label> Suche: </Label>
-				<TextField fx:id="textField" />
+				<Label fx:id="l_search"> Suche: </Label>
+				<TextField fx:id="tf_search" />
+				<Button fx:id="btn_search" onAction="#btn_search_clicked">Suchen</Button>
 			</HBox>
 			<TableView fx:id="tableview">
 				<columns>
-					<TableColumn text="Titel" fx:id="col_title">
-						<!-- <cellValueFactory><PropertyValueFactory property="title" /> </cellValueFactory> -->
-					</TableColumn>
-					<TableColumn text="Länge" fx:id="col_length">
-						<!-- <cellValueFactory><PropertyValueFactory property="length" /> </cellValueFactory> -->
-					</TableColumn>
-					<TableColumn text="Jahr" fx:id="col_date">
-						<!-- <cellValueFactory><PropertyValueFactory property="date" /> </cellValueFactory> -->
-					</TableColumn>
-					<TableColumn text="Director" fx:id="col_artist">
-						<!-- <cellValueFactory><PropertyValueFactory property="artist" /> </cellValueFactory> -->
-					</TableColumn>
-					<TableColumn text="Genre" fx:id="col_genre">
-						<!-- <cellValueFactory><PropertyValueFactory property="genre" /> </cellValueFactory> -->
-					</TableColumn>
+					<TableColumn text="Titel" fx:id="col_title"></TableColumn>
+					<TableColumn text="Länge" fx:id="col_length"></TableColumn>
+					<TableColumn text="Jahr" fx:id="col_date"></TableColumn>
+					<TableColumn text="Director" fx:id="col_artist"></TableColumn>
+					<TableColumn text="Genre" fx:id="col_genre"></TableColumn>
+					<TableColumn text="Bewertung" fx:id="col_ranking"></TableColumn>
 				</columns>
 			</TableView>
+			<Label fx:id="l_news"></Label>
 		</VBox>
 	</center>
 	<right>
@@ -141,6 +134,7 @@
 				<Button fx:id="btn_play" onAction="#btn_play_clicked">Abspielen</Button>
 				<Button fx:id="btn_end" onAction="#btn_end_clicked">Beenden</Button>
 			</HBox>
+			<Button fx:id="btn_del" onAction="#btn_del_clicked">Löschen</Button>
 		</VBox>
 	</right>
 	<bottom></bottom>
