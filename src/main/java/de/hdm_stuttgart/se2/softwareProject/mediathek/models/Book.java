@@ -101,4 +101,27 @@ class Book extends Media implements IMedia {
 		return this.favorite;
 	}
 
+	@Override
+	public long getDuration() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public String getDate() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getArtist() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getGenre() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

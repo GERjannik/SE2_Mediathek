@@ -3,6 +3,7 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 import java.io.File;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import javafx.event.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -14,8 +15,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 public class SettingWindow extends Stage{
+	
+	private static SettingWindow instance;
 
 	// private static Logger log = LogManager.getLogger(SettingWindow.class);
 	public SettingWindow(){
@@ -81,10 +85,10 @@ public class SettingWindow extends Stage{
 			@Override
 			public void handle(ActionEvent event) {
 
-
 				File input = new File (tf_path.getText());
 				if (input.exists() && input.isDirectory()) {
 					s.setDirectory(input.toString());
+					s.readDirectory();
 					l_path_succes.setText("Pfad wurde gespeichert");
 				} else {
 					l_path_error.setText("Die Eingabe ist kein gültiges Verzeichnis");
@@ -103,9 +107,20 @@ public class SettingWindow extends Stage{
 		
 		btn_scan.setOnAction(new EventHandler<ActionEvent>() {
 			
+			class RescanCommand implements Runnable {
+
+				@Override
+				public void run() {
+					IMedialist[] returns = MediaStorage.mediaScan(s.getMediaDirectory());
+					IMedialist movies = returns[0];
+					IMedialist audio = returns[1];
+				}
+				
+				
+			}
 			@Override
 			public void handle(ActionEvent event) {
-				MediaStorage.mediaScan(s.getMediaDirectory());
+				new Thread(new RescanCommand()).start();
 			}
 		});
 
@@ -120,6 +135,10 @@ public class SettingWindow extends Stage{
 
 		setScene(SettingGUI);
 
+	}
+	
+	public static SettingWindow getInstance() {
+		return instance;
 	}
 }
 

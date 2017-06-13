@@ -53,44 +53,59 @@
 		</HBox>
 		<TableView fx:id="tableview">
 			<columns>
-				<TableColumn text="Titel" fx:id="col_title"></TableColumn>
-					<!--
-					<cellValueFactory><PropertyValueFactory property="titel" />
-        			</cellValueFactory>
-        			-->
-				<TableColumn text="Jahr" fx:id="col_year"></TableColumn>
-					<!--
-					<cellValueFactory><PropertyValueFactory property="yearTable" />
+				<TableColumn text="Titel" fx:id="col_title">
+				 	<!-- 
+				 	<cellValueFactory><PropertyValueFactory property="title" />
        				</cellValueFactory>
        				-->
-				<TableColumn text="Genre" fx:id="col_genre"></TableColumn>
+				</TableColumn>
+				<TableColumn text="Länge" fx:id="col_length">
+					<!-- 
+					<cellValueFactory><PropertyValueFactory property="length" />
+       				</cellValueFactory>
+       				-->
+				</TableColumn>					
+				<TableColumn text="Jahr" fx:id="col_date">
+					<!--
+					<cellValueFactory><PropertyValueFactory property="date" />
+       				</cellValueFactory>
+       				-->
+				</TableColumn>					
+				<TableColumn text="Director" fx:id="col_artist">
+					<!--
+					<cellValueFactory><PropertyValueFactory property="artist" />
+       				</cellValueFactory>
+       				-->
+				</TableColumn>					
+				<TableColumn text="Genre" fx:id="col_genre">
 					<!--
 					<cellValueFactory><PropertyValueFactory property="genre" />
-        			</cellValueFactory>
-        			-->
-				<TableColumn text="Director" fx:id="col_director"></TableColumn>
-					<!--
-					<cellValueFactory><PropertyValueFactory property="directorTable" />
        				</cellValueFactory>
-					-->
+       				-->
+				</TableColumn>	
 			</columns>
 		</TableView>
 		</VBox>
 	</center>
 	<right>
 		<VBox fx:id="right_vbox">
-			<Label fx:id="coverArtLaber">Cover Art</Label>
-			<Label fx:id="titelLabel">Titel</Label>
-			<Label fx:id="directorLabel">Director</Label>
-			<Label fx:id="yearLabel">Jahr</Label>
-			<Label fx:id="genreLabel">Genre</Label>
-			<Label></Label>
-			<Label></Label>
-			<Label></Label>
+			<Label fx:id="lab_titel">Titel</Label>
+			<TextField fx:id ="tf_title" promptText="Titel"/>
+			<Label fx:id="lab_artist">Artist</Label>
+			<TextField fx:id ="tf_artist"/>
+			<Label fx:id="lab_year">Year</Label>
+			<TextField fx:id ="tf_year"/>
+			<Label fx:id="lab_duration">Duration</Label>
+			<TextField fx:id ="tf_duration"/>
+			<Label fx:id="lab_genre">Genre</Label>
+			<TextField fx:id ="tf_genre"/>
+			
 			<HBox BorderPane.alignment="BOTTOM_RIGHT">
 				<Button fx:id="btn_edit" onAction="#btn_edit_clicked">Bearbeiten</Button>
 				<Button fx:id="btn_save" onAction="#btn_save_clicked">Speichern</Button>
 			</HBox>
+			<Button fx:id="btn_play" onAction="#btn_play_clicked">Abspielen</Button>
+			<Button fx:id="btn_end" onAction="#btn_end_clicked">Beenden</Button>
 		</VBox>
 	</right>
 	<bottom></bottom>

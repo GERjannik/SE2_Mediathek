@@ -140,4 +140,24 @@ class Movie extends Media implements IMedia {
 	public boolean getFavorite() {
 		return this.favorite;
 	}
+
+	@Override
+	public long getDuration() {
+		return this.duration;
+	}
+
+	@Override
+	public String getDate() {
+		return this.releaseDate;
+	}
+
+	@Override
+	public String getArtist() {
+		return this.regisseur;
+	}
+
+	@Override
+	public String getGenre() {
+		return this.genre;
+	}
 }

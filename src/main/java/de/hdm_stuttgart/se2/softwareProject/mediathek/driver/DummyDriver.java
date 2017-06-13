@@ -2,18 +2,16 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.driver;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Map.Entry;
-import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import com.sun.jna.NativeLibrary;
+
+import java.util.Scanner;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
@@ -24,14 +22,14 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
 import uk.co.caprica.vlcj.player.MediaMeta;
 import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 
-public class App {
 
-	private static Logger log = LogManager.getLogger(App.class);
+public class DummyDriver {
+
+	private static Logger log = LogManager.getLogger(DummyDriver.class);
 
 	public static void main(String[] args) {
-
-		Settings s = new Settings();
 		
+		Settings s = new Settings();
 		Scanner scan = new Scanner(System.in);
 		ArrayList<IMedialist> allLists = new ArrayList<>();
 
@@ -55,25 +53,9 @@ public class App {
 
 		IMedialist[] scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
 		IMedialist movies = scannedContent[0];
-		IMedialist audio = scannedContent[1];	
-		
-		allLists = MediaStorage.loadPlaylists(movies, audio);
-		
-		IMedialist movieFavorites = ListFactory.getInstance("video", "Favoriten (Video)");
-		for (Entry<File, IMedia> i : movies.getContent().entrySet()) {
-			if (i.getValue().getFavorite()) {
-				movieFavorites.getContent().put(i.getKey(), i.getValue());
-			}
-		}
-		IMedialist audioFavorites = ListFactory.getInstance("audio", "Favoriten (Audio)");
-		for (Entry<File, IMedia> i : audio.getContent().entrySet()) {
-			if (i.getValue().getFavorite()) {
-				audioFavorites.getContent().put(i.getKey(), i.getValue());
-			}
-		}
-		allLists.add(movieFavorites);
-		allLists.add(audioFavorites);
-		
+		IMedialist audio = scannedContent[1];
+		// Implementierung von books nur angedeutet (Interfaces) 
+		//IMedialist books = scannedContent[2];
 		loop:while(true) {
 			menu();
 			boolean validInput = false;
@@ -126,7 +108,9 @@ public class App {
 				}
 				break;
 			case "6":
-				MediaStorage.mediaScan(s.getMediaDirectory());
+				scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
+				movies = scannedContent[0];
+				audio = scannedContent[1];
 				break;
 			case "7":
 				validInput = false;
@@ -195,16 +179,13 @@ public class App {
 				break;
 			case "11":
 				System.out.println("Bye");
-				if (allLists.size() > 0) {
 				MediaStorage.savePlaylists(allLists);
-				}
 				break loop;
 			default:
 				System.out.println("Ungültige Eingabe");
 			}
 		}
 	}
-	
 
 	public static void menu() {
 		System.out.println("Menü: \n"
@@ -271,31 +252,10 @@ public class App {
 			case "0":
 				System.out.println("Welches Medium soll zur Playlist " + playlist.getName() + " hinzugefügt werden?");
 				try {
-					if (playlist.getName().equals("Favoriten (Video)") || playlist.getName().equals("Favoriten (Audio)")) {
-						IMedia in = getInput(s, scan, movies, audio);
-						in.setFavorite(true);
-						MediaMeta meta = MediaStorage.readMetaData(in.getFile());
-						String settings = meta.getDescription();
-						HashMap<String, Object> out = new HashMap<>();
-						JSONObject root = (JSONObject) new JSONParser().parse(settings);
-						out.put("infos", root.get("infos"));
-						out.put("favorite", root.get("favorite"));
-						out.put("visible", root.get("visible"));
-						out.put("ranking", root.get("ranking"));
-						out.replace("favorite", true);
-						root = new JSONObject(out);
-						meta.setDescription(root.toString());
-						meta.save();
-						meta.release();
-						playlist.addMedia(in);
-					}
 					playlist.addMedia(getInput(s, scan, movies, audio));
 				} catch (InvalidInputException e) {
 					log.warn("Ungültige Eingabe. Eingegebener Titel nicht gefunden");
 					log.catching(e);
-				} catch (ParseException e) {
-					log.catching(e);
-					log.error("Parsen in JSON Objekt fehlgeschlagen");
 				}
 				break;
 			case "1":
@@ -326,11 +286,7 @@ public class App {
 			case "2":
 				return allLists;
 			case "3":
-				if (!playlist.getName().equals("Favoriten (Video)") && !playlist.getName().equals("Favoriten (Audio)")) {
-					allLists.remove(choice);
-				} else {
-					log.info("Playlists mit Favoriten kann nicht gelöscht werden");
-				}
+				allLists.remove(choice);
 				return allLists;
 			default:
 				System.out.println("Ungültige Eingabe!");
