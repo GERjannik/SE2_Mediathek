@@ -17,6 +17,9 @@
 <?import javafx.collections.*?> 
 <?import fxmltableview.*?>
 <?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.Slider?>
 
 
 
@@ -31,9 +34,14 @@
 	<left>
 		<VBox>
 			<HBox>
-				<ToggleButton fx:id="tb_movies" selected="true">Filme</ToggleButton>
-				<ToggleButton fx:id="tb_audio" selected="true">Audio</ToggleButton>
-				<ToggleButton fx:id="tb_books">Bücher</ToggleButton>
+				<fx:define>
+					<ToggleGroup fx:id="toggleGroup" />
+				</fx:define>
+				<children>
+					<ToggleButton fx:id="tb_movies" ToggleGroup="$toggleGroup">Filme</ToggleButton>
+					<ToggleButton fx:id="tb_audio" ToggleGroup="$toggleGroup">Audio</ToggleButton>
+					<ToggleButton fx:id="tb_books" ToggleGroup="$toggleGroup">Bücher </ToggleButton>
+				</children>
 			</HBox>
 			<TabPane>
 				<tabs>
@@ -84,6 +92,7 @@
 	</center>
 	<right>
 		<VBox fx:id="right_vbox">
+			<Label fx:id="lab_meta">Metadaten</Label>
 			<Label fx:id="lab_titel">Titel</Label>
 			<TextField fx:id="tf_title" promptText="Titel" />
 			<Label fx:id="lab_year">Year</Label>
@@ -92,13 +101,46 @@
 			<TextField fx:id="tf_artist" promptText="Artist" />
 			<Label fx:id="lab_genre">Genre</Label>
 			<TextField fx:id="tf_genre" promptText="Genre" />
-
+			<Label fx:id="lab_ranking">Bewertung</Label>
+			<HBox>
+				<fx:define>
+					<ToggleGroup fx:id="radioGroup" />
+				</fx:define>
+				<children>
+					<RadioButton fx:id="rb_one" toggleGroup="$radioGroup"
+						text="1" />
+					<RadioButton fx:id="rb_two" toggleGroup="$radioGroup"
+						text="2" />
+					<RadioButton fx:id="rb_three" toggleGroup="$radioGroup"
+						text="3" />
+					<RadioButton fx:id="rb_four" toggleGroup="$radioGroup"
+						text="4" />
+					<RadioButton fx:id="rb_five" toggleGroup="$radioGroup"
+						text="5" />
+				</children>
+			</HBox>
+			<Label></Label>
+			<HBox>
+				<Label fx:id="l_favo">Favoriten</Label>
+				<fx:define>
+					<ToggleGroup fx:id="favoGroup" />
+				</fx:define>
+				<children>
+					<HBox>
+						<ToggleButton fx:id="tb_yes" toggleGroup="$favoGroup">JA</ToggleButton>
+						<ToggleButton fx:id="tb_no" toggleGroup="$favoGroup">NEIN</ToggleButton>
+					</HBox>
+				</children>
+			</HBox>
+			<Label></Label>
 			<HBox BorderPane.alignment="BOTTOM_RIGHT">
 				<Button fx:id="btn_edit" onAction="#btn_edit_clicked">Bearbeiten</Button>
 				<Button fx:id="btn_save" onAction="#btn_save_clicked">Speichern</Button>
 			</HBox>
-			<Button fx:id="btn_play" onAction="#btn_play_clicked">Abspielen</Button>
-			<Button fx:id="btn_end" onAction="#btn_end_clicked">Beenden</Button>
+			<HBox>
+				<Button fx:id="btn_play" onAction="#btn_play_clicked">Abspielen</Button>
+				<Button fx:id="btn_end" onAction="#btn_end_clicked">Beenden</Button>
+			</HBox>
 		</VBox>
 	</right>
 	<bottom></bottom>

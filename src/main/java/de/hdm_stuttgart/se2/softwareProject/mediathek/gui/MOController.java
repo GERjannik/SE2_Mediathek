@@ -5,6 +5,8 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.simple.parser.ParseException;
+
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
@@ -16,11 +18,15 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import uk.co.caprica.vlcj.player.MediaMeta;
 
 public class MOController implements Initializable {
 
@@ -30,10 +36,23 @@ public class MOController implements Initializable {
 
 	IMedialist movies, audio;
 	Settings s = new Settings();
+	String play_data;
 
+	@FXML ToggleGroup toggleGroup;
 	@FXML ToggleButton tb_movies;
 	@FXML ToggleButton tb_audio;
 	@FXML ToggleButton tb_books;
+	
+	@FXML ToggleGroup favoGroup;
+	@FXML ToggleButton tb_yes;
+	@FXML ToggleButton tb_no;
+
+	@FXML ToggleGroup radioGroup;
+	@FXML RadioButton rb_one;
+	@FXML RadioButton rb_two;
+	@FXML RadioButton rb_three;
+	@FXML RadioButton rb_four;
+	@FXML RadioButton rb_five;
 
 	@FXML Label playlist;
 	@FXML Label list;
@@ -44,6 +63,7 @@ public class MOController implements Initializable {
 	@FXML TextField tf_year;
 	@FXML TextField tf_artist;
 	@FXML TextField tf_genre;
+	
 	// Table FXML
 	@FXML TableView<Media> tableview = new TableView<Media>();
 	@FXML TableColumn<Media, String> col_title = new TableColumn<>("Titel");
@@ -51,7 +71,6 @@ public class MOController implements Initializable {
 	@FXML TableColumn<Media, String> col_date = new TableColumn<Media, String>("Erscheinung");
 	@FXML TableColumn<Media, String> col_artist  = new TableColumn<Media, String>("Director");
 	@FXML TableColumn<Media, String> col_genre  = new TableColumn<Media, String>("Genre");
-
 
 
 	@Override
@@ -96,13 +115,14 @@ public class MOController implements Initializable {
 						for (IMedia i : movies.getContent().values()) {
 							data.add(new Media(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
 						}
+
 						for (IMedia i : audio.getContent().values()) {
 							data.add(new Media(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
 						}
 					} 
 					tableview.setItems(data); 
 
-					try {Thread.sleep(6000);} catch (InterruptedException e) {}
+					try {Thread.sleep(60000);} catch (InterruptedException e) {}
 
 				}
 			}}).start();
@@ -116,20 +136,53 @@ public class MOController implements Initializable {
 	}
 
 	@FXML
-	public void btn_save_clicked(ActionEvent event){
-		System.out.println("Saved");
+	public void btn_save_clicked(ActionEvent event) throws ParseException{
+
+		String save_titel = tf_title.getText();
+		String save_year = tf_year.getText();
+		String save_artist = tf_artist.getText();
+		String save_genre = tf_genre.getText();
+
+		String ranking = radioGroup.getSelectedToggle().toString().substring(radioGroup.getSelectedToggle().toString().length()-2, radioGroup.getSelectedToggle().toString().length()-1);
+			
+		
+		Toggle favo = favoGroup.getSelectedToggle();
+
+		IMedia media;
+
+		play_data = tableview.getSelectionModel().getSelectedItem().getTitle().toString();
+
+		media = Media.getInput(s, play_data, movies, audio);
+
+		Media.editMetaInformation(media, save_titel, save_year, save_artist, save_genre, ranking, favo); 
+		
+		tf_title.setText(null);
+		tf_year.setText(null);
+		tf_artist.setText(null);
+		tf_genre.setText(null);
+		radioGroup.selectToggle(null);
+		favoGroup.selectToggle(null);
+
+		initialize(null, null);
+
 
 	}
 
 	@FXML
 	public void btn_edit_clicked(ActionEvent event){
 
+		tf_title.setText(tableview.getSelectionModel().getSelectedItem().getTitle());
+		tf_year.setText(tableview.getSelectionModel().getSelectedItem().getDate());
+		tf_artist.setText(tableview.getSelectionModel().getSelectedItem().getArtist());
+		tf_genre.setText(tableview.getSelectionModel().getSelectedItem().getGenre());
+		
+
 	}
 
 	@FXML
 	public void btn_play_clicked(ActionEvent event){
 
-		String play_data = tableview.getSelectionModel().getSelectedItem().getTitle();
+		play_data = tableview.getSelectionModel().getSelectedItem().getTitle();
 
 		Media.playMovie(s, play_data, movies, audio);
 
