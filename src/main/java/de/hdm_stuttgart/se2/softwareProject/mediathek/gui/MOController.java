@@ -146,6 +146,7 @@ public class MOController implements Initializable {
 							s.readDirectory();
 							scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
 
+							//TODO Abfrage aktuell über die Größe, muss noch angepasst werden. Vergleich mit aktuellen Daten muss erstellt werden...
 							if ( movies.getContent().size() != scannedContent[0].getContent().size() || audio.getContent().size() != scannedContent[1].getContent().size()) {
 
 								movies = scannedContent[0];
