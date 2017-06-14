@@ -67,8 +67,7 @@
 		<VBox>
 			<HBox>
 				<Label fx:id="l_search"> Suche: </Label>
-				<TextField fx:id="tf_search" />
-				<Button fx:id="btn_search" onAction="#btn_search_clicked">Suchen</Button>
+				<TextField fx:id="tf_search"  />
 			</HBox>
 			<TableView fx:id="tableview">
 				<columns>
