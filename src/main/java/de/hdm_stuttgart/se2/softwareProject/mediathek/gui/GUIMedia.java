@@ -29,11 +29,11 @@ import uk.co.caprica.vlcj.player.MediaPlayerFactory;
  * Auslagerung aller extra Methoden und Klassen
  *
  */
-public class Media {
+public class GUIMedia {
 	
-	private static Logger log = LogManager.getLogger(Media.class);
+	private static Logger log = LogManager.getLogger(GUIMedia.class);
 
-	private static Media instance;
+	private static GUIMedia instance;
 
 	private final SimpleStringProperty title;
 	private final SimpleLongProperty length;
@@ -41,7 +41,7 @@ public class Media {
 	private final SimpleStringProperty artist;
 	private final SimpleStringProperty genre; 
 
-	public Media(String title, Long length, String date, String artist, String genre) {
+	public GUIMedia(String title, Long length, String date, String artist, String genre) {
 		this.title = new SimpleStringProperty(title);
 		this.length = new SimpleLongProperty(length);
 		this.date = new SimpleStringProperty(date);
@@ -70,13 +70,13 @@ public class Media {
 	}
 
 
-	public static Media getInstance() {
+	public static GUIMedia getInstance() {
 		return instance;
 	}
 
 
-	public static void setInstance(Media instance) {
-		Media.instance = instance;
+	public static void setInstance(GUIMedia instance) {
+		GUIMedia.instance = instance;
 	}
 
 

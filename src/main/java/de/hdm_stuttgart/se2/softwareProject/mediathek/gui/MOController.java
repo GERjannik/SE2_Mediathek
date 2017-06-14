@@ -1,6 +1,7 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 
 import java.io.File;
+import java.lang.Thread.State;
 import java.net.URL;
 import java.util.Observable;
 import java.util.ResourceBundle;
@@ -45,9 +46,9 @@ public class MOController implements Initializable {
 	Settings s = new Settings();
 	String play_data;
 
-	ObservableList<Media> data;
-	FilteredList<Media> filterdData;
-	SortedList<Media> sortedData;
+	ObservableList<GUIMedia> data;
+	FilteredList<GUIMedia> filterdData;
+	SortedList<GUIMedia> sortedData;
 
 	@FXML ToggleGroup toggleGroup;
 	@FXML ToggleButton tb_movies;
@@ -79,13 +80,13 @@ public class MOController implements Initializable {
 	@FXML TextField tf_search;
 
 	// Table FXML
-	@FXML TableView<Media> tableview = new TableView<Media>();
-	@FXML TableColumn<Media, String> col_title = new TableColumn<>("Titel");
-	@FXML TableColumn<Media, Long> col_length = new TableColumn<Media, Long>("Länge");
-	@FXML TableColumn<Media, String> col_date = new TableColumn<Media, String>("Erscheinung");
-	@FXML TableColumn<Media, String> col_artist  = new TableColumn<Media, String>("Director");
-	@FXML TableColumn<Media, String> col_genre  = new TableColumn<Media, String>("Genre");
-	@FXML TableColumn<Media, String> col_ranking = new TableColumn<Media, String>("Bewertung");
+	@FXML TableView<GUIMedia> tableview = new TableView<GUIMedia>();
+	@FXML TableColumn<GUIMedia, String> col_title = new TableColumn<>("Titel");
+	@FXML TableColumn<GUIMedia, Long> col_length = new TableColumn<GUIMedia, Long>("Länge");
+	@FXML TableColumn<GUIMedia, String> col_date = new TableColumn<GUIMedia, String>("Erscheinung");
+	@FXML TableColumn<GUIMedia, String> col_artist  = new TableColumn<GUIMedia, String>("Director");
+	@FXML TableColumn<GUIMedia, String> col_genre  = new TableColumn<GUIMedia, String>("Genre");
+	@FXML TableColumn<GUIMedia, String> col_ranking = new TableColumn<GUIMedia, String>("Bewertung");
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -95,22 +96,49 @@ public class MOController implements Initializable {
 		// Zuweisung der Spalten, für das passende füllen der TableView
 		col_title.setMinWidth(100);
 		col_title.setCellValueFactory(
-				new PropertyValueFactory<Media, String>("title"));
+				new PropertyValueFactory<GUIMedia, String>("title"));
 		col_length.setMinWidth(100);
 		col_length.setCellValueFactory(
-				new PropertyValueFactory<Media, Long>("length"));
+				new PropertyValueFactory<GUIMedia, Long>("length"));
 		col_date.setMinWidth(100);
 		col_date.setCellValueFactory(
-				new PropertyValueFactory<Media, String>("date"));
+				new PropertyValueFactory<GUIMedia, String>("date"));
 		col_artist.setMinWidth(100);
 		col_artist.setCellValueFactory(
-				new PropertyValueFactory<Media, String>("artist"));
+				new PropertyValueFactory<GUIMedia, String>("artist"));
 		col_genre.setMinWidth(100);
 		col_genre.setCellValueFactory(
-				new PropertyValueFactory<Media, String>("genre"));
+				new PropertyValueFactory<GUIMedia, String>("genre"));
 		col_ranking.setMinWidth(100);
 		col_ranking.setCellValueFactory(
-				new PropertyValueFactory<Media, String>("ranking"));
+				new PropertyValueFactory<GUIMedia, String>("ranking"));
+		
+		Thread t = new Thread(new Runnable() {
+			public void run() {
+				
+				// Erstellen der ObservableList zum füllen der TableView
+				data = FXCollections.observableArrayList();
+
+				if (new File("settings.json").exists() && !(new File("settings.json").isDirectory())) {
+					s.readDirectory();
+
+					IMedialist[] scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
+
+						movies = scannedContent[0];
+						audio = scannedContent[1];
+						
+						for (IMedia i : movies.getContent().values()) {
+							data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
+						}
+
+						for (IMedia i : audio.getContent().values()) {
+							data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
+						}
+						tableview.setItems(data);
+				}
+			}
+		});
+		t.start();
 
 		//Abfrage ob Pfad eingetragen ist, wenn ja füllen der ObservableList für die Tableview
 		//Thread läuft alle 3 Sekunden geänderte Film oder Audio Listen anzupassen und neu in der 
@@ -118,66 +146,75 @@ public class MOController implements Initializable {
 		new Thread(new Runnable() {
 			public void run() {
 				while (true) {
+					if(tf_search.getText() == null || tf_search.getText().isEmpty()) {
+						// Erstellen der ObservableList zum füllen der TableView
+						data = FXCollections.observableArrayList();
 
-					// Erstellen der ObservableList zum füllen der TableView
-					data = FXCollections.observableArrayList();
+						if (new File("settings.json").exists() && !(new File("settings.json").isDirectory())) {
+							s.readDirectory();
 
-					if (new File("settings.json").exists() && !(new File("settings.json").isDirectory())) {
-						s.readDirectory();
+							IMedialist[] scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
+							if (!movies.equals(scannedContent[0]) || !audio.equals(scannedContent[1])) {
+								movies = scannedContent[0];
+								audio = scannedContent[1];
+								
+								for (IMedia i : movies.getContent().values()) {
+									data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
+								}
 
-						IMedialist[] scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
-						movies = scannedContent[0];
-						audio = scannedContent[1];
-
-						for (IMedia i : movies.getContent().values()) {
-							data.add(new Media(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
-						}
-
-						for (IMedia i : audio.getContent().values()) {
-							data.add(new Media(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
-						}
-					}    
-
-					tableview.setItems(data); 
-
-					filterdData = new FilteredList<>(data, f -> true);
-
-					// 2. Set the filter Predicate whenever the filter changes.
-					tf_search.textProperty().addListener((observable, oldValue, newValue) -> {
-						filterdData.setPredicate(Media -> {
-							// If filter text is empty, display all Media.
-							if (newValue == null || newValue.isEmpty()) {
-								System.out.println("Filtertext ist empty");
-								return true;
+								for (IMedia i : audio.getContent().values()) {
+									data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
+								}
+								tableview.setItems(data);
 							}
+						}
 
-							// Compare first name and last name of every person with filter text.
-							String lowerCaseFilter = newValue.toLowerCase();
+						filterdData = new FilteredList<>(data, f -> true);
 
-							if (Media.getTitle().toLowerCase().contains(lowerCaseFilter)) {
+						// 2. Set the filter Predicate whenever the filter changes.
+						tf_search.textProperty().addListener((observable, oldValue, newValue) -> {
+							filterdData.setPredicate(Media -> {
+								// If filter text is empty, display all Media.
+								if (newValue == null || newValue.isEmpty()) {
+									System.out.println("Filtertext ist empty");
+									return true;
+								}
+
+								// Compare first name and last name of every person with filter text.
+								String lowerCaseFilter = newValue.toLowerCase();
+
+								if (Media.getTitle().toLowerCase().contains(lowerCaseFilter)) {
+									System.out.println("false");
+									return true; // Filter matches titel.
+								} 
 								System.out.println("false");
-								return true; // Filter matches titel.
-							} 
-							System.out.println("false");
-							return false; // Does not match.
+								return false; // Does not match.
+							});
 						});
-					});
 
-					// 3. Wrap the FilteredList in a SortedList. 
-					sortedData = new SortedList<>(filterdData);
+						// 3. Wrap the FilteredList in a SortedList. 
+						sortedData = new SortedList<>(filterdData);
 
-					// 4. Bind the SortedList comparator to the TableView comparator.
-					sortedData.comparatorProperty().bind(tableview.comparatorProperty());
+						// 4. Bind the SortedList comparator to the TableView comparator.
+						sortedData.comparatorProperty().bind(tableview.comparatorProperty());
 
-					// 5. Add sorted (and filtered) data to the table.
-					tableview.setItems(sortedData);
+						// 5. Add sorted (and filtered) data to the table.
+						tableview.setItems(sortedData);
 
 
-					try {Thread.sleep(60000);} catch (InterruptedException e) {}
+						try {Thread.sleep(3000);} catch (InterruptedException e) {}
+					} else {
+						try {
+							Thread.sleep(3000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
 
 				}
 
-			}}).start();
+			}}, "rescanThread").start();
 	}
 
 	public void btn_search_clicked() {
@@ -236,21 +273,21 @@ public class MOController implements Initializable {
 		String save_year = tf_year.getText();
 		String save_artist = tf_artist.getText();
 		String save_genre = tf_genre.getText();
-		
+
 		//String ranking = radioGroup.getSelectedToggle().toString().substring(radioGroup.getSelectedToggle().toString().length()-2, radioGroup.getSelectedToggle().toString().length()-1);
-		
+
 		String ranking = "1";
-		
+
 		Toggle favo = favoGroup.getSelectedToggle();
 
 		IMedia media;
-				
+
 		play_data = tableview.getSelectionModel().getSelectedItem().getTitle().toString();
 
-		media = Media.getInput(s, play_data, movies, audio);
-		
-		Media.editMetaInformation(media, save_titel, save_year, save_artist, save_genre, ranking, favo); 
-				
+		media = GUIMedia.getInput(s, play_data, movies, audio);
+
+		GUIMedia.editMetaInformation(media, save_titel, save_year, save_artist, save_genre, ranking, favo); 
+
 		tf_title.setText(null);
 		tf_year.setText(null);
 		tf_artist.setText(null);
@@ -270,23 +307,23 @@ public class MOController implements Initializable {
 		tf_year.setText(tableview.getSelectionModel().getSelectedItem().getDate());
 		tf_artist.setText(tableview.getSelectionModel().getSelectedItem().getArtist());
 		tf_genre.setText(tableview.getSelectionModel().getSelectedItem().getGenre());
-		
+
 	}
 
 	@FXML
 	public void btn_play_clicked(ActionEvent event){
 
 		play_data = tableview.getSelectionModel().getSelectedItem().getTitle();
-		
-		Media.playMovie(s, play_data, movies, audio);
+
+		GUIMedia.playMovie(s, play_data, movies, audio);
 
 	}
 
 	@FXML
 	public void btn_del_clicked() {
-		
+
 	}
-	
+
 	@FXML
 	public void btn_end_clicked() {
 		System.exit(0);
