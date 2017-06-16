@@ -178,5 +178,27 @@ public class GUIMedia {
 				meta.release();
 				log.info("Metadaten der Datei " + m.getFile() + "erfolgreich gespeichert.");
 	}
+	
+	public static void deleteMedia(Settings s, String play_data, IMedialist movies, IMedialist audio, boolean delete) {
+
+		IMedia m = getInput(s, play_data, movies, audio);		
+
+		boolean validInput = false;
+		while (validInput == false) {
+
+			if (delete == true) {
+				validInput = true;
+				m.getFile().delete();
+				log.info("Das Medium " + m.getTitle() + " wurde von der Festplatte gelöscht");
+				m.removeMedia();
+			} else if (delete == false) {
+				validInput = true;
+				m.removeMedia();
+				log.info("Das Medium " + m.getTitle() + " wird nicht mehr in der Mediathek angezeigt");
+			} else {
+				System.out.println("ungültige Eingabe - entweder für 'Ja' / 'ja' oder 'Nein' / 'nein' entscheiden");
+			}
+		}
+	}
 
 }

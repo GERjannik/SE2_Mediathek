@@ -126,6 +126,7 @@
 			</HBox>
 			<HBox BorderPane.alignment="BOTTOM_RIGHT">
 				<Button fx:id="btn_save" onAction="#btn_save_clicked">Speichern</Button>
+				<Button fx:id="btn_cancel" onAction="#btn_cancel_clicked">Verwerfen</Button>
 			</HBox>
 			<Label></Label>
 			<HBox>

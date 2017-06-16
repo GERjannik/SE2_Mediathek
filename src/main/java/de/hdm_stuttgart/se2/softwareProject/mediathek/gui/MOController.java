@@ -35,6 +35,8 @@ import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import uk.co.caprica.vlcj.player.MediaMeta;
 
 public class MOController implements Initializable {
@@ -253,6 +255,13 @@ public class MOController implements Initializable {
 			initialize(null, null);
 		}
 	}
+	
+	@FXML
+	public void btn_cancel_clicked(){
+		
+		tableview_mouse_clicked();
+		
+	}
 
 	@FXML
 	public void tableview_mouse_clicked(){
@@ -273,9 +282,20 @@ public class MOController implements Initializable {
 
 	}
 
+	//TODO Markierter Wert muss übergeben werden....
 	@FXML
 	public void btn_del_clicked() {
-
+		
+		if(tableview.getSelectionModel().isEmpty()){
+			l_news.setTextFill(javafx.scene.paint.Color.RED);
+			l_news.setText("Bitte wählen sie ein zu löschendes Medium aus");
+			
+			
+			
+		} else {
+			new DeleteWindow().show();
+		}
+		
 	}
 
 	@FXML
