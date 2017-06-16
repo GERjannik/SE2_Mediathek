@@ -151,7 +151,7 @@ public class MOController implements Initializable {
 							if ( movies.getContent().size() != scannedContent[0].getContent().size() || audio.getContent().size() != scannedContent[1].getContent().size()) {
 
 								movies = scannedContent[0];
-								audio = scannedContent[1];
+								// audio = scannedContent[1];
 
 								data.clear();
 
