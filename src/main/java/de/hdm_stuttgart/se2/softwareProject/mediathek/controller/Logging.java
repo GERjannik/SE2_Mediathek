@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import org.apache.logging.log4j.core.appender.FileAppender;
+import org.apache.logging.log4j.core.LoggerContext;
 import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.ConfigurationFactory;
 import org.apache.logging.log4j.core.config.ConfigurationSource;
@@ -25,8 +25,13 @@ public class Logging {
 		ConfigurationFactory configFactory = XmlConfigurationFactory.getInstance();
 		Configuration configuration = configFactory.getConfiguration(source);
 		
-		// TODO Appender Objekt erstellen
-		// FileAppender appender = FileAppender.createAppender("/log/logfile.log", true, locking, name, immediateFlush, ignore, false, false, org.apache.log4j.PatternLayout, false, advertise, advertiseUri, config)();
-
+		// LoggerContext
+		LoggerContext context = new LoggerContext("Mediathek DJLB Logger");
+		
+		// Starten des Logging Systems
+		context.start(configuration);
+		
+		// TODO Constructor in main einfügen und Logger in Klassen anpassen 
+		// TODO --> context.getLogger(de.hdm_stuttgart.se2.softwareProject.mediathek.controller);
 	}
 }
