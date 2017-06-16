@@ -1,5 +1,6 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 
+import java.awt.Color;
 import java.io.File;
 import java.lang.Thread.State;
 import java.net.URL;
@@ -45,6 +46,7 @@ public class MOController implements Initializable {
 	IMedialist movies, audio;
 	Settings s = new Settings();
 	String play_data;
+	String ranking;
 
 	ObservableList<GUIMedia> data;
 	FilteredList<GUIMedia> filterdData;
@@ -70,6 +72,7 @@ public class MOController implements Initializable {
 	@FXML Label playlist;
 	@FXML Label list;
 	@FXML Label l_news;
+
 	@FXML Button btn_save;
 	@FXML Button btn_edit;
 	@FXML Button btn_search;
@@ -91,8 +94,6 @@ public class MOController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-
-		//TODO Liste wird immer neuer erzeugt, daher Verlust des Focus. Muss geändert werden! ABER WIE???
 
 		// Zuweisung der Spalten, für das passende füllen der TableView
 		col_title.setMinWidth(100);
@@ -196,7 +197,7 @@ public class MOController implements Initializable {
 						// 5. Add sorted (and filtered) data to the table.
 						tableview.setItems(sortedData);
 
-						try {Thread.sleep(3000);} catch (InterruptedException e) {}
+						try {Thread.sleep(1000);} catch (InterruptedException e) {}
 					} 
 				} 
 			}}, "rescanThread").start();
@@ -207,7 +208,6 @@ public class MOController implements Initializable {
 		new SettingWindow().show();			
 	}
 
-	//TODO Fehler im Ranking, hat aber schon funktioniert...
 	@FXML
 	public void btn_save_clicked(ActionEvent event) throws ParseException{
 
@@ -215,35 +215,47 @@ public class MOController implements Initializable {
 		String save_year = tf_year.getText();
 		String save_artist = tf_artist.getText();
 		String save_genre = tf_genre.getText();
+		boolean save_favo = false;
 
-		//String ranking = radioGroup.getSelectedToggle().toString().substring(radioGroup.getSelectedToggle().toString().length()-2, radioGroup.getSelectedToggle().toString().length()-1);
+		if (radioGroup.hasProperties()){
+			ranking = radioGroup.getSelectedToggle().toString().substring(radioGroup.getSelectedToggle().toString().length()-2, radioGroup.getSelectedToggle().toString().length()-1);
+		} 		
 
-		String ranking = "1";
-
-		Toggle favo = favoGroup.getSelectedToggle();
+		//TODO
+		ToggleButton favo = (ToggleButton) favoGroup.getSelectedToggle();
+		
+		if (favo == null){
+			save_favo = false;
+		}
+		else if (favo.equals(tb_yes)) {
+			save_favo = true;
+		}
 
 		IMedia media;
 
-		play_data = tableview.getSelectionModel().getSelectedItem().getTitle().toString();
+		if (tableview.getSelectionModel().isEmpty()){
+			l_news.setTextFill(javafx.scene.paint.Color.RED);
+			l_news.setText("Stellen Sie sicher, das ein Medium ausgewählt ist");
+		} else {
+			play_data = tableview.getSelectionModel().getSelectedItem().getTitle().toString();
 
-		media = GUIMedia.getInput(s, play_data, movies, audio);
+			media = GUIMedia.getInput(s, play_data, movies, audio);
 
-		GUIMedia.editMetaInformation(media, save_titel, save_year, save_artist, save_genre, ranking, favo); 
+			GUIMedia.editMetaInformation(media, save_titel, save_year, save_artist, save_genre, ranking, save_favo); 
 
-		tf_title.setText(null);
-		tf_year.setText(null);
-		tf_artist.setText(null);
-		tf_genre.setText(null);
-		radioGroup.selectToggle(null);
-		favoGroup.selectToggle(null);
+			tf_title.setText(null);
+			tf_year.setText(null);
+			tf_artist.setText(null);
+			tf_genre.setText(null);
+			radioGroup.selectToggle(null);
+			favoGroup.selectToggle(null);
 
-		initialize(null, null);
-
-
+			initialize(null, null);
+		}
 	}
 
 	@FXML
-	public void btn_edit_clicked(ActionEvent event){
+	public void tableview_mouse_clicked(){
 
 		tf_title.setText(tableview.getSelectionModel().getSelectedItem().getTitle());
 		tf_year.setText(tableview.getSelectionModel().getSelectedItem().getDate());

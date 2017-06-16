@@ -69,7 +69,7 @@
 				<Label fx:id="l_search"> Suche: </Label>
 				<TextField fx:id="tf_search"  />
 			</HBox>
-			<TableView fx:id="tableview">
+			<TableView fx:id="tableview" onMouseClicked="#tableview_mouse_clicked">
 				<columns>
 					<TableColumn text="Titel" fx:id="col_title"></TableColumn>
 					<TableColumn text="Länge" fx:id="col_length"></TableColumn>
@@ -120,15 +120,14 @@
 				<children>
 					<HBox>
 						<ToggleButton fx:id="tb_yes" toggleGroup="$favoGroup">JA</ToggleButton>
-						<ToggleButton fx:id="tb_no" toggleGroup="$favoGroup">NEIN</ToggleButton>
+						<ToggleButton fx:id="tb_no" toggleGroup="$favoGroup" >NEIN</ToggleButton>
 					</HBox>
 				</children>
 			</HBox>
-			<Label></Label>
 			<HBox BorderPane.alignment="BOTTOM_RIGHT">
-				<Button fx:id="btn_edit" onAction="#btn_edit_clicked">Bearbeiten</Button>
 				<Button fx:id="btn_save" onAction="#btn_save_clicked">Speichern</Button>
 			</HBox>
+			<Label></Label>
 			<HBox>
 				<Button fx:id="btn_play" onAction="#btn_play_clicked">Abspielen</Button>
 				<Button fx:id="btn_end" onAction="#btn_end_clicked">Beenden</Button>

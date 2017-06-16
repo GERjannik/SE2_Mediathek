@@ -72,26 +72,35 @@ public class MediaStorage {
 				if (meta.getDescription()!= null && meta.getDescription().startsWith("{")) {
 					root = (JSONObject) new JSONParser().parse(meta.getDescription());
 				} else {
-					if (meta.getDescription() == null) {
-						root.put("infos", "Keine weiteren Infos vorhanden");
+					if (meta.getDescription() == null || meta.getDescription().equals("")) {
+						root.put("favorite", false);
+						root.put("visible", true);
 					} else {
 						root.put("infos", meta.getDescription());
 					}
 					root.put("favorite", false);
 					root.put("visible", true);
-					root.put("ranking", "1");
+					root.put("ranking", "0");
 				}
 			} catch (ParseException e) {
 				log.warn("Medien-Description Metadaten konnten nicht in JSON geparst werden");
 				log.catching(e);
-				if (meta.getDescription() == null) {
-					root.put("infos", "Keine weiteren Infos vorhanden");
-				} else {
-					root.put("infos", meta.getDescription());
-				}
+				meta.setDescription("");
 				root.put("favorite", false);
 				root.put("visible", true);
-				root.put("ranking", "1");
+			}
+			
+			boolean favo, visible;
+			
+			try {
+				favo = (boolean)root.get("favorite");
+			} catch (NullPointerException e) {
+				favo = false;
+			}
+			try {
+				visible = (boolean)root.get("visible");
+			} catch (NullPointerException e) {
+				visible = false;
 			}
 			if (files.get(i).getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")) {
 				typ = "video";
@@ -100,8 +109,8 @@ public class MediaStorage {
 						meta.getArtist(),
 						meta.getGenre(),
 						(String)root.get("infos"),
-						(boolean)root.get("favorite"),
-						(boolean)root.get("visible"),
+						favo,
+						visible,
 						(String)root.get("ranking"));
 				movies.getContent().put(files.get(i), temp);
 
@@ -109,7 +118,12 @@ public class MediaStorage {
 				typ = "audio";
 				IMedia temp = MediaFactory.getInstance(
 						typ, meta.getTitle(), files.get(i), meta.getLength(), meta.getDate(),
-						meta.getArtist(), meta.getGenre(), (String)root.get("infos"), (boolean)root.get("favorite"), (boolean)root.get("visible"), (String)root.get("ranking"));
+						meta.getArtist(), 
+						meta.getGenre(), 
+						(String)root.get("infos"), 
+						favo,
+						visible,
+						(String)root.get("ranking"));
 				audio.getContent().put(files.get(i), temp);
 			} /*else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(doc|docx|pdf|html|txt)$")) {
 				typ = "book";

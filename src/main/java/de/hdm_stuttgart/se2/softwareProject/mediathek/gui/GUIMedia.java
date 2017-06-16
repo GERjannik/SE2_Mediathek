@@ -115,7 +115,7 @@ public class GUIMedia {
 		return meta;
 	}
 	
-	public static void editMetaInformation(IMedia m,String save_titel,String save_year, String save_artist, String save_genre, String ranking, Toggle favo) throws ParseException {
+	public static void editMetaInformation(IMedia m,String save_titel,String save_year, String save_artist, String save_genre, String ranking, boolean save_favo) throws ParseException {
 
 		MediaMeta meta = readMetaData(m.getFile());
 		log.info("Metadaten von " + m.getFile() + " werden bearbeitet");
@@ -127,15 +127,15 @@ public class GUIMedia {
 			meta.setDate(save_year);
 			meta.setArtist(save_artist);
 			meta.setGenre(save_genre);
-			//meta.setRating(ranking);
-
-			
+			//meta.setRating(ranking);	
 			
 			HashMap<String, Object> root = new HashMap<>();
-			root.put("infos", meta);
-			//root.put("ranking", ranking);
+			//root.put("infos", meta);
+			root.put("ranking", ranking);
+			root.put("favorite", save_favo);
 			root.put("visible", true);
 			JSONObject metaInfos = new JSONObject(root);
+			meta.setDescription("");
 			meta.setDescription(metaInfos.toString());
 		}
 		if (m.getTyp().equals("audio"))	{
@@ -148,10 +148,12 @@ public class GUIMedia {
 			//meta.setRating(ranking.toString());
 
 			HashMap<String, Object> root = new HashMap<>();
-			root.put("infos", meta);
-			//root.put("ranking", ranking);
+			//root.put("infos", meta);
+			root.put("ranking", ranking);
+			root.put("favorite", save_favo);
 			root.put("visible", true);
 			JSONObject metaInfos = new JSONObject(root);
+			meta.setDescription("");
 			meta.setDescription(metaInfos.toString());
 		}
 		
@@ -173,8 +175,8 @@ public class GUIMedia {
 //				m.setFavorite((Boolean)root.get("favorite"));
 //				meta.release();
 //				log.info("Änderungen erfolgreich gespeichert.");
-			
-		
+				meta.release();
+				log.info("Metadaten der Datei " + m.getFile() + "erfolgreich gespeichert.");
 	}
 
 }
