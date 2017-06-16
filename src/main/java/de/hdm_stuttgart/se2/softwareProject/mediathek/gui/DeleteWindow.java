@@ -26,26 +26,20 @@ import org.apache.logging.log4j.Logger;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.gui.MOController;
 
 public class DeleteWindow extends Stage{
 	
-	private static DeleteWindow instance;
-
-	
+	private static DeleteWindow instance;	
 	
 	private static Logger log = LogManager.getLogger(DeleteWindow.class);
-
-	public DeleteWindow() {
+	
+	public DeleteWindow() {	
 		
 		Settings s = new Settings();
-		IMedialist movies, audio;
-		String play_data = MOController.getInstance().tableview.getSelectionModel().getSelectedItem().getTitle().toString();
 		
-		IMedialist[] returns = MediaStorage.mediaScan(s.getMediaDirectory());
-		movies = returns[0];
-		 audio = returns[1];
-		
-		
+		String del_data = "test.mp4";
+
 		
 		//Aufbau des Einstellungsfenster
 		BorderPane root = new BorderPane();
@@ -89,8 +83,8 @@ public class DeleteWindow extends Stage{
 		btn_delete_mediathek.setOnAction(new EventHandler<ActionEvent>() {
 			
 			@Override
-			public void handle(ActionEvent event){					
-
+			public void handle(ActionEvent event){	
+				
 				boolean delete = false;		
 				
 							
@@ -104,7 +98,7 @@ public class DeleteWindow extends Stage{
 				
 				if (result.get() == ButtonType.OK){	
 					
-					GUIMedia.deleteMedia(s, play_data, movies, audio, delete);
+//					GUIMedia.deleteMedia(s, play_data, movies, audio, delete);
 					
 					close();
 									    
@@ -115,10 +109,14 @@ public class DeleteWindow extends Stage{
 		});
 		
 		btn_delete_disk.setOnAction(new EventHandler<ActionEvent>() {
-
+			
 			@Override
 			public void handle(ActionEvent event){
 				
+				String del_data = MOController.getInstance().tableview.getSelectionModel().getSelectedItem().getTitle();
+				IMedialist[] returns = MediaStorage.mediaScan(s.getMediaDirectory());
+				IMedialist movies = returns[0];
+				IMedialist audio = returns[1];
 				boolean delete = true;
 
 				Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -130,14 +128,14 @@ public class DeleteWindow extends Stage{
 
 				if (result.get() == ButtonType.OK){
 
-					GUIMedia.deleteMedia(s, play_data, movies, audio, delete);
+					GUIMedia.deleteMedia(s, del_data, movies, audio, delete);
 
 					close();
 					
 				} else {
 
 				}		
-
+												
 			}
 		});
 		
@@ -150,7 +148,6 @@ public class DeleteWindow extends Stage{
 				
 			}
 		});
-		
 	}
 	
 	public static DeleteWindow getInstance() {

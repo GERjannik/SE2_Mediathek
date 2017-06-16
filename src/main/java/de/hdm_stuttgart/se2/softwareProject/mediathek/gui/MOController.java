@@ -5,6 +5,7 @@ import java.io.File;
 import java.lang.Thread.State;
 import java.net.URL;
 import java.util.Observable;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
@@ -25,7 +26,12 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar.ButtonData;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
@@ -276,26 +282,73 @@ public class MOController implements Initializable {
 	@FXML
 	public void btn_play_clicked(ActionEvent event){
 
-		play_data = tableview.getSelectionModel().getSelectedItem().getTitle();
+		play_data = tableview.getSelectionModel().getSelectedItem().getTitle().toString();
 
 		GUIMedia.playMovie(s, play_data, movies, audio);
 
 	}
 
-	//TODO Markierter Wert muss übergeben werden....
 	@FXML
 	public void btn_del_clicked() {
-		
-		if(tableview.getSelectionModel().isEmpty()){
-			l_news.setTextFill(javafx.scene.paint.Color.RED);
-			l_news.setText("Bitte wählen sie ein zu löschendes Medium aus");
+				
+		 try {
+			 play_data = tableview.getSelectionModel().getSelectedItem().getTitle();
 			
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Löschen");
+			alert.setHeaderText(play_data + " aus der Mediathek entfernen oder von Festplatte löschen");
+
+			ButtonType buttonTypeOne = new ButtonType("Mediathek");
+			ButtonType buttonTypeTwo = new ButtonType("Festplatte");
+
+			ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
+
+			alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
+
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == buttonTypeOne){
+				
+				Alert finish = new Alert(AlertType.CONFIRMATION);
+				finish.setTitle("Letzte Warnung");
+				finish.setHeaderText(play_data + " wird aus Mediathek entfernt.");
+				
+				ButtonType bt_okay = new ButtonType("Okay");
+				ButtonType bt_cancel = new ButtonType("Cancel", ButtonData.BACK_PREVIOUS);
+				
+				finish.getButtonTypes().setAll(bt_okay, bt_cancel);
+				
+				Optional<ButtonType> last = finish.showAndWait();
+				
+				if (last.get() == bt_okay) {
+					boolean delete = true;
+					GUIMedia.deleteMedia(s, play_data, movies, audio, delete);
+				} 	
+
+			} else if (result.get() == buttonTypeTwo) {
+							
+				Alert finish = new Alert(AlertType.CONFIRMATION);
+				finish.setTitle("Letzte Warnung");
+				finish.setHeaderText(play_data + " wird von Festplatte gelöscht");
+				finish.setContentText("Sind sie sich wirklich sicher?");
+				
+				ButtonType bt_yes = new ButtonType("Ja");
+				ButtonType bt_no = new ButtonType("Nein", ButtonData.BACK_PREVIOUS);
+				
+				finish.getButtonTypes().setAll(bt_yes, bt_no);
+				
+				Optional<ButtonType> last = finish.showAndWait();
+				
+				if (last.get() == bt_yes) {
+					boolean delete = false;
+					GUIMedia.deleteMedia(s, play_data, movies, audio, delete);
+				} 
+			} 
+
+		} catch (Exception e) {
 			
-			
-		} else {
-			new DeleteWindow().show();
-		}
-		
+				l_news.setTextFill(javafx.scene.paint.Color.RED);
+				l_news.setText("Bitte wählen sie ein zu löschendes Medium aus");	
+		}	
 	}
 
 	@FXML
@@ -315,6 +368,19 @@ public class MOController implements Initializable {
 	@FXML
 	private void btn_minus_clicked() {
 
+	}
+	
+	public String getPlay_data() {
+		return play_data;
+	}
+	public void setPlay_data(String play_data) {
+		this.play_data = play_data;
+	}
+	public TableView<GUIMedia> getTableview() {
+		return tableview;
+	}
+	public void setTableview(TableView<GUIMedia> tableview) {
+		this.tableview = tableview;
 	}
 
 
