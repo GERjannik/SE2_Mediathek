@@ -205,7 +205,7 @@ public class MOController implements Initializable {
 						// 5. Add sorted (and filtered) data to the table.
 						tableview.setItems(sortedData);
 
-						try {Thread.sleep(1000);} catch (InterruptedException e) {}
+						try {Thread.sleep(30000);} catch (InterruptedException e) {}
 					} 
 				} 
 			}}, "rescanThread").start();
