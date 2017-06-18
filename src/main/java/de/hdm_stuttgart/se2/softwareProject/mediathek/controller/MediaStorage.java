@@ -64,44 +64,56 @@ public class MediaStorage {
 
 		// Aus jeder Datei des Arrays wird ein Objekt erstellt und der richtigen HashMap zugeordnet
 		for (int i = 0; i < files.size(); i++) {
+			// Prüft ob Datei für Mediathek kompatibel ist
+			if (!files.get(i).getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")
+					&& !files.get(i).getName().toLowerCase().matches("^.*\\.(mp3||wav|wma|aac|ogg)$")) {
+				continue;
+			}
 			String typ = null;
 			MediaMeta meta = readMetaData(files.get(i));
 			log.info("Metadaten von " + files.get(i) + " werden gelesen");
-			JSONObject root = new JSONObject();
+			JSONObject root = new JSONObject();			
+			boolean favo = false;
+			boolean visible = false;
+			String ranking = "0";
+			
 			try {
-				if (meta.getDescription()!= null && meta.getDescription().startsWith("{")) {
-					root = (JSONObject) new JSONParser().parse(meta.getDescription());
-				} else {
-					if (meta.getDescription() == null || meta.getDescription().equals("")) {
-						root.put("favorite", false);
-						root.put("visible", true);
-					} else {
-						root.put("infos", meta.getDescription());
-					}
-					root.put("favorite", false);
-					root.put("visible", true);
-					root.put("ranking", "0");
-				}
-			} catch (ParseException e) {
-				log.warn("Medien-Description Metadaten konnten nicht in JSON geparst werden");
+				root = (JSONObject) new JSONParser().parse(meta.getDescription());
+			} catch (Exception e) {
 				log.catching(e);
-				meta.setDescription("");
-				root.put("favorite", false);
-				root.put("visible", true);
+				log.error("Fehler beim Einlesen der erweiterten Metadaten von " + files.get(i));
+				log.info("Default gesetzt (favo = false, visible = true, ranking = 0)");
 			}
 			
-			boolean favo, visible;
+			try {
+				if (root.get("favorite").equals(true)) {
+					favo = true;
+				} else {
+					favo = false;
+				}
+			} catch (NullPointerException e) {
+				log.error("Fehler beim Lesen des Metaattributs favorite von " + files.get(i));
+				log.info("Default gesetzt (favo = false)");
+			}
 			
 			try {
-				favo = (boolean)root.get("favorite");
+				if (root.get("visible").equals(true)) {
+					visible = true;
+				} else {
+					visible = false;
+				}
 			} catch (NullPointerException e) {
-				favo = false;
+				log.error("Fehler beim Lesen des Metaattributs visible von " + files.get(i));
+				log.info("Default gesetzt (visible = false)");
 			}
+			
 			try {
-				visible = (boolean)root.get("visible");
+				ranking = root.get("ranking").toString();
 			} catch (NullPointerException e) {
-				visible = false;
+				log.error("Fehler beim Lesen des Metaattributs ranking von " + files.get(i));
+				log.info("Default gesetzt (ranking = 0)");
 			}
+			
 			if (files.get(i).getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")) {
 				typ = "video";
 				IMedia temp = MediaFactory.getInstance(
@@ -111,7 +123,7 @@ public class MediaStorage {
 						(String)root.get("infos"),
 						favo,
 						visible,
-						(String)root.get("ranking"));
+						ranking);
 				movies.getContent().put(files.get(i), temp);
 
 			} else if (files.get(i).getName().toLowerCase().matches("^.*\\.(mp3||wav|wma|aac|ogg)$")) {
@@ -123,7 +135,7 @@ public class MediaStorage {
 						(String)root.get("infos"), 
 						favo,
 						visible,
-						(String)root.get("ranking"));
+						ranking);
 				audio.getContent().put(files.get(i), temp);
 			} /*else if (scannedMedia[i].getName().toLowerCase().matches("^.*\\.(doc|docx|pdf|html|txt)$")) {
 				typ = "book";

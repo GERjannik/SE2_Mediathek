@@ -1,16 +1,9 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 
-import java.awt.Color;
 import java.io.File;
-import java.lang.Thread.State;
 import java.net.URL;
-import java.util.Observable;
 import java.util.Optional;
 import java.util.ResourceBundle;
-import java.util.function.Predicate;
-
-import javax.swing.text.TabExpander;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.parser.ParseException;
@@ -26,7 +19,6 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -37,13 +29,9 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import uk.co.caprica.vlcj.player.MediaMeta;
 
 public class MOController implements Initializable {
 
@@ -225,18 +213,23 @@ public class MOController implements Initializable {
 		String save_genre = tf_genre.getText();
 		boolean save_favo = false;
 
-		if (radioGroup.hasProperties()){
+		try {
 			ranking = radioGroup.getSelectedToggle().toString().substring(radioGroup.getSelectedToggle().toString().length()-2, radioGroup.getSelectedToggle().toString().length()-1);
-		} 		
-
-		//TODO
-		ToggleButton favo = (ToggleButton) favoGroup.getSelectedToggle();
-		
-		if (favo == null){
-			save_favo = false;
+		} catch (NullPointerException e) {
+			log.error("Keine Auswahl bei Bewertung angeklickt");
+			ranking = "0";
 		}
-		else if (favo.equals(tb_yes)) {
-			save_favo = true;
+
+		try {
+			String a = favoGroup.getSelectedToggle().toString().substring(favoGroup.getSelectedToggle().toString().length()-3, favoGroup.getSelectedToggle().toString().length()-1);
+			if (a.equals("Ja")) {
+				save_favo = true;
+			} else {
+				save_favo = false;
+			}
+		}catch (NullPointerException e) {
+			log.error("Keine Auswahl bei Favoriten angeklickt");
+			save_favo = false;
 		}
 
 		IMedia media;
@@ -261,12 +254,12 @@ public class MOController implements Initializable {
 			initialize(null, null);
 		}
 	}
-	
+
 	@FXML
 	public void btn_cancel_clicked(){
-		
+
 		tableview_mouse_clicked();
-		
+
 	}
 
 	@FXML
@@ -290,10 +283,10 @@ public class MOController implements Initializable {
 
 	@FXML
 	public void btn_del_clicked() {
-				
-		 try {
+
+		try {
 			File play_data = tableview.getSelectionModel().getSelectedItem().getFile();
-			
+
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Löschen");
 			alert.setHeaderText(play_data + " aus der Mediathek entfernen oder von Festplatte löschen");
@@ -307,37 +300,37 @@ public class MOController implements Initializable {
 
 			Optional<ButtonType> result = alert.showAndWait();
 			if (result.get() == buttonTypeOne){
-				
+
 				Alert finish = new Alert(AlertType.CONFIRMATION);
 				finish.setTitle("Letzte Warnung");
 				finish.setHeaderText(play_data + " wird aus Mediathek entfernt.");
-				
+
 				ButtonType bt_okay = new ButtonType("Okay");
 				ButtonType bt_cancel = new ButtonType("Cancel", ButtonData.BACK_PREVIOUS);
-				
+
 				finish.getButtonTypes().setAll(bt_okay, bt_cancel);
-				
+
 				Optional<ButtonType> last = finish.showAndWait();
-				
+
 				if (last.get() == bt_okay) {
 					boolean delete = true;
 					GUIMedia.deleteMedia(s, play_data, movies, audio, delete);
 				} 	
 
 			} else if (result.get() == buttonTypeTwo) {
-							
+
 				Alert finish = new Alert(AlertType.CONFIRMATION);
 				finish.setTitle("Letzte Warnung");
 				finish.setHeaderText(play_data + " wird von Festplatte gelöscht");
 				finish.setContentText("Sind sie sich wirklich sicher?");
-				
+
 				ButtonType bt_yes = new ButtonType("Ja");
 				ButtonType bt_no = new ButtonType("Nein", ButtonData.BACK_PREVIOUS);
-				
+
 				finish.getButtonTypes().setAll(bt_yes, bt_no);
-				
+
 				Optional<ButtonType> last = finish.showAndWait();
-				
+
 				if (last.get() == bt_yes) {
 					boolean delete = false;
 					GUIMedia.deleteMedia(s, play_data, movies, audio, delete);
@@ -345,9 +338,9 @@ public class MOController implements Initializable {
 			} 
 
 		} catch (Exception e) {
-			
-				l_news.setTextFill(javafx.scene.paint.Color.RED);
-				l_news.setText("Bitte wählen sie ein zu löschendes Medium aus");	
+
+			l_news.setTextFill(javafx.scene.paint.Color.RED);
+			l_news.setText("Bitte wählen sie ein zu löschendes Medium aus");	
 		}	
 	}
 
@@ -369,7 +362,7 @@ public class MOController implements Initializable {
 	private void btn_minus_clicked() {
 
 	}
-	
+
 	/* public String getPlay_data() {
 		return play_data;
 	}

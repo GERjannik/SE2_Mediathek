@@ -1,26 +1,20 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 
-import java.awt.Dialog.ModalExclusionType;
 import java.io.File;
 import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.Scanner;
 import java.util.Map.Entry;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
-import de.hdm_stuttgart.se2.softwareProject.mediathek.driver.App;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidInputException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.scene.control.Toggle;
 import uk.co.caprica.vlcj.player.MediaMeta;
 import uk.co.caprica.vlcj.player.MediaPlayerFactory;
 
@@ -30,7 +24,7 @@ import uk.co.caprica.vlcj.player.MediaPlayerFactory;
  *
  */
 public class GUIMedia {
-	
+
 	private static Logger log = LogManager.getLogger(GUIMedia.class);
 
 	private static GUIMedia instance;
@@ -70,7 +64,7 @@ public class GUIMedia {
 	public String getGenre() {
 		return genre.get();
 	}
-	
+
 	public File getFile() {
 		return new File(this.file.getValue());
 	}
@@ -97,7 +91,7 @@ public class GUIMedia {
 		}).start();
 
 	}
-	
+
 
 	public static IMedia getInput(Settings s, File play_data, IMedialist movies, IMedialist audio) {
 
@@ -113,78 +107,59 @@ public class GUIMedia {
 		}
 		throw new InvalidInputException();
 	}
-	
-	
+
+
 	public static MediaMeta readMetaData(File file) {
 		MediaPlayerFactory factory = new MediaPlayerFactory();
 		MediaMeta meta = factory.getMediaMeta(file.toString(), true);
 		return meta;
 	}
-	
+
 	public static void editMetaInformation(IMedia m,String save_titel,String save_year, String save_artist, String save_genre, String ranking, boolean save_favo) throws ParseException {
 
 		MediaMeta meta = readMetaData(m.getFile());
 		log.info("Metadaten von " + m.getFile() + " werden bearbeitet");
 
-		if (m.getTyp().equals("video"))	{
-			do {
-				meta.setTitle(save_titel);
-			} while (meta.getTitle().isEmpty() || meta.getTitle().matches("^\\s*$"));
-			meta.setDate(save_year);
-			meta.setArtist(save_artist);
-			meta.setGenre(save_genre);
-			//meta.setRating(ranking);	
-			
-			HashMap<String, Object> root = new HashMap<>();
-			//root.put("infos", meta);
-			root.put("ranking", ranking);
-			root.put("favorite", save_favo);
-			root.put("visible", true);
-			JSONObject metaInfos = new JSONObject(root);
-			meta.setDescription("");
-			meta.setDescription(metaInfos.toString());
-		}
-		if (m.getTyp().equals("audio"))	{
-			do {
-				meta.setTitle(save_titel);
-			} while (meta.getTitle().isEmpty() || meta.getTitle().matches("^\\s*$"));
-			meta.setDate(save_year);
-			meta.setArtist(save_artist);
-			meta.setGenre(save_genre);
-			//meta.setRating(ranking.toString());
 
-			HashMap<String, Object> root = new HashMap<>();
-			//root.put("infos", meta);
-			root.put("ranking", ranking);
-			root.put("favorite", save_favo);
-			root.put("visible", true);
-			JSONObject metaInfos = new JSONObject(root);
-			meta.setDescription("");
-			meta.setDescription(metaInfos.toString());
-		}
-		
-		
+		do {
+			meta.setTitle(save_titel);
+		} while (meta.getTitle().isEmpty() || meta.getTitle().matches("^\\s*$"));
+		meta.setDate(save_year);
+		meta.setArtist(save_artist);
+		meta.setGenre(save_genre);
+
+		HashMap<String, Object> root = new HashMap<>();
+		//root.put("infos", meta);
+		root.put("ranking", ranking);
+		root.put("favorite", save_favo);
+		root.put("visible", true);
+		JSONObject metaInfos = new JSONObject(root);
+		meta.setDescription("");
+		meta.setDescription(metaInfos.toString());
+
+
+
 		//JSONObject root = (JSONObject) new JSONParser().parse(meta.getDescription());
 
-				// Metainformationen werden in Datei gespeichert
-				
-				meta.save();
-			
+		// Metainformationen werden in Datei gespeichert
 
-				// Metainformationen werden in Attribute des IMedia Objekts geschrieben
-//				m.setTitle(meta.getTitle());
-//				m.setDate(meta.getDate());
-//				m.setRegisseur(meta.getArtist());
-//				m.setGenre(meta.getGenre());
-//				m.setInfo((String) root.get("infos"));
-//				m.setRanking(Integer.parseInt((String)root.get("ranking")));
-//				m.setFavorite((Boolean)root.get("favorite"));
-//				meta.release();
-//				log.info("Änderungen erfolgreich gespeichert.");
-				meta.release();
-				log.info("Metadaten der Datei " + m.getFile() + "erfolgreich gespeichert.");
+		meta.save();
+
+
+		// Metainformationen werden in Attribute des IMedia Objekts geschrieben
+		//				m.setTitle(meta.getTitle());
+		//				m.setDate(meta.getDate());
+		//				m.setRegisseur(meta.getArtist());
+		//				m.setGenre(meta.getGenre());
+		//				m.setInfo((String) root.get("infos"));
+		//				m.setRanking(Integer.parseInt((String)root.get("ranking")));
+		//				m.setFavorite((Boolean)root.get("favorite"));
+		//				meta.release();
+		//				log.info("Änderungen erfolgreich gespeichert.");
+		meta.release();
+		log.info("Metadaten der Datei " + m.getFile() + "erfolgreich gespeichert.");
 	}
-	
+
 	public static void deleteMedia(Settings s, File play_data, IMedialist movies, IMedialist audio, boolean delete) {
 
 		IMedia m = getInput(s, play_data, movies, audio);		

@@ -15,7 +15,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 public class SettingWindow extends Stage{
 	
@@ -109,6 +108,7 @@ public class SettingWindow extends Stage{
 			
 			class RescanCommand implements Runnable {
 
+				// TODO: manueller Rescan verarbeitet die eingescannten Daten aktuell nicht
 				@Override
 				public void run() {
 					IMedialist[] returns = MediaStorage.mediaScan(s.getMediaDirectory());
