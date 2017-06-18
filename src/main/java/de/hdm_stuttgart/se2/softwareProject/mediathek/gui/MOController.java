@@ -4,6 +4,13 @@ import java.io.File;
 import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import java.util.function.Predicate;
+
+import javax.swing.text.TabExpander;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
+
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.parser.ParseException;
@@ -33,6 +40,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 
+
 public class MOController implements Initializable {
 
 	private static Logger log = LogManager.getLogger(MOController.class);
@@ -41,7 +49,8 @@ public class MOController implements Initializable {
 
 	IMedialist movies, audio;
 	Settings s = new Settings();
-	//String play_data;
+	File play_data;
+	String del_data;
 	String ranking;
 
 	ObservableList<GUIMedia> data;
@@ -120,15 +129,15 @@ public class MOController implements Initializable {
 			movies = scannedContent[0];
 			audio = scannedContent[1];
 
-
 			for (IMedia i : movies.getContent().values()) {
-				data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
+				data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
 			}
 
 			for (IMedia i : audio.getContent().values()) {
-				data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
+				data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
 			}
 			tableview.setItems(data);
+
 		}
 		//Abfrage ob Pfad eingetragen ist, wenn ja füllen der ObservableList für die Tableview
 		//Thread läuft alle 3 Sekunden geänderte Film oder Audio Listen anzupassen und neu in der 
@@ -152,13 +161,14 @@ public class MOController implements Initializable {
 								data.clear();
 
 								for (IMedia i : movies.getContent().values()) {
-									data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
+									data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
 								}
 
 								for (IMedia i : audio.getContent().values()) {
-									data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
+									data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
 								}
 								tableview.setItems(data);
+
 							}							
 						}
 
@@ -214,11 +224,22 @@ public class MOController implements Initializable {
 		boolean save_favo = false;
 
 		try {
-			ranking = radioGroup.getSelectedToggle().toString().substring(radioGroup.getSelectedToggle().toString().length()-2, radioGroup.getSelectedToggle().toString().length()-1);
+			switch (radioGroup.getSelectedToggle().toString()) {
+
+			case "RadioButton[id=rb_one, styleClass=radio-button]'1'": ranking = "1"; break;
+			case "RadioButton[id=rb_two, styleClass=radio-button]'2'": ranking = "2"; break;
+			case "RadioButton[id=rb_three, styleClass=radio-button]'3'": ranking = "3"; break;
+			case "RadioButton[id=rb_four, styleClass=radio-button]'4'": ranking = "4"; break;
+			case "RadioButton[id=rb_five, styleClass=radio-button]'5'": ranking = "5"; break;
+			default: ranking = "0"; break;
+			}
 		} catch (NullPointerException e) {
-			log.error("Keine Auswahl bei Bewertung angeklickt");
 			ranking = "0";
+			log.info("Keine Auswahl bei Bewertung angeklickt"); 
 		}
+
+
+
 
 		try {
 			String a = favoGroup.getSelectedToggle().toString().substring(favoGroup.getSelectedToggle().toString().length()-3, favoGroup.getSelectedToggle().toString().length()-1);
@@ -238,7 +259,7 @@ public class MOController implements Initializable {
 			l_news.setTextFill(javafx.scene.paint.Color.RED);
 			l_news.setText("Stellen Sie sicher, das ein Medium ausgewählt ist");
 		} else {
-			File play_data = tableview.getSelectionModel().getSelectedItem().getFile();
+			play_data = tableview.getSelectionModel().getSelectedItem().getFile();
 
 			media = GUIMedia.getInput(s, play_data, movies, audio);
 
@@ -262,6 +283,7 @@ public class MOController implements Initializable {
 
 	}
 
+	//TODO Anzeige von Ranking und Favorite
 	@FXML
 	public void tableview_mouse_clicked(){
 
@@ -275,7 +297,7 @@ public class MOController implements Initializable {
 	@FXML
 	public void btn_play_clicked(ActionEvent event){
 
-		File play_data = tableview.getSelectionModel().getSelectedItem().getFile();
+		play_data = tableview.getSelectionModel().getSelectedItem().getFile();
 
 		GUIMedia.playMovie(s, play_data, movies, audio);
 
@@ -285,25 +307,27 @@ public class MOController implements Initializable {
 	public void btn_del_clicked() {
 
 		try {
-			File play_data = tableview.getSelectionModel().getSelectedItem().getFile();
+			play_data = tableview.getSelectionModel().getSelectedItem().getFile();
+			del_data = tableview.getSelectionModel().getSelectedItem().getTitle();
 
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Löschen");
-			alert.setHeaderText(play_data + " aus der Mediathek entfernen oder von Festplatte löschen");
+			alert.setHeaderText(del_data + " aus der Mediathek entfernen oder von Festplatte löschen");
 
-			ButtonType buttonTypeOne = new ButtonType("Mediathek");
-			ButtonType buttonTypeTwo = new ButtonType("Festplatte");
+			ButtonType bt_mediathek = new ButtonType("Mediathek");
+			ButtonType bt_hdd = new ButtonType("Festplatte");
 
 			ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
 
-			alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
+			alert.getButtonTypes().setAll(bt_mediathek, bt_hdd, buttonTypeCancel);
 
 			Optional<ButtonType> result = alert.showAndWait();
-			if (result.get() == buttonTypeOne){
+
+			if (result.get() == bt_mediathek){
 
 				Alert finish = new Alert(AlertType.CONFIRMATION);
 				finish.setTitle("Letzte Warnung");
-				finish.setHeaderText(play_data + " wird aus Mediathek entfernt.");
+				finish.setHeaderText(del_data + " wird aus Mediathek entfernt.");
 
 				ButtonType bt_okay = new ButtonType("Okay");
 				ButtonType bt_cancel = new ButtonType("Cancel", ButtonData.BACK_PREVIOUS);
@@ -313,15 +337,15 @@ public class MOController implements Initializable {
 				Optional<ButtonType> last = finish.showAndWait();
 
 				if (last.get() == bt_okay) {
-					boolean delete = true;
+					boolean delete = false;
 					GUIMedia.deleteMedia(s, play_data, movies, audio, delete);
 				} 	
 
-			} else if (result.get() == buttonTypeTwo) {
+			} else if (result.get() == bt_hdd) {
 
 				Alert finish = new Alert(AlertType.CONFIRMATION);
 				finish.setTitle("Letzte Warnung");
-				finish.setHeaderText(play_data + " wird von Festplatte gelöscht");
+				finish.setHeaderText(del_data + " wird von Festplatte gelöscht");
 				finish.setContentText("Sind sie sich wirklich sicher?");
 
 				ButtonType bt_yes = new ButtonType("Ja");
@@ -332,7 +356,7 @@ public class MOController implements Initializable {
 				Optional<ButtonType> last = finish.showAndWait();
 
 				if (last.get() == bt_yes) {
-					boolean delete = false;
+					boolean delete = true;
 					GUIMedia.deleteMedia(s, play_data, movies, audio, delete);
 				} 
 			} 
@@ -362,20 +386,6 @@ public class MOController implements Initializable {
 	private void btn_minus_clicked() {
 
 	}
-
-	/* public String getPlay_data() {
-		return play_data;
-	}
-	public void setPlay_data(String play_data) {
-		this.play_data = play_data;
-	} */
-	public TableView<GUIMedia> getTableview() {
-		return tableview;
-	}
-	public void setTableview(TableView<GUIMedia> tableview) {
-		this.tableview = tableview;
-	}
-
 
 	public static MOController getInstance() {
 		return instance;

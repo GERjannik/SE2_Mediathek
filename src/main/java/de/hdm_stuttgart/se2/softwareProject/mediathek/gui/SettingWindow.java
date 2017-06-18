@@ -25,7 +25,7 @@ public class SettingWindow extends Stage{
 
 		//Aufbau des Einstellungsfenster
 		BorderPane root = new BorderPane();
-		Scene SettingGUI = new Scene(root,600,400);
+		Scene SettingGUI = new Scene(root);
 
 		Settings s = new Settings();
 
