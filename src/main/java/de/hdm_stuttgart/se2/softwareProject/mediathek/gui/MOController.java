@@ -213,7 +213,7 @@ public class MOController implements Initializable {
 						// 5. Add sorted (and filtered) data to the table.
 						tableview.setItems(sortedData);
 
-						try {Thread.sleep(30000);} catch (InterruptedException e) {}
+						try {Thread.sleep(1000);} catch (InterruptedException e) {}
 					} 
 				} 
 			}}, "rescanThread").start();
@@ -247,9 +247,6 @@ public class MOController implements Initializable {
 			ranking = "0";
 			log.info("Keine Auswahl bei Bewertung angeklickt"); 
 		}
-
-
-
 
 		try {
 			String a = favoGroup.getSelectedToggle().toString().substring(favoGroup.getSelectedToggle().toString().length()-3, favoGroup.getSelectedToggle().toString().length()-1);
@@ -293,7 +290,7 @@ public class MOController implements Initializable {
 
 	}
 
-	// TODO Anzeige von Favorite
+	//TODO Anzeige Favo
 	@FXML
 	public void tableview_mouse_clicked(){
 
@@ -301,6 +298,28 @@ public class MOController implements Initializable {
 		tf_year.setText(tableview.getSelectionModel().getSelectedItem().getDate());
 		tf_artist.setText(tableview.getSelectionModel().getSelectedItem().getArtist());
 		tf_genre.setText(tableview.getSelectionModel().getSelectedItem().getGenre());
+
+		switch (tableview.getSelectionModel().getSelectedItem().getRanking()) {
+
+		case "1": radioGroup.selectToggle(rb_one); break;
+		case "2": radioGroup.selectToggle(rb_two); break;
+		case "3": radioGroup.selectToggle(rb_three); break;
+		case "4": radioGroup.selectToggle(rb_four); break;
+		case "5": radioGroup.selectToggle(rb_five); break;
+		default: radioGroup.selectToggle(null); break;
+		}
+
+
+//		switch ( ) {
+//		
+//		case true: toggleGroup.selectToggle(tb_yes); break;
+//		case false: toggleGroup.selectToggle(tb_no); break;
+//		default: toggleGroup.selectToggle(null); break;
+//	
+//		}
+		
+
+
 
 	}
 
