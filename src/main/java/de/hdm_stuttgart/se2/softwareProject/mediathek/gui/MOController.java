@@ -26,7 +26,6 @@ import javafx.collections.transformation.SortedList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -37,13 +36,10 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Toggle;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import uk.co.caprica.vlcj.player.MediaMeta;
+
 
 public class MOController implements Initializable {
 
@@ -53,7 +49,7 @@ public class MOController implements Initializable {
 
 	IMedialist movies, audio;
 	Settings s = new Settings();
-	String play_data;
+	File play_data;
 	String ranking;
 
 	ObservableList<GUIMedia> data;
@@ -132,15 +128,15 @@ public class MOController implements Initializable {
 			movies = scannedContent[0];
 			audio = scannedContent[1];
 
-
 			for (IMedia i : movies.getContent().values()) {
-				data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
+				data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
 			}
 
 			for (IMedia i : audio.getContent().values()) {
-				data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
+				data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
 			}
 			tableview.setItems(data);
+
 		}
 		//Abfrage ob Pfad eingetragen ist, wenn ja füllen der ObservableList für die Tableview
 		//Thread läuft alle 3 Sekunden geänderte Film oder Audio Listen anzupassen und neu in der 
@@ -164,13 +160,14 @@ public class MOController implements Initializable {
 								data.clear();
 
 								for (IMedia i : movies.getContent().values()) {
-									data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
+									data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
 								}
 
 								for (IMedia i : audio.getContent().values()) {
-									data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
+									data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
 								}
 								tableview.setItems(data);
+
 							}							
 						}
 
@@ -205,7 +202,7 @@ public class MOController implements Initializable {
 						// 5. Add sorted (and filtered) data to the table.
 						tableview.setItems(sortedData);
 
-						try {Thread.sleep(30000);} catch (InterruptedException e) {}
+						try {Thread.sleep(1000);} catch (InterruptedException e) {}
 					} 
 				} 
 			}}, "rescanThread").start();
@@ -245,7 +242,7 @@ public class MOController implements Initializable {
 			l_news.setTextFill(javafx.scene.paint.Color.RED);
 			l_news.setText("Stellen Sie sicher, das ein Medium ausgewählt ist");
 		} else {
-			play_data = tableview.getSelectionModel().getSelectedItem().getTitle().toString();
+			play_data = tableview.getSelectionModel().getSelectedItem().getFile();
 
 			media = GUIMedia.getInput(s, play_data, movies, audio);
 
@@ -273,7 +270,7 @@ public class MOController implements Initializable {
 	@FXML
 	public void tableview_mouse_clicked(){
 
-		tf_title.setText(tableview.getSelectionModel().getSelectedItem().getTitle());
+		tf_title.setText(tableview.getSelectionModel().getSelectedItem().getFile().getName());
 		tf_year.setText(tableview.getSelectionModel().getSelectedItem().getDate());
 		tf_artist.setText(tableview.getSelectionModel().getSelectedItem().getArtist());
 		tf_genre.setText(tableview.getSelectionModel().getSelectedItem().getGenre());
@@ -283,7 +280,7 @@ public class MOController implements Initializable {
 	@FXML
 	public void btn_play_clicked(ActionEvent event){
 
-		play_data = tableview.getSelectionModel().getSelectedItem().getTitle();
+		play_data = tableview.getSelectionModel().getSelectedItem().getFile();
 
 		GUIMedia.playMovie(s, play_data, movies, audio);
 
@@ -293,7 +290,7 @@ public class MOController implements Initializable {
 	public void btn_del_clicked() {
 				
 		 try {
-			 play_data = tableview.getSelectionModel().getSelectedItem().getTitle();
+			 play_data = tableview.getSelectionModel().getSelectedItem().getFile();
 			
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Löschen");
@@ -371,19 +368,6 @@ public class MOController implements Initializable {
 
 	}
 	
-	public String getPlay_data() {
-		return play_data;
-	}
-	public void setPlay_data(String play_data) {
-		this.play_data = play_data;
-	}
-	public TableView<GUIMedia> getTableview() {
-		return tableview;
-	}
-	public void setTableview(TableView<GUIMedia> tableview) {
-		this.tableview = tableview;
-	}
-
 
 	public static MOController getInstance() {
 		return instance;

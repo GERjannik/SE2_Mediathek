@@ -92,8 +92,7 @@
 			<TextField fx:id="tf_artist" promptText="Artist" />
 			<Label fx:id="lab_genre">Genre</Label>
 			<TextField fx:id="tf_genre" promptText="Genre" />
-			<Label fx:id="lab_ranking" text="Bewertung">
-           </Label>
+			<Label fx:id="lab_ranking" text="Bewertung" />
          <HBox>
 				<fx:define>
 					<ToggleGroup fx:id="radioGroup" />

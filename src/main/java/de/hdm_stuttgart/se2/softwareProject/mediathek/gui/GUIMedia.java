@@ -40,13 +40,15 @@ public class GUIMedia {
 	private final SimpleStringProperty date;
 	private final SimpleStringProperty artist;
 	private final SimpleStringProperty genre; 
+	private final SimpleStringProperty file;
 
-	public GUIMedia(String title, Long length, String date, String artist, String genre) {
+	public GUIMedia(String title, Long length, String date, String artist, String genre, File file) {
 		this.title = new SimpleStringProperty(title);
 		this.length = new SimpleLongProperty(length);
 		this.date = new SimpleStringProperty(date);
 		this.artist = new SimpleStringProperty(artist);
 		this.genre = new SimpleStringProperty(genre);
+		this.file = new SimpleStringProperty(file.toString());
 	}
 
 	public String getTitle() {
@@ -68,6 +70,10 @@ public class GUIMedia {
 	public String getGenre() {
 		return genre.get();
 	}
+	
+	public File getFile() {
+		return new File(this.file.getValue());
+	}
 
 
 	public static GUIMedia getInstance() {
@@ -80,7 +86,7 @@ public class GUIMedia {
 	}
 
 
-	public static void playMovie(Settings s, String play_data, IMedialist movies, IMedialist audio) {
+	public static void playMovie(Settings s, File play_data, IMedialist movies, IMedialist audio) {
 
 		new Thread(new Runnable() {
 			public void run() {
@@ -93,15 +99,15 @@ public class GUIMedia {
 	}
 	
 
-	public static IMedia getInput(Settings s, String play_data, IMedialist movies, IMedialist audio) {
+	public static IMedia getInput(Settings s, File play_data, IMedialist movies, IMedialist audio) {
 
 		for (Entry<File, IMedia> i : movies.getContent().entrySet()) {
-			if (i.getValue().getTitle().equals((play_data))) {
+			if (i.getValue().getFile().equals((play_data))) {
 				return i.getValue();
 			}
 		}
 		for (Entry<File, IMedia> i : audio.getContent().entrySet()) {
-			if (i.getValue().getTitle().equals(play_data)) {
+			if (i.getValue().getFile().equals(play_data)) {
 				return i.getValue();
 			}
 		}
@@ -179,7 +185,7 @@ public class GUIMedia {
 				log.info("Metadaten der Datei " + m.getFile() + "erfolgreich gespeichert.");
 	}
 	
-	public static void deleteMedia(Settings s, String play_data, IMedialist movies, IMedialist audio, boolean delete) {
+	public static void deleteMedia(Settings s, File play_data, IMedialist movies, IMedialist audio, boolean delete) {
 
 		IMedia m = getInput(s, play_data, movies, audio);		
 

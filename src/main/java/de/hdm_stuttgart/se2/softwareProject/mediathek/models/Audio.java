@@ -57,7 +57,7 @@ class Audio extends Media implements IMedia {
 			}
 		} catch (NumberFormatException e) {
 			log.catching(e);
-			log.error("Ungültige Bewertung in Metadaten");
+			log.error("Ungültige Bewertung in Metadaten von " + title);
 			this.ranking = 1;
 		}
 	}

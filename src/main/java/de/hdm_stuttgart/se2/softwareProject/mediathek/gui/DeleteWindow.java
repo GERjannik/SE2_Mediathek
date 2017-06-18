@@ -1,5 +1,6 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 
+import java.io.File;
 import java.util.Optional;
 
 import org.apache.logging.log4j.LogManager;
@@ -113,7 +114,7 @@ public class DeleteWindow extends Stage{
 			@Override
 			public void handle(ActionEvent event){
 				
-				String del_data = MOController.getInstance().tableview.getSelectionModel().getSelectedItem().getTitle();
+				File del_data = MOController.getInstance().tableview.getSelectionModel().getSelectedItem().getFile();
 				IMedialist[] returns = MediaStorage.mediaScan(s.getMediaDirectory());
 				IMedialist movies = returns[0];
 				IMedialist audio = returns[1];
