@@ -134,7 +134,7 @@ public class MOController implements Initializable {
 
 
 			for (IMedia i : movies.getContent().values()) {
-				data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
+				data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
 			}
 
 			for (IMedia i : audio.getContent().values()) {
@@ -269,6 +269,7 @@ public class MOController implements Initializable {
 		
 	}
 
+	//TODO Anzeige von Ranking und Favorite
 	@FXML
 	public void tableview_mouse_clicked(){
 
@@ -282,7 +283,7 @@ public class MOController implements Initializable {
 	@FXML
 	public void btn_play_clicked(ActionEvent event){
 
-		play_data = tableview.getSelectionModel().getSelectedItem().getTitle().toString();
+		play_data = tableview.getSelectionModel().getSelectedItem().getTitle();
 
 		GUIMedia.playMovie(s, play_data, movies, audio);
 

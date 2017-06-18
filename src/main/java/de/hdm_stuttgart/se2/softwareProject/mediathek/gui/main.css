@@ -8,9 +8,10 @@
 	-fx-background-color: gray;
 	-fx-padding: 20 5 0 5;
 }
-#right_vbox {
-
-
+#meta_vbox {
+    -fx-background-color: darkgray;
+    -fx-border-radius: 10 10 10 10;
+    -fx-background-radius: 10 10 10 10;
 }
 #right_vbox .label {
 

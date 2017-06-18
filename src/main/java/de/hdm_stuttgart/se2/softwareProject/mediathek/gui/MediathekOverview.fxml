@@ -20,15 +20,14 @@
    <left>
       <VBox>
          <HBox>
-            <children>
-               <ToggleButton fx:id="tb_movies" mnemonicParsing="false" text="Filme">
-                  <toggleGroup>
-                     <ToggleGroup fx:id="toggleGroup" />
-                  </toggleGroup>
-               </ToggleButton>
-               <ToggleButton fx:id="tb_audio" mnemonicParsing="false" text="Audio" toggleGroup="$toggleGroup" />
-               <ToggleButton fx:id="tb_books" mnemonicParsing="false" text="Bücher" toggleGroup="$toggleGroup" />
-            </children>
+				<fx:define>
+					<ToggleGroup fx:id="toggleGroup" />
+				</fx:define>
+				<children>
+					<ToggleButton fx:id="tb_movies" ToggleGroup="$toggleGroup">Filme</ToggleButton>
+					<ToggleButton fx:id="tb_audio" ToggleGroup="$toggleGroup">Audio</ToggleButton>
+					<ToggleButton fx:id="tb_books" ToggleGroup="$toggleGroup">Bücher </ToggleButton>
+				</children>
             <VBox.margin>
                <Insets top="30.0" />
             </VBox.margin>
@@ -56,12 +55,8 @@
    	<center>
 		<VBox>
 			<HBox alignment="TOP_CENTER">
-				<TextField fx:id="tf_search" prefHeight="26.0" prefWidth="285.0" />
-            <Button mnemonicParsing="false" text="Suchen">
-               <HBox.margin>
-                  <Insets left="10.0" />
-               </HBox.margin>
-            </Button>
+			<Label fx:id="l_search"> Suche: </Label>
+			<TextField fx:id="tf_search" prefHeight="26.0" prefWidth="285.0" />
             <VBox.margin>
                <Insets bottom="20.0" top="10.0" />
             </VBox.margin>
@@ -84,7 +79,11 @@
 	</center>
    <right>
       <VBox fx:id="right_vbox">
-      		<Label fx:id="lab_meta">Metadaten</Label>
+      <VBox fx:id="meta_vbox">
+      		<Label fx:id="lab_meta">Metadaten
+      		 <VBox.margin>
+               <Insets bottom="10.0" />
+            </VBox.margin></Label>
 			<Label fx:id="lab_titel">Titel</Label>
 			<TextField fx:id="tf_title" promptText="Titel" />
 			<Label fx:id="lab_year">Year</Label>
@@ -94,30 +93,24 @@
 			<Label fx:id="lab_genre">Genre</Label>
 			<TextField fx:id="tf_genre" promptText="Genre" />
 			<Label fx:id="lab_ranking" text="Bewertung">
-            <VBox.margin>
-               <Insets top="30.0" />
-            </VBox.margin></Label>
+           </Label>
          <HBox>
-            <children>
-               <RadioButton mnemonicParsing="false" text="1">
-                  <toggleGroup>
-                     <ToggleGroup fx:id="radioGroup" />
-                  </toggleGroup>
-               </RadioButton>
-               <RadioButton mnemonicParsing="false" text="2" toggleGroup="$radioGroup" />
-               <RadioButton mnemonicParsing="false" text="3" toggleGroup="$radioGroup" />
-               <RadioButton mnemonicParsing="false" text="4" toggleGroup="$radioGroup" />
-               <RadioButton mnemonicParsing="false" text="5" toggleGroup="$radioGroup" />
-            </children>
+				<fx:define>
+					<ToggleGroup fx:id="radioGroup" />
+				</fx:define>
+				<children>
+					<RadioButton fx:id="rb_one" toggleGroup="$radioGroup" text="1" />
+					<RadioButton fx:id="rb_two" toggleGroup="$radioGroup" text="2" />
+					<RadioButton fx:id="rb_three" toggleGroup="$radioGroup" text="3" />
+					<RadioButton fx:id="rb_four" toggleGroup="$radioGroup" text="4" />
+					<RadioButton fx:id="rb_five" toggleGroup="$radioGroup" text="5" />
+				</children>
             <VBox.margin>
                <Insets bottom="10.0" top="10.0" />
             </VBox.margin>
          </HBox>
-         <Label text="Favoriten">
-            <VBox.margin>
-               <Insets bottom="10.0" top="20.0" />
-            </VBox.margin></Label>
          <HBox>
+         <Label fx:id="l_favo" text="Favoriten"></Label>
             <children>
                <ToggleButton mnemonicParsing="false" text="Ja">
                   <toggleGroup>
@@ -127,20 +120,30 @@
                <ToggleButton mnemonicParsing="false" text="Nein" toggleGroup="$favoGroup" />
             </children>
          </HBox>
-
 			<HBox BorderPane.alignment="BOTTOM_RIGHT">
 				<Button fx:id="btn_save" onAction="#btn_save_clicked">Speichern</Button>
 				<Button fx:id="btn_cancel" onAction="#btn_cancel_clicked">Verwerfen</Button>
             <VBox.margin>
-               <Insets top="30.0" />
+               <Insets top="10.0" />
             </VBox.margin>
 			</HBox>
-			<Label />
+			<padding>
+            	<Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
+        	</padding>
+			</VBox>
 			<HBox>
 				<Button fx:id="btn_play" onAction="#btn_play_clicked">Abspielen</Button>
-				<Button fx:id="btn_end" onAction="#btn_end_clicked">Beenden</Button>
+				<Button fx:id="btn_del" onAction="#btn_del_clicked">Löschen</Button>
+				<VBox.margin>
+               <Insets top="20.0" />
+            </VBox.margin>
 			</HBox>
-			<Button fx:id="btn_del" onAction="#btn_del_clicked">Löschen</Button>
+			<HBox>
+				<Button fx:id="btn_end" onAction="#btn_end_clicked">Beenden</Button>
+				<VBox.margin>
+               <Insets top="20.0" />
+            </VBox.margin>
+			</HBox>
          <padding>
             <Insets bottom="10.0" left="20.0" right="20.0" top="70.0" />
          </padding>
@@ -150,15 +153,17 @@
    	<top>
 		<Button fx:id="btn_settings" mnemonicParsing="false" onAction="#btn_settings_clicked" text="Einstellungen" BorderPane.alignment="TOP_RIGHT" />
 	</top>
+	<!--
    <bottom>
       <ButtonBar prefHeight="40.0" prefWidth="200.0" BorderPane.alignment="CENTER">
         <buttons>
-            <Button mnemonicParsing="false" text="Play" />
-          <Button mnemonicParsing="false" text="Edit" />
+        	<Button mnemonicParsing="false" text="Play" />
+         	 <Button mnemonicParsing="false" text="Edit" />
         </buttons>
          <padding>
             <Insets bottom="20.0" right="20.0" />
          </padding>
       </ButtonBar>
    </bottom>
+   -->
 </BorderPane>
