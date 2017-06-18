@@ -50,6 +50,7 @@ public class MOController implements Initializable {
 	IMedialist movies, audio;
 	Settings s = new Settings();
 	File play_data;
+	String del_data;
 	String ranking;
 
 	ObservableList<GUIMedia> data;
@@ -270,7 +271,7 @@ public class MOController implements Initializable {
 	@FXML
 	public void tableview_mouse_clicked(){
 
-		tf_title.setText(tableview.getSelectionModel().getSelectedItem().getFile().getName());
+		tf_title.setText(tableview.getSelectionModel().getSelectedItem().getTitle());
 		tf_year.setText(tableview.getSelectionModel().getSelectedItem().getDate());
 		tf_artist.setText(tableview.getSelectionModel().getSelectedItem().getArtist());
 		tf_genre.setText(tableview.getSelectionModel().getSelectedItem().getGenre());
@@ -291,24 +292,25 @@ public class MOController implements Initializable {
 				
 		 try {
 			 play_data = tableview.getSelectionModel().getSelectedItem().getFile();
+			 del_data = tableview.getSelectionModel().getSelectedItem().getTitle();
 			
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Löschen");
-			alert.setHeaderText(play_data + " aus der Mediathek entfernen oder von Festplatte löschen");
+			alert.setHeaderText(del_data + " aus der Mediathek entfernen oder von Festplatte löschen");
 
-			ButtonType buttonTypeOne = new ButtonType("Mediathek");
-			ButtonType buttonTypeTwo = new ButtonType("Festplatte");
+			ButtonType bt_mediathek = new ButtonType("Mediathek");
+			ButtonType bt_hdd = new ButtonType("Festplatte");
 
 			ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonData.CANCEL_CLOSE);
 
-			alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo, buttonTypeCancel);
+			alert.getButtonTypes().setAll(bt_mediathek, bt_hdd, buttonTypeCancel);
 
 			Optional<ButtonType> result = alert.showAndWait();
-			if (result.get() == buttonTypeOne){
+			if (result.get() == bt_mediathek){
 				
 				Alert finish = new Alert(AlertType.CONFIRMATION);
 				finish.setTitle("Letzte Warnung");
-				finish.setHeaderText(play_data + " wird aus Mediathek entfernt.");
+				finish.setHeaderText(del_data + " wird aus Mediathek entfernt.");
 				
 				ButtonType bt_okay = new ButtonType("Okay");
 				ButtonType bt_cancel = new ButtonType("Cancel", ButtonData.BACK_PREVIOUS);
@@ -322,11 +324,11 @@ public class MOController implements Initializable {
 					GUIMedia.deleteMedia(s, play_data, movies, audio, delete);
 				} 	
 
-			} else if (result.get() == buttonTypeTwo) {
+			} else if (result.get() == bt_hdd) {
 							
 				Alert finish = new Alert(AlertType.CONFIRMATION);
 				finish.setTitle("Letzte Warnung");
-				finish.setHeaderText(play_data + " wird von Festplatte gelöscht");
+				finish.setHeaderText(del_data + " wird von Festplatte gelöscht");
 				finish.setContentText("Sind sie sich wirklich sicher?");
 				
 				ButtonType bt_yes = new ButtonType("Ja");

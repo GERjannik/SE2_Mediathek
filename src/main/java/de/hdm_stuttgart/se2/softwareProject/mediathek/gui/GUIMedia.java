@@ -196,7 +196,7 @@ public class GUIMedia {
 				validInput = true;
 				m.getFile().delete();
 				log.info("Das Medium " + m.getTitle() + " wurde von der Festplatte gelöscht");
-				m.removeMedia();
+				
 			} else if (delete == false) {
 				validInput = true;
 				m.removeMedia();

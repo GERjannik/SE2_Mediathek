@@ -129,7 +129,7 @@ public class DeleteWindow extends Stage{
 
 				if (result.get() == ButtonType.OK){
 
-					GUIMedia.deleteMedia(s, del_data, movies, audio, delete);
+				//	GUIMedia.deleteMedia(s, del_data, movies, audio, delete);
 
 					close();
 					
