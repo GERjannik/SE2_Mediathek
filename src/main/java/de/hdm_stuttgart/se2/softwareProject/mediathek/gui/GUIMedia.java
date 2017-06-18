@@ -191,12 +191,10 @@ public class GUIMedia {
 
 		boolean validInput = false;
 		while (validInput == false) {
-
 			if (delete == true) {
 				validInput = true;
 				m.getFile().delete();
-				log.info("Das Medium " + m.getTitle() + " wurde von der Festplatte gelöscht");
-				
+				log.info("Das Medium " + m.getTitle() + " wurde von der Festplatte gelöscht");	
 			} else if (delete == false) {
 				validInput = true;
 				m.removeMedia();

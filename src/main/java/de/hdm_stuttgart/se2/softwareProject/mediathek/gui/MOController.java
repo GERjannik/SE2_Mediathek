@@ -10,6 +10,7 @@ import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 import javax.swing.text.TabExpander;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -222,10 +223,19 @@ public class MOController implements Initializable {
 		String save_artist = tf_artist.getText();
 		String save_genre = tf_genre.getText();
 		boolean save_favo = false;
-
-		if (radioGroup.hasProperties()){
-			ranking = radioGroup.getSelectedToggle().toString().substring(radioGroup.getSelectedToggle().toString().length()-2, radioGroup.getSelectedToggle().toString().length()-1);
-		} 		
+		
+		
+		switch (radioGroup.getSelectedToggle().toString()) {
+		
+		case "RadioButton[id=rb_one, styleClass=radio-button]'1'": ranking = "1"; break;
+		case "RadioButton[id=rb_two, styleClass=radio-button]'2'": ranking = "2"; break;
+		case "RadioButton[id=rb_three, styleClass=radio-button]'3'": ranking = "3"; break;
+		case "RadioButton[id=rb_four, styleClass=radio-button]'4'": ranking = "4"; break;
+		case "RadioButton[id=rb_five, styleClass=radio-button]'5'": ranking = "5"; break;
+		default: ranking = "0"; break;
+		
+		
+		}
 
 		//TODO
 		ToggleButton favo = (ToggleButton) favoGroup.getSelectedToggle();
