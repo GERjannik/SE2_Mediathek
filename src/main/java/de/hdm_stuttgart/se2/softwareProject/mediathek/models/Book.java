@@ -103,31 +103,32 @@ class Book extends Media implements IMedia {
 
 	@Override
 	public String getDuration() {
-		// TODO Auto-generated method stub
 		return "Seitenzahl";
 	}
 
 	@Override
 	public String getDate() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getArtist() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String getGenre() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
 	public String getRanking() {
 		return Integer.toString(this.ranking);
+	}
+
+	@Override
+	public boolean getVisiblity() {
+		return this.visible;
 	}
 
 }

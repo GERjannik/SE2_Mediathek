@@ -70,7 +70,7 @@ public class GUIMedia {
 	public File getFile() {
 		return new File(this.file.getValue());
 	}
-	
+
 	public String getRanking() {
 		return ranking.get();
 	}
@@ -170,20 +170,12 @@ public class GUIMedia {
 
 		IMedia m = getInput(s, play_data, movies, audio);		
 
-		boolean validInput = false;
-		while (validInput == false) {
-			if (delete == true) {
-				validInput = true;
-				m.getFile().delete();
-				log.info("Das Medium " + m.getTitle() + " wurde von der Festplatte gelöscht");	
-			} else if (delete == false) {
-				validInput = true;
-				m.removeMedia();
-				log.info("Das Medium " + m.getTitle() + " wird nicht mehr in der Mediathek angezeigt");
-			} else {
-				System.out.println("ungültige Eingabe - entweder für 'Ja' / 'ja' oder 'Nein' / 'nein' entscheiden");
-			}
+		if (delete == true) {
+			m.getFile().delete();
+			log.info("Das Medium " + m.getTitle() + " wurde von der Festplatte gelöscht");	
+		} else {
+			m.removeMedia();
+			log.info("Das Medium " + m.getTitle() + " wird nicht mehr in der Mediathek angezeigt");
 		}
 	}
-
 }

@@ -74,7 +74,7 @@ public class MediaStorage {
 			log.info("Metadaten von " + files.get(i) + " werden gelesen");
 			JSONObject root = new JSONObject();			
 			boolean favo = false;
-			boolean visible = false;
+			boolean visible = true;
 			String ranking = "0";
 			
 			try {
@@ -104,7 +104,7 @@ public class MediaStorage {
 				}
 			} catch (NullPointerException e) {
 				log.error("Fehler beim Lesen des Metaattributs visible von " + files.get(i));
-				log.info("Default gesetzt (visible = false)");
+				log.info("Default gesetzt (visible = true)");
 			}
 			
 			try {

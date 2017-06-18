@@ -2,11 +2,14 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 
 import java.io.File;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
@@ -33,6 +36,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import uk.co.caprica.vlcj.player.MediaMeta;
 
 
 public class MOController implements Initializable {
@@ -124,11 +128,19 @@ public class MOController implements Initializable {
 			audio = scannedContent[1];
 
 			for (IMedia i : movies.getContent().values()) {
-				data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+				if (i.getVisiblity() == true) {
+					data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+				} else {
+					log.debug(i.getFile() + " nicht in Mediathek angezeigt, da visible == false");
+				}
 			}
 
 			for (IMedia i : audio.getContent().values()) {
-				data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+				if (i.getVisiblity() == true) {
+					data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+				} else {
+					log.debug(i.getFile() + " nicht in Mediathek angezeigt, da visible == false");
+				}
 			}
 			tableview.setItems(data);
 
@@ -155,11 +167,15 @@ public class MOController implements Initializable {
 								data.clear();
 
 								for (IMedia i : movies.getContent().values()) {
-									data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+									if (i.getVisiblity() == true) {
+										data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+									}
 								}
 
 								for (IMedia i : audio.getContent().values()) {
-									data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+									if (i.getVisiblity() == true) {
+										data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+									}
 								}
 								tableview.setItems(data);
 
@@ -278,7 +294,6 @@ public class MOController implements Initializable {
 	}
 
 	// TODO Anzeige von Favorite
-	// TODO Exceptionhandling beim Sortieren durch Klicken auf erste Zeile 
 	@FXML
 	public void tableview_mouse_clicked(){
 
@@ -334,6 +349,29 @@ public class MOController implements Initializable {
 				if (last.get() == bt_okay) {
 					boolean delete = false;
 					GUIMedia.deleteMedia(s, play_data, movies, audio, delete);
+					MediaMeta meta = MediaStorage.readMetaData(play_data);
+					JSONObject root;
+					boolean favo = false;
+					String ranking = "0";
+					
+					try {
+						root = (JSONObject) new JSONParser().parse(meta.getDescription());
+						favo = (boolean) root.get("favorite");
+						ranking = (String) root.get("ranking");
+					} catch (Exception e) {
+						log.catching(e);
+						log.error("Fehler beim Einlesen der erweiterten Metadaten von " + play_data);
+						log.info("Default gesetzt (favo = false, visible = true, ranking = 0)");
+					}
+					HashMap<String, Object> entries = new HashMap<>();
+					entries.put("favorite", favo);
+					entries.put("ranking", ranking);
+					entries.put("visible", false);
+					root = new JSONObject(entries);
+					meta.setDescription(root.toString());
+					meta.save();
+					meta.release();
+					initialize(null, null);
 				} 	
 
 			} else if (result.get() == bt_hdd) {
@@ -353,6 +391,7 @@ public class MOController implements Initializable {
 				if (last.get() == bt_yes) {
 					boolean delete = true;
 					GUIMedia.deleteMedia(s, play_data, movies, audio, delete);
+					initialize(null, null);
 				} 
 			} 
 

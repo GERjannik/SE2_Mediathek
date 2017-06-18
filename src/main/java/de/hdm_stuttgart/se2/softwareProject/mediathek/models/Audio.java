@@ -143,27 +143,23 @@ class Audio extends Media implements IMedia {
 		return "0";
 	}
 
-
-
 	@Override
 	public String getDate() {
-		// TODO Auto-generated method stub
 		return this.releaseDate;
 	}
 
-
-
 	@Override
 	public String getArtist() {
-		// TODO Auto-generated method stub
 		return this.interpret;
 	}
 
-
-
 	@Override
 	public String getGenre() {
-		// TODO Auto-generated method stub
 		return this.genre;
+	}
+
+	@Override
+	public boolean getVisiblity() {
+		return this.visible;
 	}
 }

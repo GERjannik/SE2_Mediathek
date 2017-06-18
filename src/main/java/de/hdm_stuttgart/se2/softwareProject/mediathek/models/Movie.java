@@ -162,4 +162,9 @@ class Movie extends Media implements IMedia {
 		return Integer.toString(this.ranking);
 	}
 
+	@Override
+	public boolean getVisiblity() {
+		return this.visible;
+	}
+
 }

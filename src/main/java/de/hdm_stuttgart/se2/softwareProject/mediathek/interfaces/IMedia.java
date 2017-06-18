@@ -42,5 +42,6 @@ public interface IMedia {
 	void setRanking(int ranking);
 	void open();
 	boolean getFavorite();
+	boolean getVisiblity();
 
 }
