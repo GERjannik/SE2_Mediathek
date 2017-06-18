@@ -53,7 +53,7 @@ public class MOController implements Initializable {
 
 	IMedialist movies, audio;
 	Settings s = new Settings();
-	String play_data;
+	//String play_data;
 	String ranking;
 
 	ObservableList<GUIMedia> data;
@@ -134,11 +134,11 @@ public class MOController implements Initializable {
 
 
 			for (IMedia i : movies.getContent().values()) {
-				data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
+				data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
 			}
 
 			for (IMedia i : audio.getContent().values()) {
-				data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
+				data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
 			}
 			tableview.setItems(data);
 		}
@@ -164,11 +164,11 @@ public class MOController implements Initializable {
 								data.clear();
 
 								for (IMedia i : movies.getContent().values()) {
-									data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
+									data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
 								}
 
 								for (IMedia i : audio.getContent().values()) {
-									data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre()));
+									data.add(new GUIMedia(i.getFile().getName(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
 								}
 								tableview.setItems(data);
 							}							
@@ -245,7 +245,7 @@ public class MOController implements Initializable {
 			l_news.setTextFill(javafx.scene.paint.Color.RED);
 			l_news.setText("Stellen Sie sicher, das ein Medium ausgewählt ist");
 		} else {
-			play_data = tableview.getSelectionModel().getSelectedItem().getTitle().toString();
+			File play_data = tableview.getSelectionModel().getSelectedItem().getFile();
 
 			media = GUIMedia.getInput(s, play_data, movies, audio);
 
@@ -282,7 +282,7 @@ public class MOController implements Initializable {
 	@FXML
 	public void btn_play_clicked(ActionEvent event){
 
-		play_data = tableview.getSelectionModel().getSelectedItem().getTitle().toString();
+		File play_data = tableview.getSelectionModel().getSelectedItem().getFile();
 
 		GUIMedia.playMovie(s, play_data, movies, audio);
 
@@ -292,7 +292,7 @@ public class MOController implements Initializable {
 	public void btn_del_clicked() {
 				
 		 try {
-			 play_data = tableview.getSelectionModel().getSelectedItem().getTitle();
+			File play_data = tableview.getSelectionModel().getSelectedItem().getFile();
 			
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Löschen");
@@ -370,12 +370,12 @@ public class MOController implements Initializable {
 
 	}
 	
-	public String getPlay_data() {
+	/* public String getPlay_data() {
 		return play_data;
 	}
 	public void setPlay_data(String play_data) {
 		this.play_data = play_data;
-	}
+	} */
 	public TableView<GUIMedia> getTableview() {
 		return tableview;
 	}
