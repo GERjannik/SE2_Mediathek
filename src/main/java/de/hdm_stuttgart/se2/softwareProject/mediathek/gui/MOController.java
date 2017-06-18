@@ -5,12 +5,6 @@ import java.net.URL;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
-import java.util.function.Predicate;
-
-import javax.swing.text.TabExpander;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter.DEFAULT;
-
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.parser.ParseException;
@@ -130,11 +124,11 @@ public class MOController implements Initializable {
 			audio = scannedContent[1];
 
 			for (IMedia i : movies.getContent().values()) {
-				data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
+				data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
 			}
 
 			for (IMedia i : audio.getContent().values()) {
-				data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
+				data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
 			}
 			tableview.setItems(data);
 
@@ -161,11 +155,11 @@ public class MOController implements Initializable {
 								data.clear();
 
 								for (IMedia i : movies.getContent().values()) {
-									data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
+									data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
 								}
 
 								for (IMedia i : audio.getContent().values()) {
-									data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile()));
+									data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
 								}
 								tableview.setItems(data);
 
@@ -283,7 +277,8 @@ public class MOController implements Initializable {
 
 	}
 
-	//TODO Anzeige von Ranking und Favorite
+	// TODO Anzeige von Favorite
+	// TODO Exceptionhandling beim Sortieren durch Klicken auf erste Zeile 
 	@FXML
 	public void tableview_mouse_clicked(){
 

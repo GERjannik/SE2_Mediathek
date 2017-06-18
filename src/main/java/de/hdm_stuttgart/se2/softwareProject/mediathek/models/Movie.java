@@ -52,12 +52,12 @@ class Movie extends Media implements IMedia {
 			if (rankInt > 0 && rankInt < 6) {
 				this.ranking = rankInt;
 			} else {
-				this.ranking = 1;
+				this.ranking = 0;
 			}
 		} catch (NumberFormatException e) {
 			log.catching(e);
 			log.error("Ungültige Bewertung in Metadaten von " + title);
-			this.ranking = 1;
+			this.ranking = 0;
 		}
 	}
 
@@ -131,8 +131,15 @@ class Movie extends Media implements IMedia {
 	}
 
 	@Override
-	public long getDuration() {
-		return this.duration;
+	public String getDuration() {
+		if (this.duration != 0) {
+			if (this.duration / 60000 != 0)	{
+				return "" + this.duration / 60000 + " min.";
+			} else {
+				return "" + this.duration / 1000 + " sec.";
+			}
+		}
+		return "0";
 	}
 
 	@Override
@@ -149,4 +156,10 @@ class Movie extends Media implements IMedia {
 	public String getGenre() {
 		return this.genre;
 	}
+	
+	@Override
+	public String getRanking() {
+		return Integer.toString(this.ranking);
+	}
+
 }

@@ -102,9 +102,9 @@ class Book extends Media implements IMedia {
 	}
 
 	@Override
-	public long getDuration() {
+	public String getDuration() {
 		// TODO Auto-generated method stub
-		return 0;
+		return "Seitenzahl";
 	}
 
 	@Override
@@ -124,4 +124,10 @@ class Book extends Media implements IMedia {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public String getRanking() {
+		return Integer.toString(this.ranking);
+	}
+
 }

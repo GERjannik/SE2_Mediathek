@@ -53,12 +53,12 @@ class Audio extends Media implements IMedia {
 			if (rankInt > 0 && rankInt < 6) {
 				this.ranking = rankInt;
 			} else {
-				this.ranking = 1;
+				this.ranking = 0;
 			}
 		} catch (NumberFormatException e) {
 			log.catching(e);
 			log.error("Ungültige Bewertung in Metadaten von " + title);
-			this.ranking = 1;
+			this.ranking = 0;
 		}
 	}
 
@@ -130,12 +130,17 @@ class Audio extends Media implements IMedia {
 		return this.favorite;
 	}
 
-
+	@Override
+	public String getRanking() {
+		return Integer.toString(this.ranking);
+	}
 
 	@Override
-	public long getDuration() {
-		// TODO Auto-generated method stub
-		return this.duration;
+	public String getDuration() {
+		if (this.duration != 0) {
+			return this.duration / 60000 + ":" + (this.duration % 60000) / 1000 + " min.";
+		}
+		return "0";
 	}
 
 

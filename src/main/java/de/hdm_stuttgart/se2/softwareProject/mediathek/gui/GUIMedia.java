@@ -30,26 +30,28 @@ public class GUIMedia {
 	private static GUIMedia instance;
 
 	private final SimpleStringProperty title;
-	private final SimpleLongProperty length;
+	private final SimpleStringProperty length;
 	private final SimpleStringProperty date;
 	private final SimpleStringProperty artist;
 	private final SimpleStringProperty genre; 
 	private final SimpleStringProperty file;
+	private final SimpleStringProperty ranking;
 
-	public GUIMedia(String title, Long length, String date, String artist, String genre, File file) {
+	public GUIMedia(String title, String length, String date, String artist, String genre, File file, String ranking) {
 		this.title = new SimpleStringProperty(title);
-		this.length = new SimpleLongProperty(length);
+		this.length = new SimpleStringProperty(length);
 		this.date = new SimpleStringProperty(date);
 		this.artist = new SimpleStringProperty(artist);
 		this.genre = new SimpleStringProperty(genre);
 		this.file = new SimpleStringProperty(file.toString());
+		this.ranking = new SimpleStringProperty(ranking);
 	}
 
 	public String getTitle() {
 		return title.get();
 	}
 
-	public long getLength() {
+	public String getLength() {
 		return length.get();
 	}
 
@@ -67,6 +69,10 @@ public class GUIMedia {
 
 	public File getFile() {
 		return new File(this.file.getValue());
+	}
+	
+	public String getRanking() {
+		return ranking.get();
 	}
 
 
