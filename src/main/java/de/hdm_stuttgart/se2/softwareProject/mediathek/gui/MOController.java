@@ -318,7 +318,7 @@ public class MOController implements Initializable {
 				Optional<ButtonType> last = finish.showAndWait();
 				
 				if (last.get() == bt_okay) {
-					boolean delete = true;
+					boolean delete = false;
 					GUIMedia.deleteMedia(s, play_data, movies, audio, delete);
 				} 	
 
@@ -337,7 +337,7 @@ public class MOController implements Initializable {
 				Optional<ButtonType> last = finish.showAndWait();
 				
 				if (last.get() == bt_yes) {
-					boolean delete = false;
+					boolean delete = true;
 					GUIMedia.deleteMedia(s, play_data, movies, audio, delete);
 				} 
 			} 
