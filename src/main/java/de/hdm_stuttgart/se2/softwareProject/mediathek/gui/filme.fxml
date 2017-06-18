@@ -4,9 +4,11 @@
 <?import javafx.collections.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
 
 <VBox xmlns:fx="http://javafx.com/fxml">
-    <children>
+
         <ListView>
             <items>
                 <FXCollections fx:factory="observableArrayList">
@@ -18,5 +20,9 @@
                 </FXCollections>
             </items>
         </ListView>
-    </children>
+
+    <HBox>
+				<Button fx:id="btn_plus">+</Button>
+				<Button fx:id="btn_minus">-</Button>
+	</HBox>
 </VBox>

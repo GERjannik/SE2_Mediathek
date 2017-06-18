@@ -430,7 +430,7 @@ public class MOController implements Initializable {
 	// Idee: Mit getSelection Playliste und dann "Film" markieren?
 	@FXML
 	private void btn_plus_clicked() {
-
+		new AddPlaylistWindow().show();	
 	}
 
 	//TODO Entfernen von Medien aus der Playlist
