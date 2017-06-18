@@ -13,7 +13,6 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidInputException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.beans.property.SimpleStringProperty;
 import uk.co.caprica.vlcj.player.MediaMeta;
 import uk.co.caprica.vlcj.player.MediaPlayerFactory;
@@ -143,25 +142,8 @@ public class GUIMedia {
 		meta.setDescription("");
 		meta.setDescription(metaInfos.toString());
 
-
-
-		//JSONObject root = (JSONObject) new JSONParser().parse(meta.getDescription());
-
 		// Metainformationen werden in Datei gespeichert
-
 		meta.save();
-
-
-		// Metainformationen werden in Attribute des IMedia Objekts geschrieben
-		//				m.setTitle(meta.getTitle());
-		//				m.setDate(meta.getDate());
-		//				m.setRegisseur(meta.getArtist());
-		//				m.setGenre(meta.getGenre());
-		//				m.setInfo((String) root.get("infos"));
-		//				m.setRanking(Integer.parseInt((String)root.get("ranking")));
-		//				m.setFavorite((Boolean)root.get("favorite"));
-		//				meta.release();
-		//				log.info("Änderungen erfolgreich gespeichert.");
 		meta.release();
 		log.info("Metadaten der Datei " + m.getFile() + "erfolgreich gespeichert.");
 	}

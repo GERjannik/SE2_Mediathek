@@ -13,8 +13,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import com.sun.jna.NativeLibrary;
-
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidInputException;
@@ -22,7 +20,6 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
 import uk.co.caprica.vlcj.player.MediaMeta;
-import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 
 public class App {
 
@@ -244,7 +241,7 @@ public class App {
 		int choice;
 		while (true) {
 			System.out.println("Welche Playlist soll berbeitet werden?");
-			for (int i = 0; i < allLists.size(); i++) {
+			for (int i = 2; i < allLists.size(); i++) {
 				System.out.println(i + ": " + allLists.get(i).getName());
 			}
 			scan.nextLine();

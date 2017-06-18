@@ -364,9 +364,11 @@ public class MediaStorage {
 			while (input.hasNextLine()) {
 				String jsonInput = input.nextLine();
 				JSONObject root = (JSONObject) new JSONParser().parse(jsonInput.toString());
+				@SuppressWarnings("unchecked")
+				ArrayList<String> content = (ArrayList<String>) root.get("content");
 				IMedialist m = ListFactory.getInstance((String)root.get("type"), (String)root.get("name"));
 				if (((String)root.get("type")).equals("video")) {
-					for (String f : (ArrayList<String>)root.get("content")) {
+					for (String f : content) {
 						for  (Entry<File, IMedia> i : movies.getContent().entrySet()) {
 							if (i.getKey().equals(new File(f))) {
 								m.addMedia(i.getValue());
@@ -374,7 +376,7 @@ public class MediaStorage {
 						}
 					}
 				} else {
-					for (String f : (ArrayList<String>)root.get("content")) {
+					for (String f : content) {
 						for  (Entry<File, IMedia> i : audio.getContent().entrySet()) {
 							if (i.getKey().equals(new File(f))) {
 								m.addMedia(i.getValue());

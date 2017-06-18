@@ -109,6 +109,7 @@ public class SettingWindow extends Stage{
 			class RescanCommand implements Runnable {
 
 				// TODO: manueller Rescan verarbeitet die eingescannten Daten aktuell nicht
+				// Datenaustausch zwischen SettingsWindow und MO Controller muss stattfinden
 				@Override
 				public void run() {
 					IMedialist[] returns = MediaStorage.mediaScan(s.getMediaDirectory());

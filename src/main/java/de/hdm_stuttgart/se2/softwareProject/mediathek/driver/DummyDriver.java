@@ -9,8 +9,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.parser.ParseException;
 
-import com.sun.jna.NativeLibrary;
-
 import java.util.Scanner;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
@@ -19,8 +17,6 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidInputExc
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
-import uk.co.caprica.vlcj.player.MediaMeta;
-import uk.co.caprica.vlcj.runtime.RuntimeUtil;
 
 
 public class DummyDriver {
