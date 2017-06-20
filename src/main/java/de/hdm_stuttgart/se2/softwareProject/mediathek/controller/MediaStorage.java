@@ -151,7 +151,15 @@ public class MediaStorage {
 		IMedialist[] allMedia = {movies,audio};
 		return allMedia;
 	}
-
+	
+	/**
+	 * Methode zum Löschen von Mediendateien aus dem Dateipfad der Mediathek.
+	 * 
+	 * @param s Objekt vom Typ 'Settings'
+	 * @param scan Objekt vom Typ 'Scanner', enthält Referenz zum Pfad der Mediendateien
+	 * @param movies Objekt vom Typ 'IMedialist', enhält Map mit Movie Objekten
+	 * @param audio Objekt vom Typ 'IMedialist', enhält Map mit Audio Objekten
+	 */
 	public static void deleteMedia(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {
 
 		IMedia m = App.getInput(s, scan, movies, audio);		
@@ -175,6 +183,15 @@ public class MediaStorage {
 		}
 	}
 
+	/**
+	 * Methode zum Editieren von Metainformationen der Mediendateien. Metainformationen werden sowohl in den Feldern des IMedia 
+	 * Objektes, als auch in den Mediendateien selbst gespeichert.
+	 * 
+	 * @param m Objekt vom Typ 'IMedia'
+	 * @param s Objekt vom Typ 'Scanner'
+	 * @throws ParseException Wird von JsonParser.parse() geworfen, wenn von der Methode MediaMeta.getDescription() ein unerwarteter
+	 * String zurückgegeben wird. 
+	 */
 	public static void editMetaInformation(IMedia m, Scanner s) throws ParseException {
 
 		MediaMeta meta = readMetaData(m.getFile());
@@ -261,7 +278,7 @@ public class MediaStorage {
 		System.out.println("Erscheinungsdatum: " + meta.getDate());
 		System.out.println("Regisseur/Verfasser: " + meta.getArtist());
 		System.out.println("Genre: " + meta.getGenre());
-		JSONObject root = (JSONObject) new JSONParser().parse(meta.getDescription());
+		JSONObject root = (JSONObject) new JSONParser().parse(meta.getDescription()); // hier wird die Exception geworfen
 		System.out.println("Infos: " + root.get("infos"));
 		System.out.println("Bewertung: " + root.get("ranking") + "/5");
 		System.out.println("Favorit? " + root.get("favorite"));

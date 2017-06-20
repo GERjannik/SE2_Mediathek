@@ -218,7 +218,17 @@ public class App {
 				+ "10: Medium abspielen\n"
 				+ "11: Programm beenden\n");
 	}
-
+	
+	// TODO klären, wozu Parameter s benötigt wird
+	/**
+	 * Methode zur Auslesen von IMedia Objekten aus der Map eines IMedialist Objektes nach gegebenen User Input.
+	 * 
+	 * @param s Objekt vom Typ 'Settings'
+	 * @param scan Objekt vom Typ 'Scanner'
+	 * @param movies Objekt vom Typ 'IMedialist', enhält Map mit Movie Objekten
+	 * @param audio Objekt vom Typ 'IMedialist', enhält Map mit Movie Objekten
+	 * @return IMedia Objekt
+	 */
 	public static IMedia getInput(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {
 		System.out.println("Gib den Titel des Mediums ein");
 		scan.nextLine();

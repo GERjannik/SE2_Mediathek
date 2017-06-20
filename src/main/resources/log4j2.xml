@@ -1,22 +1,80 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration>
-    <Appenders>
-        <File name="A1" fileName="A1.log" append="false">
-            <PatternLayout pattern="%t %-5p %c{2} - %m%n"/>
-        </File>
-        <Console name="STDOUT" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d %-5p [%t] %C{2} (%F:%L) - %m%n"/>
-        </Console>
-    </Appenders>
-    <Loggers>
 
-        <!-- You my want to define class or package level per-logger rules -->
-        <Logger name="de.hdm_stuttgart.se2.softwareProject.mediathek.App" level="debug">
-            <AppenderRef ref="A1"/>
-        </Logger>
-        <Root level="info">
-            <AppenderRef ref="STDOUT"/>
-            <AppenderRef ref="A1"/>
-        </Root>
-    </Loggers>
+  <Appenders>
+  
+    <File name="gui.file" fileName="gui.log" append="false">
+      <PatternLayout pattern="%t %-5p %c{10} - %m%n"/>
+    </File>
+    
+    <File name="controller.file" fileName="controller.log" append="false">
+      <PatternLayout pattern="%t %-5p %c{10} - %m%n"/>
+    </File>
+    
+    <File name="models.file" fileName="models.log" append="false">
+      <PatternLayout pattern="%t %-5p %c{10} - %m%n"/>
+    </File>
+    
+    <File name="root.file" fileName="root.log" append="false">
+      <PatternLayout pattern="%t %-5p %c{10} - %m%n"/>
+    </File>
+    
+    <File name="history.file" fileName="history.log" append="true">
+      <PatternLayout pattern="%t %-5p %c{10} - %m%n"/>
+    </File>
+    
+    <Console name="default.console" target="SYSTEM_OUT">
+      <!-- %d = Datum -->
+      <!-- %-5p = Logging Level links ausgerichtet, 5 Chars lang -->
+      <!-- %t = Thread -->
+      <!-- %c{10} = vollqualifizierter Pfad Klasse -->
+      <!-- %F:%L = Datei:Zeile -->
+      <PatternLayout pattern="%d %-5p [%t] %C{10} (%F:%L) - %m%n"/>
+    </Console>
+    
+    <Console name="root.console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%d %-5p"/>
+    </Console>
+    
+    <Console name="driver.console" target="SYSTEM_OUT">
+      <PatternLayout pattern="%m%n"/>
+    </Console>
+    
+  </Appenders>
+  
+  <Loggers>
+  
+    <Logger name="de.hdm_stuttgart.se2.softwareProject.mediathek.models" level="debug">
+      <AppenderRef ref="models.file"/>
+      <AppenderRef ref="default.console"/>
+    </Logger>
+    
+    <Logger name="de.hdm_stuttgart.se2.softwareProject.mediathek.models.Movie" level="debug">
+      <AppenderRef ref="models.file"/>
+      <AppenderRef ref="default.console"/>
+    </Logger>
+    
+    <Logger name="de.hdm_stuttgart.se2.softwareProject.mediathek.controller" level="debug">
+      <AppenderRef ref="controller.file"/>
+      <AppenderRef ref="default.console"/>
+    </Logger>
+    
+    <Logger name="de.hdm_stuttgart.se2.softwareProject.mediathek.gui" level="info">
+      <AppenderRef ref="gui.file"/>
+      <AppenderRef ref="default.console"/>
+    </Logger>
+    
+    <Logger name="de.hdm_stuttgart.se2.softwareProject.mediathek.driver" level="debug">
+      <AppenderRef ref="root.file"/>
+      <AppenderRef ref="default.console"/>
+    </Logger>
+    
+    <Root level="error">
+  	  <AppenderRef ref="root.file"/>
+      <AppenderRef ref="history.file"/>
+      <AppenderRef ref="default.console"/>
+    </Root>
+    
+  </Loggers>
+  
 </Configuration>
