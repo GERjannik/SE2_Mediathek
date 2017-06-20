@@ -91,7 +91,7 @@ public class SettingWindow extends Stage{
 					l_path_succes.setText("Pfad wurde gespeichert");
 				} else {
 					l_path_error.setText("Die Eingabe ist kein gültiges Verzeichnis");
-				}		
+				}	
 			}
 		});
 
