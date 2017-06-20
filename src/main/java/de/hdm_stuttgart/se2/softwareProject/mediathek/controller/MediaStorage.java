@@ -184,7 +184,8 @@ public class MediaStorage {
 	}
 
 	/**
-	 * Methode zum Editieren von Metainformationen der Mediendateien. Metainformationen werden in den Mediendateien selbst gespeichert.
+	 * Methode zum Editieren von Metainformationen der Mediendateien. Metainformationen werden sowohl in den Feldern des IMedia 
+	 * Objektes, als auch in den Mediendateien selbst gespeichert.
 	 * 
 	 * @param m Objekt vom Typ 'IMedia'
 	 * @param s Objekt vom Typ 'Scanner'
