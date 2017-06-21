@@ -1,16 +1,20 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 
 import java.io.File;
-import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
+import java.util.HashSet;
+import java.util.Optional;
+
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
-import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import javafx.event.*;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -21,7 +25,7 @@ public class SettingWindow extends Stage{
 	private static SettingWindow instance;
 
 	// private static Logger log = LogManager.getLogger(SettingWindow.class);
-	public SettingWindow(){
+	public SettingWindow(HashSet<File> visible) {
 
 		//Aufbau des Einstellungsfenster
 		BorderPane root = new BorderPane();
@@ -89,6 +93,7 @@ public class SettingWindow extends Stage{
 					s.setDirectory(input.toString());
 					s.readDirectory();
 					l_path_succes.setText("Pfad wurde gespeichert");
+					close();
 				} else {
 					l_path_error.setText("Die Eingabe ist kein gültiges Verzeichnis");
 				}	
@@ -106,22 +111,29 @@ public class SettingWindow extends Stage{
 		
 		btn_scan.setOnAction(new EventHandler<ActionEvent>() {
 			
-			class RescanCommand implements Runnable {
-
-				// TODO: manueller Rescan verarbeitet die eingescannten Daten aktuell nicht
-				// Datenaustausch zwischen SettingsWindow und MO Controller muss stattfinden
-				@Override
-				public void run() {
-					IMedialist[] returns = MediaStorage.mediaScan(s.getMediaDirectory());
-					IMedialist movies = returns[0];
-					IMedialist audio = returns[1];
-				}
-				
-				
-			}
 			@Override
 			public void handle(ActionEvent event) {
-				new Thread(new RescanCommand()).start();
+				close();
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Rescan");
+				alert.setHeaderText("Bei einem Rescan werden Ihnen auch alle Medien,"
+						+ " die aus der Mediathek entfernt wurden, sich jedoch noch im angegebenen Ordner befinden,"
+						+ " wieder angezeigt. Rescan durchführen?");
+
+				ButtonType bt_rescan = new ButtonType("Rescan");
+
+				ButtonType buttonTypeCancel = new ButtonType("Abbrechen");
+
+				alert.getButtonTypes().setAll(bt_rescan, buttonTypeCancel);
+
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.get() == bt_rescan) {
+					visible.clear();
+					new File("visibility.json").delete();
+				} else if (result.get() == buttonTypeCancel) {
+					close();
+					new SettingWindow(visible).show();
+				}
 			}
 		});
 

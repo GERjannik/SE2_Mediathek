@@ -1,10 +1,16 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Scanner;
+import java.util.Set;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -36,7 +42,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
-import uk.co.caprica.vlcj.player.MediaMeta;
 
 
 public class MOController implements Initializable {
@@ -50,6 +55,9 @@ public class MOController implements Initializable {
 	File play_data;
 	String del_data;
 	String ranking;
+	HashSet<File> visibility = new HashSet<>();	
+	
+
 
 	ObservableList<GUIMedia> data;
 	FilteredList<GUIMedia> filterdData;
@@ -98,6 +106,13 @@ public class MOController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
+		readVisibilityJSON();
+		if (new File("settings.json").exists() && !(new File("settings.json").isDirectory())) {
+			s.readDirectory();
+		}
+		if (s.getMediaDirectory() == null || !s.getMediaDirectory().isDirectory()) {
+			new SettingWindow(visibility).show();
+		} 
 
 		// Zuweisung der Spalten, für das passende füllen der TableView
 		col_title.setMinWidth(100);
@@ -126,6 +141,7 @@ public class MOController implements Initializable {
 		//Tableview anzuzeigen.
 		Thread rescanThread = new Thread(new Runnable() {
 			public void run() {
+				HashSet<File> lastVisibleMedia = new HashSet<>();
 				while (true) {
 					if(tf_search.getText() == null || tf_search.getText().isEmpty()) {
 						// Erstellen der ObservableList zum füllen der TableView
@@ -138,28 +154,29 @@ public class MOController implements Initializable {
 							scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
 
 							//TODO Abfrage aktuell über die Größe, muss noch angepasst werden. Vergleich mit aktuellen Daten muss erstellt werden...
-							if (movies.getContent().isEmpty() || audio.getContent().isEmpty() ||
-									movies.getContent().size() != scannedContent[0].getContent().size() ||
-									audio.getContent().size() != scannedContent[1].getContent().size()) {
-
+							if (contentEqualsCheck(scannedContent, lastVisibleMedia) == false) {
+								
+								lastVisibleMedia.clear();
+								for (File f : visibility) {
+									lastVisibleMedia.add(f);
+								}
 								movies = scannedContent[0];
 								audio = scannedContent[1];
 
 								data.clear();
 
 								for (IMedia i : movies.getContent().values()) {
-									if (i.getVisiblity() == true) {
+									if (visibility == null || !visibility.contains(i.getFile())) {
 										data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
 									}
 								}
 
 								for (IMedia i : audio.getContent().values()) {
-									if (i.getVisiblity() == true) {
+									if (visibility == null || !visibility.contains(i.getFile())) {
 										data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
 									}
 								}
 								tableview.setItems(data);
-
 							}							
 						}
 
@@ -194,7 +211,7 @@ public class MOController implements Initializable {
 						// 5. Add sorted (and filtered) data to the table.
 						tableview.setItems(sortedData);
 
-						try {Thread.sleep(30000);} catch (InterruptedException e) {}
+						try {Thread.sleep(1000);} catch (InterruptedException e) {}
 					} 
 				} 
 			}}, "rescanThread");
@@ -213,7 +230,7 @@ public class MOController implements Initializable {
 						audio = scannedContent[1];
 
 						for (IMedia i : movies.getContent().values()) {
-							if (i.getVisiblity() == true) {
+							if (visibility == null || !visibility.contains(i.getFile())) {
 								data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
 							} else {
 								log.debug(i.getFile() + " nicht in Mediathek angezeigt, da visible == false");
@@ -221,7 +238,7 @@ public class MOController implements Initializable {
 						}
 
 						for (IMedia i : audio.getContent().values()) {
-							if (i.getVisiblity() == true) {
+							if (visibility == null || !visibility.contains(i.getFile())) {
 								data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
 							} else {
 								log.debug(i.getFile() + " nicht in Mediathek angezeigt, da visible == false");
@@ -235,10 +252,10 @@ public class MOController implements Initializable {
 			}
 		}, "initialScan").start();
 	}
+	
 	@FXML 
-	public void btn_settings_clicked() {	
-
-		new SettingWindow().show();			
+	public void btn_settings_clicked() throws InterruptedException {	
+		new SettingWindow(visibility).show();
 	}
 
 	@FXML
@@ -383,30 +400,10 @@ public class MOController implements Initializable {
 				Optional<ButtonType> last = finish.showAndWait();
 
 				if (last.get() == bt_okay) {
+					visibility.add(play_data);
+					writeVisibilityJSON();
 					boolean delete = false;
-					GUIMedia.deleteMedia(s, play_data, movies, audio, delete);
-					MediaMeta meta = MediaStorage.readMetaData(play_data);
-					JSONObject root;
-					boolean favo = false;
-					String ranking = "0";
-
-					try {
-						root = (JSONObject) new JSONParser().parse(meta.getDescription());
-						favo = (boolean) root.get("favorite");
-						ranking = (String) root.get("ranking");
-					} catch (Exception e) {
-						log.catching(e);
-						log.error("Fehler beim Einlesen der erweiterten Metadaten von " + play_data);
-						log.info("Default gesetzt (favo = false, visible = true, ranking = 0)");
-					}
-					HashMap<String, Object> entries = new HashMap<>();
-					entries.put("favorite", favo);
-					entries.put("ranking", ranking);
-					entries.put("visible", false);
-					root = new JSONObject(entries);
-					meta.setDescription(root.toString());
-					meta.save();
-					meta.release();
+					GUIMedia.deleteMedia(s, play_data, movies, audio, delete);;
 					initialize(null, null);
 				} 	
 
@@ -431,8 +428,8 @@ public class MOController implements Initializable {
 				} 
 			} 
 
-		} catch (Exception e) {
-
+		} catch (NullPointerException e) {
+			log.catching(e);
 			l_news.setTextFill(javafx.scene.paint.Color.RED);
 			l_news.setText("Bitte wählen sie ein zu löschendes Medium aus");	
 		}	
@@ -460,5 +457,85 @@ public class MOController implements Initializable {
 	public static MOController getInstance() {
 		return instance;
 	}
+	
+	public void writeVisibilityJSON() {
+		HashMap<Integer, String> map = new HashMap<>();
+		int i = 0;
+		for (File f : this.visibility) {
+			map.put(i++, f.toString());
+		}
+		JSONObject obj = new JSONObject(map);
 
+		try (PrintWriter writer = new PrintWriter(new File ("visibility.json"))) {
+			writer.print(obj.toJSONString());
+			log.info("Nicht sichtbare Medien erfolgreich in JSON gespeichert");
+			writer.close();
+		} catch (FileNotFoundException e) {
+			log.info("Speichern sichtbarer Medien in JSON fehlgeschlagen");
+			log.catching(e);;
+			e.printStackTrace();
+		}
+	}
+	
+	public void readVisibilityJSON() {
+		try {
+			/* Settings-Datei wird über den Scanner eingelesen und dann Zeilenweise einen String angehängt */
+			log.info("Visibility-Datei wird gelesen");
+			Scanner input = new Scanner(new File ("visibility.json"));
+
+			StringBuilder jsonIn = new StringBuilder();
+
+			while (input.hasNextLine()) {
+				jsonIn.append(input.nextLine());
+			}
+
+			// Der String wird über einen JSON Parser geparst und anschließend an ein JSON objekt übergeben
+			JSONParser parser = new JSONParser();
+			JSONObject root = new JSONObject();
+			try {
+				root = (JSONObject) parser.parse(jsonIn.toString());
+			} catch (Exception e) {
+				log.debug("Keine Daten aus visibility.json eingelesen. Ggf. liegt ein Feheler vor");
+			}
+
+
+			for (Object s : root.values()) {
+				this.visibility.add(new File(s.toString()));
+			}
+			input.close();
+			
+		} catch (FileNotFoundException e) {
+			log.info("visibility.json wurde nicht gefunden. Neue, leere Datei wird erstellt");
+			log.catching(e);
+			e.printStackTrace();
+			try {
+				new File("visibility.json").createNewFile();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
+	
+	private boolean contentEqualsCheck(IMedialist[] scannedContent, HashSet<File> lastVisible) {
+		// Prüft ob Dateien im Ordner noch dieselben sind, wie die bereits eingelesenen Dateien 
+		Set<File> tempSet = scannedContent[0].getContent().keySet();
+		for (File f : movies.getContent().keySet()) {
+			if (!tempSet.contains(f)) {
+				return false;
+			}
+		}
+		tempSet = scannedContent[1].getContent().keySet();
+		for (File f : audio.getContent().keySet()) {
+			if (!tempSet.contains(f)) {
+				return false;
+			}
+		}
+		
+		// Prüft ob Stand der sichtbaren Medien gleich zum zuletzt angezeigten Stand ist
+		if (!lastVisible.equals(this.visibility)) {
+			return false;
+		}
+		
+		return true;
+	}
 }

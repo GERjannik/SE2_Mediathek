@@ -1,10 +1,8 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 
-import java.io.File;
 import java.io.IOException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import javafx.application.Application;
@@ -36,46 +34,19 @@ public class MediathekGUI extends Application {
 
 	private void initRootLayout() throws IOException {
 
-		boolean scanSuccessful = false;
-		try {
-			if (new File("settings.json").exists() && !(new File("settings.json").isDirectory())) {
-				s.readDirectory();
-			}
-			if (s.getMediaDirectory() != null && s.getMediaDirectory().isDirectory()) {
-				class RescanCommand implements Runnable {
+		//Load root layout from fxml file.
+		FXMLLoader loader = new FXMLLoader();
+		loader.setLocation(MediathekGUI.class.getResource("MediathekOverview.fxml"));
 
-					@Override
-					public void run() {
-						IMedialist[] returns = MediaStorage.mediaScan(s.getMediaDirectory());
-						movies = returns[0];
-						audio = returns[1];
-					}		
-				}
-				new Thread(new RescanCommand()).start();
-				scanSuccessful = true;
-			}			
+		//Sprung in die MOController initialize Methode
+		rootLayout = (BorderPane) loader.load();
 
-			//Load root layout from fxml file.
-			FXMLLoader loader = new FXMLLoader();
-			loader.setLocation(MediathekGUI.class.getResource("MediathekOverview.fxml"));
-
-			//Sprung in die MOController initialize Methode
-			rootLayout = (BorderPane) loader.load();
-
-			//Show the scene containing the root layout.
-			Scene scene = new Scene(rootLayout);
-			scene.getStylesheets().add(getClass().getResource("main.css").toExternalForm());
-			primaryStage.setScene(scene);
-			primaryStage.show();	
-
-			if (scanSuccessful == false) {
-				new SettingWindow().show();
-			}
-		} catch (IOException e) {
-			log.catching(e);
-			e.printStackTrace();
-		}		
-
+		//Show the scene containing the root layout.
+		Scene scene = new Scene(rootLayout);
+		scene.getStylesheets().add(getClass().getResource("main.css").toExternalForm());
+		primaryStage.setScene(scene);
+		primaryStage.show();	
+		log.debug("GUI wurde geladen");
 	}
 
 	public Stage getPrimaryStage() {
@@ -87,7 +58,7 @@ public class MediathekGUI extends Application {
 		launch(args);
 	}
 
-	
+
 	public IMedialist getMovies() {
 		return movies;
 	}
