@@ -13,6 +13,7 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidInputException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 import uk.co.caprica.vlcj.player.MediaMeta;
 import uk.co.caprica.vlcj.player.MediaPlayerFactory;
@@ -27,7 +28,8 @@ public class GUIMedia {
 	private static Logger log = LogManager.getLogger(GUIMedia.class);
 
 	private static GUIMedia instance;
-
+	
+	private final SimpleBooleanProperty favo;
 	private final SimpleStringProperty title;
 	private final SimpleStringProperty length;
 	private final SimpleStringProperty date;
@@ -36,7 +38,8 @@ public class GUIMedia {
 	private final SimpleStringProperty file;
 	private final SimpleStringProperty ranking;
 
-	public GUIMedia(String title, String length, String date, String artist, String genre, File file, String ranking) {
+	public GUIMedia(Boolean favo, String title, String length, String date, String artist, String genre, File file, String ranking) {
+		this.favo = new SimpleBooleanProperty(favo);
 		this.title = new SimpleStringProperty(title);
 		this.length = new SimpleStringProperty(length);
 		this.date = new SimpleStringProperty(date);
@@ -44,6 +47,10 @@ public class GUIMedia {
 		this.genre = new SimpleStringProperty(genre);
 		this.file = new SimpleStringProperty(file.toString());
 		this.ranking = new SimpleStringProperty(ranking);
+	}
+
+	public boolean getFavo() {
+		return favo.get();
 	}
 
 	public String getTitle() {

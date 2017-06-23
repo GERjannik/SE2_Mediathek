@@ -15,6 +15,9 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.sceme.layout.*?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.collections.*?>
 
 <BorderPane styleClass="root" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.hdm_stuttgart.se2.softwareProject.mediathek.gui.MOController">
    <left>
@@ -63,6 +66,7 @@
 			</HBox>
 			<TableView fx:id="tableview" onMouseClicked="#tableview_mouse_clicked" prefHeight="462.0" prefWidth="812.0">
 				<columns>
+					<TableColumn fx:id="col_favo" text="Favorit" />
 					<TableColumn fx:id="col_title" text="Titel" />
 					<TableColumn fx:id="col_length" text="Länge" />
 					<TableColumn fx:id="col_date" text="Jahr" />
@@ -110,13 +114,12 @@
          </HBox>
          <HBox>
          <Label fx:id="l_favo" text="Favoriten"></Label>
+         	<fx:define>
+				<ToggleGroup fx:id="favoGroup" />
+			</fx:define>
             <children>
-               <ToggleButton mnemonicParsing="false" text="Ja">
-                  <toggleGroup>
-                     <ToggleGroup fx:id="favoGroup" />
-                  </toggleGroup>
-               </ToggleButton>
-               <ToggleButton mnemonicParsing="false" text="Nein" toggleGroup="$favoGroup" />
+               <ToggleButton fx:id="tb_favo_yes" text="Ja" toggleGroup="$favoGroup" />
+               <ToggleButton fx:id="tb_favo_no" text="Nein" toggleGroup="$favoGroup" />
             </children>
          </HBox>
 			<HBox BorderPane.alignment="BOTTOM_RIGHT">

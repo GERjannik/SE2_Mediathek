@@ -42,13 +42,17 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaErrorEvent;
+import javafx.scene.control.ChoiceBox;
 
 
 public class MOController implements Initializable {
 
 	private static Logger log = LogManager.getLogger(MOController.class);
 
-	private static MOController instance;
+	private static MOController instance;	 
 
 	IMedialist movies, audio;
 	Settings s = new Settings();
@@ -57,8 +61,6 @@ public class MOController implements Initializable {
 	String ranking;
 	HashSet<File> visibility = new HashSet<>();	
 	
-
-
 	ObservableList<GUIMedia> data;
 	FilteredList<GUIMedia> filterdData;
 	SortedList<GUIMedia> sortedData;
@@ -70,8 +72,8 @@ public class MOController implements Initializable {
 	@FXML ToggleButton tb_books;
 
 	@FXML ToggleGroup favoGroup;
-	@FXML ToggleButton tb_yes;
-	@FXML ToggleButton tb_no;
+	@FXML ToggleButton tb_favo_yes;
+	@FXML ToggleButton tb_favo_no;
 
 	@FXML ToggleGroup radioGroup;
 	@FXML RadioButton rb_one;
@@ -94,9 +96,11 @@ public class MOController implements Initializable {
 	@FXML TextField tf_genre;
 	@FXML TextField tf_search;
 
+
 	// Table FXML
 	@FXML TableView<GUIMedia> tableview = new TableView<GUIMedia>();
-	@FXML TableColumn<GUIMedia, String> col_title = new TableColumn<>("Titel");
+	@FXML TableColumn<GUIMedia, Image> col_favo = new TableColumn<GUIMedia, Image>("Favorit");
+	@FXML TableColumn<GUIMedia, String> col_title = new TableColumn<GUIMedia, String>("Titel");
 	@FXML TableColumn<GUIMedia, Long> col_length = new TableColumn<GUIMedia, Long>("Länge");
 	@FXML TableColumn<GUIMedia, String> col_date = new TableColumn<GUIMedia, String>("Erscheinung");
 	@FXML TableColumn<GUIMedia, String> col_artist  = new TableColumn<GUIMedia, String>("Director");
@@ -115,6 +119,9 @@ public class MOController implements Initializable {
 		} 
 
 		// Zuweisung der Spalten, für das passende füllen der TableView
+		col_favo.setMinWidth(10);
+		col_favo.setCellValueFactory(
+				new PropertyValueFactory<GUIMedia, Image>("favo"));
 		col_title.setMinWidth(100);
 		col_title.setCellValueFactory(
 				new PropertyValueFactory<GUIMedia, String>("title"));
@@ -167,13 +174,13 @@ public class MOController implements Initializable {
 
 								for (IMedia i : movies.getContent().values()) {
 									if (visibility == null || !visibility.contains(i.getFile())) {
-										data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+										data.add(new GUIMedia(i.getFavorite(),i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
 									}
 								}
 
 								for (IMedia i : audio.getContent().values()) {
 									if (visibility == null || !visibility.contains(i.getFile())) {
-										data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+										data.add(new GUIMedia(i.getFavorite(),i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
 									}
 								}
 								tableview.setItems(data);
@@ -181,27 +188,28 @@ public class MOController implements Initializable {
 						}
 
 						filterdData = new FilteredList<>(data, f -> true);
-
+						
+						
 						// 2. Set the filter Predicate whenever the filter changes.
 						tf_search.textProperty().addListener((observable, oldValue, newValue) -> {
 							filterdData.setPredicate(Media -> {
 								// If filter text is empty, display all Media.
 								if (newValue == null || newValue.isEmpty()) {
-									System.out.println("Filtertext ist empty");
 									return true;
 								}
 
-								// Compare first name and last name of every person with filter text.
+							// Compare first name and last name of every person with filter text.
 								String lowerCaseFilter = newValue.toLowerCase();
-
+							
 								if (Media.getTitle().toLowerCase().contains(lowerCaseFilter)) {
-									System.out.println("false");
-									return true; // Filter matches titel.
+									log.info("Filter matched");
+								return true; // Filter matches titel.
 								} 
-								System.out.println("false");
+								log.info("Filter do not matched");
 								return false; // Does not match.
 							});
 						});
+
 						// 3. Wrap the FilteredList in a SortedList. 
 						sortedData = new SortedList<>(filterdData);
 
@@ -231,7 +239,7 @@ public class MOController implements Initializable {
 
 						for (IMedia i : movies.getContent().values()) {
 							if (visibility == null || !visibility.contains(i.getFile())) {
-								data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+								data.add(new GUIMedia(i.getFavorite(),i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
 							} else {
 								log.debug(i.getFile() + " nicht in Mediathek angezeigt, da visible == false");
 							}
@@ -239,7 +247,7 @@ public class MOController implements Initializable {
 
 						for (IMedia i : audio.getContent().values()) {
 							if (visibility == null || !visibility.contains(i.getFile())) {
-								data.add(new GUIMedia(i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+								data.add(new GUIMedia(i.getFavorite(),i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
 							} else {
 								log.debug(i.getFile() + " nicht in Mediathek angezeigt, da visible == false");
 							}
@@ -324,9 +332,10 @@ public class MOController implements Initializable {
 
 	}
 
-	//TODO Anzeige Favo
 	@FXML
 	public void tableview_mouse_clicked(){
+		
+		try {
 
 		tf_title.setText(tableview.getSelectionModel().getSelectedItem().getTitle());
 		tf_year.setText(tableview.getSelectionModel().getSelectedItem().getDate());
@@ -343,18 +352,14 @@ public class MOController implements Initializable {
 		default: radioGroup.selectToggle(null); break;
 		}
 
-
-		//		switch ( ) {
-		//		
-		//		case true: toggleGroup.selectToggle(tb_yes); break;
-		//		case false: toggleGroup.selectToggle(tb_no); break;
-		//		default: toggleGroup.selectToggle(null); break;
-		//	
-		//		}
-
-
-
-
+		if (tableview.getSelectionModel().getSelectedItem().getFavo() == true) {		
+			favoGroup.selectToggle(tb_favo_yes);		
+		} else if (tableview.getSelectionModel().getSelectedItem().getFavo() == false) {			
+			favoGroup.selectToggle(tb_favo_no);			
+		}	
+		} catch (NullPointerException e) {
+			log.error("Tableview ist nicht inizialisiert");
+		}
 	}
 
 	@FXML
@@ -363,7 +368,6 @@ public class MOController implements Initializable {
 		play_data = tableview.getSelectionModel().getSelectedItem().getFile();
 
 		GUIMedia.playMovie(s, play_data, movies, audio);
-
 	}
 
 	@FXML
