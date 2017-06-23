@@ -56,7 +56,7 @@ public class MOController implements Initializable {
 	String del_data;
 	String ranking;
 	HashSet<File> visibility = new HashSet<>();	
-	
+
 
 
 	ObservableList<GUIMedia> data;
@@ -155,7 +155,7 @@ public class MOController implements Initializable {
 
 							//TODO Abfrage aktuell über die Größe, muss noch angepasst werden. Vergleich mit aktuellen Daten muss erstellt werden...
 							if (contentEqualsCheck(scannedContent, lastVisibleMedia) == false) {
-								
+
 								lastVisibleMedia.clear();
 								for (File f : visibility) {
 									lastVisibleMedia.add(f);
@@ -215,7 +215,7 @@ public class MOController implements Initializable {
 					} 
 				} 
 			}}, "rescanThread");
-		
+
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -252,7 +252,7 @@ public class MOController implements Initializable {
 			}
 		}, "initialScan").start();
 	}
-	
+
 	@FXML 
 	public void btn_settings_clicked() throws InterruptedException {	
 		new SettingWindow(visibility).show();
@@ -328,21 +328,24 @@ public class MOController implements Initializable {
 	@FXML
 	public void tableview_mouse_clicked(){
 
-		tf_title.setText(tableview.getSelectionModel().getSelectedItem().getTitle());
-		tf_year.setText(tableview.getSelectionModel().getSelectedItem().getDate());
-		tf_artist.setText(tableview.getSelectionModel().getSelectedItem().getArtist());
-		tf_genre.setText(tableview.getSelectionModel().getSelectedItem().getGenre());
+		try {
+			tf_title.setText(tableview.getSelectionModel().getSelectedItem().getTitle());
+			tf_year.setText(tableview.getSelectionModel().getSelectedItem().getDate());
+			tf_artist.setText(tableview.getSelectionModel().getSelectedItem().getArtist());
+			tf_genre.setText(tableview.getSelectionModel().getSelectedItem().getGenre());
 
-		switch (tableview.getSelectionModel().getSelectedItem().getRanking()) {
+			switch (tableview.getSelectionModel().getSelectedItem().getRanking()) {
 
-		case "1": radioGroup.selectToggle(rb_one); break;
-		case "2": radioGroup.selectToggle(rb_two); break;
-		case "3": radioGroup.selectToggle(rb_three); break;
-		case "4": radioGroup.selectToggle(rb_four); break;
-		case "5": radioGroup.selectToggle(rb_five); break;
-		default: radioGroup.selectToggle(null); break;
+			case "1": radioGroup.selectToggle(rb_one); break;
+			case "2": radioGroup.selectToggle(rb_two); break;
+			case "3": radioGroup.selectToggle(rb_three); break;
+			case "4": radioGroup.selectToggle(rb_four); break;
+			case "5": radioGroup.selectToggle(rb_five); break;
+			default: radioGroup.selectToggle(null); break;
+			}
+		} catch (NullPointerException e) {
+			log.debug("Kein Objekt der Tabelle angeklickt");
 		}
-
 
 		//		switch ( ) {
 		//		
@@ -457,7 +460,7 @@ public class MOController implements Initializable {
 	public static MOController getInstance() {
 		return instance;
 	}
-	
+
 	public void writeVisibilityJSON() {
 		HashMap<Integer, String> map = new HashMap<>();
 		int i = 0;
@@ -476,7 +479,7 @@ public class MOController implements Initializable {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void readVisibilityJSON() {
 		try {
 			/* Settings-Datei wird über den Scanner eingelesen und dann Zeilenweise einen String angehängt */
@@ -503,7 +506,7 @@ public class MOController implements Initializable {
 				this.visibility.add(new File(s.toString()));
 			}
 			input.close();
-			
+
 		} catch (FileNotFoundException e) {
 			log.info("visibility.json wurde nicht gefunden. Neue, leere Datei wird erstellt");
 			log.catching(e);
@@ -515,7 +518,7 @@ public class MOController implements Initializable {
 			}
 		}
 	}
-	
+
 	private boolean contentEqualsCheck(IMedialist[] scannedContent, HashSet<File> lastVisible) {
 		// Prüft ob Dateien im Ordner noch dieselben sind, wie die bereits eingelesenen Dateien 
 		Set<File> tempSet = scannedContent[0].getContent().keySet();
@@ -530,12 +533,12 @@ public class MOController implements Initializable {
 				return false;
 			}
 		}
-		
+
 		// Prüft ob Stand der sichtbaren Medien gleich zum zuletzt angezeigten Stand ist
 		if (!lastVisible.equals(this.visibility)) {
 			return false;
 		}
-		
+
 		return true;
 	}
 }

@@ -66,7 +66,7 @@ public class MediaStorage {
 		for (int i = 0; i < files.size(); i++) {
 			// Prüft ob Datei für Mediathek kompatibel ist
 			if (!files.get(i).getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")
-					&& !files.get(i).getName().toLowerCase().matches("^.*\\.(mp3||wav|wma|aac|ogg)$")) {
+					&& !files.get(i).getName().toLowerCase().matches("^.*\\.(mp3|wav|wma|aac|ogg)$")) {
 				continue;
 			}
 			String typ = null;
