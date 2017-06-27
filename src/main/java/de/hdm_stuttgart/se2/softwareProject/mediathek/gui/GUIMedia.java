@@ -161,7 +161,7 @@ public class GUIMedia {
 
 		if (delete == true) {
 			m.getFile().delete();
-			log.info("Das Medium " + m.getTitle() + " wurde von der Festplatte gelöscht");	
+			log.info("Das Medium " + m.getTitle() + " wurde von der Festplatte gelöscht");
 		} else {
 			m.removeMedia();
 			log.info("Das Medium " + m.getTitle() + " wird nicht mehr in der Mediathek angezeigt");

@@ -30,6 +30,10 @@ public class Settings {
 	// Name der Settingsdatei im Prokjekt Stammverzeichnis
 	private File mediaDirectory;
 	
+	public void setMediaDirectory(File mediaDirectory) {
+		this.mediaDirectory = mediaDirectory;
+	}
+
 	public Settings() {
 		
 	}

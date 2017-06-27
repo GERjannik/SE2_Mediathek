@@ -43,10 +43,6 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaErrorEvent;
-import javafx.stage.Modality;
-import javafx.scene.control.ChoiceBox;
 
 
 public class MOController implements Initializable {
