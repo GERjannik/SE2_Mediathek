@@ -11,6 +11,9 @@ abstract class ScanDirectoryRecursive {
 		}
 		File[] fileArray = file.listFiles();
 		for (File f : fileArray) {
+			if (f.isHidden()) {
+				continue;
+			}
 			if (f.isDirectory()) {
 				getPaths(f, list);
 			} else {

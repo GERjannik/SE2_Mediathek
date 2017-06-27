@@ -529,9 +529,19 @@ public class MOController implements Initializable {
 				return false;
 			}
 		}
+		for (File f : tempSet) {
+			if (!movies.getContent().containsKey(f)) {
+				return false;
+			}
+		}
 		tempSet = scannedContent[1].getContent().keySet();
 		for (File f : audio.getContent().keySet()) {
 			if (!tempSet.contains(f)) {
+				return false;
+			}
+		}
+		for (File f : tempSet) {
+			if (!audio.getContent().containsKey(f)) {
 				return false;
 			}
 		}
