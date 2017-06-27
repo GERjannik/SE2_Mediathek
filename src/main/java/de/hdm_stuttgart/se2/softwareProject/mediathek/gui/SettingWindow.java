@@ -30,6 +30,7 @@ public class SettingWindow extends Stage{
 		//Aufbau des Einstellungsfenster
 		BorderPane root = new BorderPane();
 		Scene SettingGUI = new Scene(root);
+		setAlwaysOnTop(true);
 
 		Settings s = new Settings();
 

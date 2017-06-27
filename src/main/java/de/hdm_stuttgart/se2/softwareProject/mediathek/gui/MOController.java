@@ -45,6 +45,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaErrorEvent;
+import javafx.stage.Modality;
 import javafx.scene.control.ChoiceBox;
 
 
