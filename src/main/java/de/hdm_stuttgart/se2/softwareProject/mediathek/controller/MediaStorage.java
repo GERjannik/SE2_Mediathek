@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.Map.Entry;
 import java.util.Scanner;
+import java.util.stream.Collectors;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
@@ -61,14 +63,18 @@ public class MediaStorage {
 */	
 		// Array mit File Objekten zu allen Medien Dateien, unabhängig vom Typ
 		ArrayList<File> files = ScanDirectoryRecursive.createFileList(file);
-
+		
+		files.parallelStream()
+			.filter(z -> z.getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg|mp3|wav|wma|aac|ogg)$"))
+			.collect(Collectors.toList());
+			
 		// Aus jeder Datei des Arrays wird ein Objekt erstellt und der richtigen HashMap zugeordnet
 		for (int i = 0; i < files.size(); i++) {
 			// Prüft ob Datei für Mediathek kompatibel ist
-			if (!files.get(i).getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")
+			/* if (!files.get(i).getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")
 					&& !files.get(i).getName().toLowerCase().matches("^.*\\.(mp3|wav|wma|aac|ogg)$")) {
 				continue;
-			}
+			} */
 			String typ = null;
 			MediaMeta meta = readMetaData(files.get(i));
 			log.info("Metadaten von " + files.get(i) + " werden gelesen");
