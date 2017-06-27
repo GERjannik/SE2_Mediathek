@@ -11,6 +11,9 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -188,7 +191,8 @@ public class MOController implements Initializable {
 						
 						
 						// 2. Set the filter Predicate whenever the filter changes.
-						tf_search.textProperty().addListener((observable, oldValue, newValue) -> {
+						tf_search.textProperty().addListener((observable, oldValue, newValue) -> {			
+							
 							filterdData.setPredicate(Media -> {
 								// If filter text is empty, display all Media.
 								if (newValue == null || newValue.isEmpty()) {
@@ -196,7 +200,7 @@ public class MOController implements Initializable {
 								}
 
 							// Compare first name and last name of every person with filter text.
-								String lowerCaseFilter = newValue.toLowerCase();
+									String lowerCaseFilter = newValue.toLowerCase();
 							
 								if (Media.getTitle().toLowerCase().contains(lowerCaseFilter)) {
 									log.info("Filter matched");
@@ -214,7 +218,7 @@ public class MOController implements Initializable {
 						sortedData.comparatorProperty().bind(tableview.comparatorProperty());
 
 						// 5. Add sorted (and filtered) data to the table.
-						tableview.setItems(sortedData);
+						tableview.setItems(sortedData);						
 
 						try {Thread.sleep(1000);} catch (InterruptedException e) {}
 					} 
