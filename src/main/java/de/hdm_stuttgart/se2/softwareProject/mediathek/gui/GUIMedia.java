@@ -1,9 +1,10 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map.Entry;
-
+import java.util.List;
+import java.util.NoSuchElementException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
@@ -28,7 +29,7 @@ public class GUIMedia {
 	private static Logger log = LogManager.getLogger(GUIMedia.class);
 
 	private static GUIMedia instance;
-	
+
 	private final SimpleBooleanProperty favo;
 	private final SimpleStringProperty title;
 	private final SimpleStringProperty length;
@@ -106,18 +107,23 @@ public class GUIMedia {
 
 
 	public static IMedia getInput(Settings s, File play_data, IMedialist movies, IMedialist audio) {
+		
+		// Schreibt alle Medien in eine gemeinsamme Collection
+		List<IMedia> tempmedia = new ArrayList<>();
+		tempmedia.addAll(movies.getContent().values());
+		tempmedia.addAll(audio.getContent().values());
 
-		for (Entry<File, IMedia> i : movies.getContent().entrySet()) {
-			if (i.getValue().getFile().equals((play_data))) {
-				return i.getValue();
-			}
+		// Wenn übergebener Dateiname mit einem Objekt der Mediathek übereinstimmt, wird dieses zurückgegeben
+		// ansonsten kommt es zu InvalidInputException
+		try {
+			return tempmedia.parallelStream()
+					.filter(i -> i.getFile().equals(play_data))
+					.findAny()
+					.get();
+		} catch (NoSuchElementException e) {
+			throw new InvalidInputException();
 		}
-		for (Entry<File, IMedia> i : audio.getContent().entrySet()) {
-			if (i.getValue().getFile().equals(play_data)) {
-				return i.getValue();
-			}
-		}
-		throw new InvalidInputException();
+
 	}
 
 

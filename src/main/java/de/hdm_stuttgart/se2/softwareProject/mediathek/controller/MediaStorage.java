@@ -64,17 +64,13 @@ public class MediaStorage {
 		// Array mit File Objekten zu allen Medien Dateien, unabhängig vom Typ
 		ArrayList<File> files = ScanDirectoryRecursive.createFileList(file);
 		
-		files.parallelStream()
-			.filter(z -> z.getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg|mp3|wav|wma|aac|ogg)$"))
+		// Prüft ob Datei für Mediathek kompatibel ist. Wenn nicht wird sie rausgefiltert
+		files = (ArrayList<File>) files.parallelStream()
+			.filter(z -> z.getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg|mp3|wav|wma|aac|ogg|flv)$"))
 			.collect(Collectors.toList());
 			
 		// Aus jeder Datei des Arrays wird ein Objekt erstellt und der richtigen HashMap zugeordnet
 		for (int i = 0; i < files.size(); i++) {
-			// Prüft ob Datei für Mediathek kompatibel ist
-			/* if (!files.get(i).getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")
-					&& !files.get(i).getName().toLowerCase().matches("^.*\\.(mp3|wav|wma|aac|ogg)$")) {
-				continue;
-			} */
 			String typ = null;
 			MediaMeta meta = readMetaData(files.get(i));
 			log.info("Metadaten von " + files.get(i) + " werden gelesen");
@@ -120,7 +116,7 @@ public class MediaStorage {
 				log.info("Default gesetzt (ranking = 0)");
 			}
 			
-			if (files.get(i).getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg)$")) {
+			if (files.get(i).getName().toLowerCase().matches("^.*\\.(avi|mp4|wmv|mdk|mkv|mpeg|mpg|flv)$")) {
 				typ = "video";
 				IMedia temp = MediaFactory.getInstance(
 						typ, meta.getTitle(), files.get(i), meta.getLength(),meta.getDate(),
@@ -132,7 +128,7 @@ public class MediaStorage {
 						ranking);
 				movies.getContent().put(files.get(i), temp);
 
-			} else if (files.get(i).getName().toLowerCase().matches("^.*\\.(mp3||wav|wma|aac|ogg)$")) {
+			} else if (files.get(i).getName().toLowerCase().matches("^.*\\.(mp3|wav|wma|aac|ogg)$")) {
 				typ = "audio";
 				IMedia temp = MediaFactory.getInstance(
 						typ, meta.getTitle(), files.get(i), meta.getLength(), meta.getDate(),
