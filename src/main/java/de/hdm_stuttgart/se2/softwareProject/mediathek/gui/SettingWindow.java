@@ -96,6 +96,7 @@ public class SettingWindow extends Stage{
 					close();
 				} else {
 					l_path_error.setText("Die Eingabe ist kein gültiges Verzeichnis");
+					// TODO InvalidInputException werfen
 				}	
 			}
 		});

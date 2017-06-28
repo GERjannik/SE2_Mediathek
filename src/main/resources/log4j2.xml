@@ -2,6 +2,10 @@
 <Configuration>
 
   <Appenders>
+  	
+  	<File name="exceptions.file" fileName="exceptions.log" append="false">
+      <PatternLayout pattern="%d %t %-5p %c{10} - %m%n"/>
+    </File>
   
     <File name="gui.file" fileName="gui.log" append="false">
       <PatternLayout pattern="%d %t %-5p %c{10} - %m%n"/>
@@ -32,14 +36,6 @@
       <PatternLayout pattern="%d %-5p [%t] %C{10} (%F:%L) - %m%n"/>
     </Console>
     
-    <Console name="root.console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%d %-5p"/>
-    </Console>
-    
-    <Console name="driver.console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%m%n"/>
-    </Console>
-    
   </Appenders>
   
   <Loggers>
@@ -49,12 +45,7 @@
       <!-- <AppenderRef ref="default.console"/> -->
     </Logger>
     
-    <Logger name="de.hdm_stuttgart.se2.softwareProject.mediathek.models.Movie" level="debug">
-      <AppenderRef ref="models.file"/>
-      <!-- <AppenderRef ref="default.console"/> -->
-    </Logger>
-    
-    <Logger name="de.hdm_stuttgart.se2.softwareProject.mediathek.controller" level="debug">
+    <Logger name="de.hdm_stuttgart.se2.softwareProject.mediathek.controller" level="error">
       <AppenderRef ref="controller.file"/>
       <!-- <AppenderRef ref="default.console"/> -->
     </Logger>
@@ -66,6 +57,11 @@
     
     <Logger name="de.hdm_stuttgart.se2.softwareProject.mediathek.driver" level="debug">
       <AppenderRef ref="root.file"/>
+      <!-- <AppenderRef ref="default.console"/> -->
+    </Logger>
+    
+    <Logger name="de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions" level="error">
+      <AppenderRef ref="exceptions.file"/>
       <!-- <AppenderRef ref="default.console"/> -->
     </Logger>
     
