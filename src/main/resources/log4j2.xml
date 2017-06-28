@@ -46,33 +46,33 @@
   
     <Logger name="de.hdm_stuttgart.se2.softwareProject.mediathek.models" level="debug">
       <AppenderRef ref="models.file"/>
-      <AppenderRef ref="default.console"/>
+      <!-- <AppenderRef ref="default.console"/> -->
     </Logger>
     
     <Logger name="de.hdm_stuttgart.se2.softwareProject.mediathek.models.Movie" level="debug">
       <AppenderRef ref="models.file"/>
-      <AppenderRef ref="default.console"/>
+      <!-- <AppenderRef ref="default.console"/> -->
     </Logger>
     
     <Logger name="de.hdm_stuttgart.se2.softwareProject.mediathek.controller" level="debug">
       <AppenderRef ref="controller.file"/>
-      <AppenderRef ref="default.console"/>
+      <!-- <AppenderRef ref="default.console"/> -->
     </Logger>
     
     <Logger name="de.hdm_stuttgart.se2.softwareProject.mediathek.gui" level="info">
       <AppenderRef ref="gui.file"/>
-      <AppenderRef ref="default.console"/>
+      <!-- <AppenderRef ref="default.console"/> -->
     </Logger>
     
     <Logger name="de.hdm_stuttgart.se2.softwareProject.mediathek.driver" level="debug">
       <AppenderRef ref="root.file"/>
-      <AppenderRef ref="default.console"/>
+      <!-- <AppenderRef ref="default.console"/> -->
     </Logger>
     
     <Root level="error">
   	  <AppenderRef ref="root.file"/>
       <AppenderRef ref="history.file"/>
-      <AppenderRef ref="default.console"/>
+      <!-- <AppenderRef ref="default.console"/> -->
     </Root>
     
   </Loggers>
