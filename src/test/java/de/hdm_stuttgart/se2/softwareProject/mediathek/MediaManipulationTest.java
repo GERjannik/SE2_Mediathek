@@ -1,4 +1,4 @@
-package de.hdm_stuttgart.se2.softwareProject.mediathek;
+			package de.hdm_stuttgart.se2.softwareProject.mediathek;
 
 import java.io.File;
 import java.io.IOException;
