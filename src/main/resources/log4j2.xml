@@ -4,27 +4,27 @@
   <Appenders>
   
     <File name="gui.file" fileName="gui.log" append="false">
-      <PatternLayout pattern="%t %-5p %c{10} - %m%n"/>
+      <PatternLayout pattern="%d %t %-5p %c{10} - %m%n"/>
     </File>
     
     <File name="controller.file" fileName="controller.log" append="false">
-      <PatternLayout pattern="%t %-5p %c{10} - %m%n"/>
+      <PatternLayout pattern="%d %t %-5p %c{10} - %m%n"/>
     </File>
     
     <File name="models.file" fileName="models.log" append="false">
-      <PatternLayout pattern="%t %-5p %c{10} - %m%n"/>
+      <PatternLayout pattern="%d %t %-5p %c{10} - %m%n"/>
     </File>
     
     <File name="root.file" fileName="root.log" append="false">
-      <PatternLayout pattern="%t %-5p %c{10} - %m%n"/>
+      <PatternLayout pattern="%d %t %-5p %c{10} - %m%n"/>
     </File>
     
     <File name="history.file" fileName="history.log" append="true">
-      <PatternLayout pattern="%t %-5p %c{10} - %m%n"/>
+      <PatternLayout pattern="%d %t %-5p %c{10} - %m%n"/>
     </File>
     
     <Console name="default.console" target="SYSTEM_OUT">
-      <!-- %d = Datum -->
+      <!-- %d = Datum "2012-11-02 14:34:02,781" -->
       <!-- %-5p = Logging Level links ausgerichtet, 5 Chars lang -->
       <!-- %t = Thread -->
       <!-- %c{10} = vollqualifizierter Pfad Klasse -->
