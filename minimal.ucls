@@ -4,7 +4,7 @@
   <class id="1" language="java" name="de.hdm_stuttgart.se2.softwareProject.mediathek.gui.GUIMedia" project="mediathek" 
     file="/mediathek/src/main/java/de/hdm_stuttgart/se2/softwareProject/mediathek/gui/GUIMedia.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="569" y="146"/>    
+    <position height="-1" width="-1" x="423" y="128"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false" static="false"/>      
@@ -15,7 +15,7 @@
     project="mediathek" 
     file="/mediathek/src/main/java/de/hdm_stuttgart/se2/softwareProject/mediathek/gui/MediathekGUI.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="976" y="259"/>    
+    <position height="-1" width="-1" x="913" y="555"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false" static="false"/>      
@@ -92,7 +92,7 @@
     project="mediathek" 
     file="/mediathek/src/main/java/de/hdm_stuttgart/se2/softwareProject/mediathek/lists/ListFactory.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1152" y="526"/>    
+    <position height="-1" width="-1" x="1211" y="603"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false" static="false"/>      
@@ -103,7 +103,7 @@
     project="mediathek" 
     file="/mediathek/src/main/java/de/hdm_stuttgart/se2/softwareProject/mediathek/lists/Movielist.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="656" y="562"/>    
+    <position height="-1" width="-1" x="597" y="621"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="false" 
       sort-features="false" accessors="true" visibility="false">      
       <attributes public="false" package="false" protected="false" private="false" static="false"/>      

@@ -70,7 +70,7 @@
     project="mediathek" 
     file="/mediathek/src/main/java/de/hdm_stuttgart/se2/softwareProject/mediathek/gui/MediathekGUI.java" binary="false" 
     corner="BOTTOM_RIGHT">    
-    <position height="-1" width="-1" x="1262" y="607"/>    
+    <position height="-1" width="-1" x="1306" y="489"/>    
     <display autosize="true" stereotype="true" package="true" initial-value="true" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -441,10 +441,10 @@
   <association id="83">    
     <end type="SOURCE" refId="7" navigable="false">      
       <attribute id="84" name="instance">        
-        <position height="0" width="0" x="-24" y="-12"/>      
+        <position height="0" width="0" x="20" y="-130"/>      
       </attribute>      
       <multiplicity id="85" minimum="0" maximum="1">        
-        <position height="0" width="0" x="-24" y="-12"/>      
+        <position height="0" width="0" x="20" y="-130"/>      
       </multiplicity>    
     </end>    
     <end type="TARGET" refId="7" navigable="true"/>    
