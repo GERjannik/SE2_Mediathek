@@ -61,7 +61,8 @@ public class SettingWindow extends Stage{
 			s.readDirectory();
 			tf_path.setText(s.getMediaDirectory().toString());
 		} else {
-			tf_path.setPromptText("C:/Pfad/...");
+			//tf_path.setText();
+			//tf_path.setPromptText("C:/Pfad/...");
 		}
 
 		Button btn_accept = new Button("Bestätigen");
