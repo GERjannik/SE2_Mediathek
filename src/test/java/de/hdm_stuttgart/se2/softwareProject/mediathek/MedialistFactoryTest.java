@@ -30,8 +30,7 @@ public class MedialistFactoryTest {
 	
 	@Test(expected=InvalidTypeException.class)
 	public void testMedialistNegative() {
-		IMedialist list = ListFactory.getInstance("falseType", "testListe");
-		assertEquals(null, list);
+		ListFactory.getInstance("falseType", "testListe");
 	}
 
 }
