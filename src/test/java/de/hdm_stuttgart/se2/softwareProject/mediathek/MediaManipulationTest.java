@@ -2,9 +2,13 @@
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
+import org.apache.logging.log4j.core.util.FileUtils;
 import org.junit.Assert;
 import org.junit.Test;
+
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
@@ -26,6 +30,8 @@ public class MediaManipulationTest {
 		IMedialist audio = content[1];
 		GUIMedia.deleteMedia(s, new File("testDirectory/testfile.mp4"), movies, audio, true);
 		Assert.assertTrue(s.getMediaDirectory().listFiles().length == 0);
+		new File("testDirecotry/testfile.mp4").delete();
+
 	}
 
 	@Test(expected=InvalidInputException.class)
