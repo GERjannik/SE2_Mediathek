@@ -1,6 +1,7 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.models;
 
 import java.io.File;
+
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
 /**

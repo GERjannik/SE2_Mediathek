@@ -1,10 +1,9 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.models;
 
 import java.io.File;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-
-import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 
 /**
  * Implementiert das IMedia Interface. Erweiterung um medienspezifische
@@ -15,7 +14,7 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
  * @author ll040
  *
  */
-class Movie extends Media implements IMedia {
+class Movie extends Media /*implements IMedia */{
 	
 	private static Logger log = LogManager.getLogger(Movie.class);
 	
@@ -123,11 +122,6 @@ class Movie extends Media implements IMedia {
 	public void setRanking(int ranking) {
 		this.ranking = ranking;
 		log.debug("Bewertung des Mediums " + this.getFile() + " auf " + this.ranking + " geändert");
-	}
-	
-	@Override
-	public boolean getFavorite() {
-		return this.favorite;
 	}
 
 	@Override

@@ -8,7 +8,7 @@ public class InvalidInputException extends RuntimeException {
 	private static final long serialVersionUID = 1;
 
 	public InvalidInputException() {
-		Logger log = LogManager.getLogger(InvalidTypeException.class);
+		Logger log = LogManager.getLogger(InvalidInputException.class);
 		log.error("Falsche Eingabe in " + this.getClass());
 	}
 	

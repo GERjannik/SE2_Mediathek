@@ -53,13 +53,14 @@ abstract class Media implements IMedia{
 	public String getTyp() {
 		return this.typ;
 	}
+	
+	@Override
+	public boolean getFavorite() {
+		return this.favorite;
+	}
 
 	@Override
-	public void getDetails() {
-		if (this.visible == true) {
-			System.out.println(this.title);
-		}
-	}
+	public abstract void getDetails();
 
 	// Wenn Medium nur aus Mediathek gelöscht wird, wird dieses Medium einfach nicht mehr ausgegeben
 	@Override

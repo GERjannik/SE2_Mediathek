@@ -1,6 +1,6 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 

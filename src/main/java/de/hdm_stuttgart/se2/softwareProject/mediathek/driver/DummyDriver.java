@@ -4,12 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Map.Entry;
+import java.util.Scanner;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.parser.ParseException;
-
-import java.util.Scanner;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;

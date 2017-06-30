@@ -3,18 +3,17 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Optional;
-
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
-import javafx.event.*;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -22,9 +21,9 @@ import javafx.stage.Stage;
 
 public class SettingWindow extends Stage{
 	
-	private static SettingWindow instance;
+	
 
-	// private static Logger log = LogManager.getLogger(SettingWindow.class);
+	
 	public SettingWindow(HashSet<File> visible) {
 
 		//Aufbau des Einstellungsfenster
@@ -152,9 +151,6 @@ public class SettingWindow extends Stage{
 
 	}
 	
-	public static SettingWindow getInstance() {
-		return instance;
-	}
 }
 
 

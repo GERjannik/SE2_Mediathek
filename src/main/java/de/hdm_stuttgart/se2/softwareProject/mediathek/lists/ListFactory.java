@@ -3,7 +3,6 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.lists;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidTypeException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 
@@ -19,7 +18,7 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
  */
 public class ListFactory {
 
-	private static Logger log = LogManager.getLogger(Settings.class);
+	private static Logger log = LogManager.getLogger(ListFactory.class);
 	
 	/**
 	 * 

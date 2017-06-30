@@ -1,10 +1,10 @@
 package de.hdm_stuttgart.se2.softwareProject.mediathek.gui;
 
 import java.io.IOException;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
-import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
+
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -13,15 +13,12 @@ import javafx.stage.Stage;
 
 public class MediathekGUI extends Application {
 
-	private static MediathekGUI instance;
+	/*private static MediathekGUI instance;*/
 	private static Logger log = LogManager.getLogger(MediathekGUI.class);
 
 	private Stage primaryStage;
 	private BorderPane rootLayout;
 
-	Settings s = new Settings();
-
-	IMedialist movies, audio;
 
 	@Override
 	public void start(Stage primaryStage) throws IOException {
@@ -57,25 +54,8 @@ public class MediathekGUI extends Application {
 
 		launch(args);
 	}
-
-
-	public IMedialist getMovies() {
-		return movies;
-	}
-
-	public void setMovies(IMedialist movies) {
-		this.movies = movies;
-	}
-
-	public IMedialist getAudio() {
-		return audio;
-	}
-
-	public void setAudio(IMedialist audio) {
-		this.audio = audio;
-	}
-
+/*
 	public static MediathekGUI getInstance() {
 		return instance;
-	}
+	}*/
 }
