@@ -11,6 +11,8 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.Set;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -56,7 +58,8 @@ public class MOController implements Initializable {
 	File play_data;
 	String del_data;
 	String ranking;
-	HashSet<File> visibility = new HashSet<>();	
+	HashSet<File> visibility = new HashSet<>();
+	Lock lock = new ReentrantLock();
 
 	ObservableList<GUIMedia> data;
 	FilteredList<GUIMedia> filterdData;
@@ -153,7 +156,11 @@ public class MOController implements Initializable {
 						if (new File("settings.json").exists() && !(new File("settings.json").isDirectory())) {
 							s.readDirectory();
 						}
-
+						
+						// Kritischen Abschnitt schützen.
+						// Synchronisierter Zugriff auf gemeinsam nutzbare Daten.
+						lock.lock();
+						
 						if (s.getMediaDirectory() != null && s.getMediaDirectory().isDirectory()) {
 							scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
 
@@ -183,6 +190,8 @@ public class MOController implements Initializable {
 								tableview.setItems(data);
 							}							
 						}
+						
+						lock.unlock();
 
 						filterdData = new FilteredList<>(data, f -> true);
 						
@@ -227,7 +236,10 @@ public class MOController implements Initializable {
 					if (new File("settings.json").exists() && !(new File("settings.json").isDirectory())) {
 						s.readDirectory();
 					}
-
+					
+					// Synchronisierter Zugriff
+					lock.lock();
+					
 					if (s.getMediaDirectory() != null && s.getMediaDirectory().isDirectory()) {
 						scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
 						movies = scannedContent[0];
@@ -251,7 +263,11 @@ public class MOController implements Initializable {
 						tableview.setItems(data);
 						break;
 					}
+					
+					lock.unlock();
 				}
+				// TODO Wieso wird der Thread aus diesem Thread heraus gestartet? Wieso nicht außerhalb, da sonst unnötige abhängigkeit.
+				rescanThread.setDaemon(true);
 				rescanThread.start();
 		}, "initialScan").start();
 	}
