@@ -40,7 +40,6 @@ public class MediaManipulationTest {
 		Settings s = new Settings();
 		s.setMediaDirectory(new File("testDirectory"));
 		GUIMedia.deleteMedia(s, new File("aaaabbbc"), ListFactory.getInstance("video", "movies"), ListFactory.getInstance("audio", "audios"), true);
-		Assert.assertEquals(null, s);
 	}
 
 }
