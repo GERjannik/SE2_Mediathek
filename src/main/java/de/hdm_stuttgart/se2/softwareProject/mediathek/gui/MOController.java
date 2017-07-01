@@ -143,8 +143,8 @@ public class MOController implements Initializable {
 		//Abfrage ob Pfad eingetragen ist, wenn ja füllen der ObservableList für die Tableview
 		//Thread läuft alle 3 Sekunden geänderte Film oder Audio Listen anzupassen und neu in der 
 		//Tableview anzuzeigen.
-		Thread rescanThread = new Thread(new Runnable() {
-			public void run() {
+		Thread rescanThread = new Thread(() -> {
+			
 				HashSet<File> lastVisibleMedia = new HashSet<>();
 				while (true) {
 					if(tf_search.getText() == null || tf_search.getText().isEmpty()) {
@@ -220,11 +220,9 @@ public class MOController implements Initializable {
 						try {Thread.sleep(1000);} catch (InterruptedException e) {}
 					} 
 				} 
-			}}, "rescanThread");
+			}, "rescanThread");
 
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
+		new Thread(() -> {
 				while (true) {
 					if (new File("settings.json").exists() && !(new File("settings.json").isDirectory())) {
 						s.readDirectory();
@@ -255,7 +253,6 @@ public class MOController implements Initializable {
 					}
 				}
 				rescanThread.start();
-			}
 		}, "initialScan").start();
 	}
 
