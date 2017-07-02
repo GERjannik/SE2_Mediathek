@@ -30,6 +30,10 @@ public class Settings {
 	// Name der Settingsdatei im Prokjekt Stammverzeichnis
 	private File mediaDirectory;
 	
+	/**
+	 * Setzen des Dateipfades mit den enthaltenen Mediendateien.
+	 * @param mediaDirectory File Objekt mit Referenz zum Dateipfad.
+	 */
 	public void setMediaDirectory(File mediaDirectory) {
 		this.mediaDirectory = mediaDirectory;
 	}

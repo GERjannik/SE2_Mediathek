@@ -313,7 +313,14 @@ public class MediaStorage {
 			}
 		}
 	}
-
+	
+	/**
+	 * Userabfrage zum Setzen und zur Ausgabe des Rankings für den spezifischen Medientypen.
+	 * 
+	 * @param s Scanner Objekt für den User-Input.
+	 * @param typ Typ des zu bewertenden Mediums.
+	 * @return String mit dem gesetzten Ranking zwischen 1 und 5.
+	 */
 	private static String rankingInput(Scanner s, String typ) {
 		do {
 			if (typ.equals("video")) {
@@ -344,6 +351,11 @@ public class MediaStorage {
 		} while (true);
 	}
 
+	/**
+	 * Speichern aller angelegten Playlists in einer JSON Datei.
+	 * 
+	 * @param allLists ArrayList mit IMedialist Objekten, in denen die Playlisten gespeichert sind.
+	 */
 	public static void savePlaylists(ArrayList<IMedialist> allLists) {
 		// playlists.json muss erstellt/überschrieben werden
 		// Schleife läuft durch Liste, die alle Playlists enthält
@@ -377,6 +389,12 @@ public class MediaStorage {
 		}
 	}
 
+	/**
+	 * Einlesen der gespeicherten IMedialist Objekte aus einer JSON Datei in eine ArrayList.
+	 * @param movies
+	 * @param audio
+	 * @return
+	 */
 	public static ArrayList<IMedialist> loadPlaylists(IMedialist movies, IMedialist audio) {
 		ArrayList<IMedialist> allLists = new ArrayList<>();
 		try (Scanner input = new Scanner(new File("playlists.json"))) {
@@ -413,6 +431,13 @@ public class MediaStorage {
 		return allLists;
 	}
 
+	/**
+	 * Methode zum Abspielen von Filmen und Audio Dateien.
+	 * @param s Settings Objekt mit Angaben zum Pfad der Mediendateien.
+	 * @param scan Scanner für den User-Input.
+	 * @param movies Liste mit Movie Objekten.
+	 * @param audio Liste mit Audio Objekten.
+	 */
 	public static void playMovie(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {
 		System.out.println("Welcher Film soll gespielt werden?");
 		App.getInput(s, scan, movies, audio).open();

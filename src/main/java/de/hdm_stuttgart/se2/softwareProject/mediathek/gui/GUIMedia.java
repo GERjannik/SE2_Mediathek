@@ -40,6 +40,17 @@ public class GUIMedia {
 	private final SimpleStringProperty file;
 	private final SimpleStringProperty ranking;
 
+	/**
+	 * Setzen der Property Objekte
+	 * @param favo Favoriten Toggle für die Media Objekte.
+	 * @param title Title des Mediums.
+	 * @param length Länge des Filmes/Liedes.
+	 * @param date Release Datum.
+	 * @param artist Regisseur/Interpret.
+	 * @param genre Film- oder Musik-Genre.
+	 * @param file File Objekt mit Pfadangabe.
+	 * @param ranking Bewertung des Mediums als String zwischen 1 und 5.
+	 */
 	public GUIMedia(Boolean favo, String title, String length, String date, String artist, String genre, File file, String ranking) {
 		this.favo = new SimpleBooleanProperty(favo);
 		this.title = new SimpleStringProperty(title);
@@ -93,7 +104,13 @@ public class GUIMedia {
 		GUIMedia.instance = instance;
 	}
 
-
+	/**
+	 * Wiedergabe der Mediendateien.
+	 * @param s Settings Objekt mit Ordnerpfad aller Mediendateien.
+	 * @param play_data File Objekt mit Referenz zur Mediendatei.
+	 * @param movies Liste mit Movie Objekten.
+	 * @param audio Liste mit Audio Objekten.
+	 */
 	public static void playMovie(Settings s, File play_data, IMedialist movies, IMedialist audio) {
 
 		new Thread(new Runnable() {
@@ -106,7 +123,14 @@ public class GUIMedia {
 
 	}
 
-
+	/**
+	 * Filtern aller Mediendateien enstprechend des Übergebenen File Objektes.
+	 * @param s //TODO kann raus?
+	 * @param play_data File Objekt welches das gesuchte IMedia Objekt referenziert.
+	 * @param movies IMedialist Objekt mit einer Liste aller Movie Objekte.
+	 * @param audio IMedialist Objekt mit einer Liste aller Movie Objekte.
+	 * @return IMedia Objekt, welches die Referenz zum gesuchten File Objekt enthält. 
+	 */
 	public static IMedia getInput(Settings s, File play_data, IMedialist movies, IMedialist audio) {
 		
 		// Schreibt alle Medien in eine gemeinsamme Collection
