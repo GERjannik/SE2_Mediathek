@@ -160,38 +160,39 @@ public class MOController implements Initializable {
 						// Kritischen Abschnitt schützen.
 						// Synchronisierter Zugriff auf gemeinsam nutzbare Daten.
 						lock.lock();
-						
-						if (s.getMediaDirectory() != null && s.getMediaDirectory().isDirectory()) {
-							scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
-
-							//TODO Abfrage aktuell über die Größe, muss noch angepasst werden. Vergleich mit aktuellen Daten muss erstellt werden...
-							if (contentEqualsCheck(scannedContent, lastVisibleMedia) == false) {
-
-								lastVisibleMedia.clear();
-								for (File f : visibility) {
-									lastVisibleMedia.add(f);
-								}
-								movies = scannedContent[0];
-								audio = scannedContent[1];
-
-								data.clear();
-
-								for (IMedia i : movies.getContent().values()) {
-									if (visibility == null || !visibility.contains(i.getFile())) {
-										data.add(new GUIMedia(i.getFavorite(),i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+						try {
+							if (s.getMediaDirectory() != null && s.getMediaDirectory().isDirectory()) {
+								scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
+	
+								//TODO Abfrage aktuell über die Größe, muss noch angepasst werden. Vergleich mit aktuellen Daten muss erstellt werden...
+								if (contentEqualsCheck(scannedContent, lastVisibleMedia) == false) {
+	
+									lastVisibleMedia.clear();
+									for (File f : visibility) {
+										lastVisibleMedia.add(f);
 									}
-								}
-
-								for (IMedia i : audio.getContent().values()) {
-									if (visibility == null || !visibility.contains(i.getFile())) {
-										data.add(new GUIMedia(i.getFavorite(),i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+									movies = scannedContent[0];
+									audio = scannedContent[1];
+	
+									data.clear();
+	
+									for (IMedia i : movies.getContent().values()) {
+										if (visibility == null || !visibility.contains(i.getFile())) {
+											data.add(new GUIMedia(i.getFavorite(),i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+										}
 									}
-								}
-								tableview.setItems(data);
-							}							
+	
+									for (IMedia i : audio.getContent().values()) {
+										if (visibility == null || !visibility.contains(i.getFile())) {
+											data.add(new GUIMedia(i.getFavorite(),i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+										}
+									}
+									tableview.setItems(data);
+								}							
+							}
+						} finally {
+							lock.unlock();
 						}
-						
-						lock.unlock();
 
 						filterdData = new FilteredList<>(data, f -> true);
 						
@@ -239,32 +240,33 @@ public class MOController implements Initializable {
 					
 					// Synchronisierter Zugriff
 					lock.lock();
-					
-					if (s.getMediaDirectory() != null && s.getMediaDirectory().isDirectory()) {
-						scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
-						movies = scannedContent[0];
-						audio = scannedContent[1];
-
-						for (IMedia i : movies.getContent().values()) {
-							if (visibility == null || !visibility.contains(i.getFile())) {
-								data.add(new GUIMedia(i.getFavorite(),i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
-							} else {
-								log.debug(i.getFile() + " nicht in Mediathek angezeigt, da visible == false");
+					try {					
+						if (s.getMediaDirectory() != null && s.getMediaDirectory().isDirectory()) {
+							scannedContent = MediaStorage.mediaScan(s.getMediaDirectory());
+							movies = scannedContent[0];
+							audio = scannedContent[1];
+	
+							for (IMedia i : movies.getContent().values()) {
+								if (visibility == null || !visibility.contains(i.getFile())) {
+									data.add(new GUIMedia(i.getFavorite(),i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+								} else {
+									log.debug(i.getFile() + " nicht in Mediathek angezeigt, da visible == false");
+								}
 							}
-						}
-
-						for (IMedia i : audio.getContent().values()) {
-							if (visibility == null || !visibility.contains(i.getFile())) {
-								data.add(new GUIMedia(i.getFavorite(),i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
-							} else {
-								log.debug(i.getFile() + " nicht in Mediathek angezeigt, da visible == false");
+	
+							for (IMedia i : audio.getContent().values()) {
+								if (visibility == null || !visibility.contains(i.getFile())) {
+									data.add(new GUIMedia(i.getFavorite(),i.getTitle(), i.getDuration(), i.getDate(), i.getArtist(), i.getGenre(), i.getFile(), i.getRanking()));
+								} else {
+									log.debug(i.getFile() + " nicht in Mediathek angezeigt, da visible == false");
+								}
 							}
+							tableview.setItems(data);
+							break;
 						}
-						tableview.setItems(data);
-						break;
+					} finally {
+						lock.unlock();
 					}
-					
-					lock.unlock();
 				}
 				// TODO Wieso wird der Thread aus diesem Thread heraus gestartet? Wieso nicht außerhalb, da sonst unnötige abhängigkeit.
 				rescanThread.setDaemon(true);
