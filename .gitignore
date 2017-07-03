@@ -13,6 +13,11 @@ local.properties
 .recommenders
 *.log
 
+# ObjectAid 
+*.ucls
+*.png
+
+
 
 # Settings-Datei
 settings.json

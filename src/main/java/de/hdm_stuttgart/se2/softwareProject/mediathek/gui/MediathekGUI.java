@@ -6,10 +6,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class MediathekGUI extends Application {
 
@@ -43,7 +45,14 @@ public class MediathekGUI extends Application {
 		scene.getStylesheets().add(getClass().getResource("main.css").toExternalForm());
 		primaryStage.setScene(scene);
 		primaryStage.show();	
+		
 		log.debug("GUI wurde geladen");
+		
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+	          public void handle(WindowEvent we) {
+	        	  log.debug("GUI wurde beendet");
+	          }
+	      }); 
 	}
 
 	public Stage getPrimaryStage() {

@@ -458,6 +458,7 @@ public class MOController implements Initializable {
 
 	@FXML
 	public void btn_end_clicked() {
+		log.debug("GUI wurde beendet");
 		System.exit(0);
 	}
 
