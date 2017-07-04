@@ -543,7 +543,6 @@ public class MOController implements Initializable {
 		} catch (FileNotFoundException e) {
 			log.info("visibility.json wurde nicht gefunden. Neue, leere Datei wird erstellt");
 			log.catching(e);
-			e.printStackTrace();
 			try {
 				new File("visibility.json").createNewFile();
 			} catch (IOException e1) {

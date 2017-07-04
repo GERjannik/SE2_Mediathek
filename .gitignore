@@ -20,7 +20,7 @@ local.properties
 
 
 # Settings-Datei
-settings.json
+#settings.json
 
 # Visibility Datei
 visibility.json
