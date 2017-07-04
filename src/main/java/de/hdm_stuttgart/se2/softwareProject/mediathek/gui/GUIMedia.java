@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
@@ -116,7 +117,12 @@ public class GUIMedia {
 		new Thread(new Runnable() {
 			public void run() {
 
-				getInput(s, play_data, movies, audio).open();
+				try {
+					getInput(s, play_data, movies, audio).open();
+				} catch (InvalidInputException e) {
+					log.log(Level.ERROR, "InvalidInputException in" + Thread.currentThread().getName(), e);
+					e.printStackTrace();
+				}
 
 			}
 		}).start();
@@ -130,8 +136,9 @@ public class GUIMedia {
 	 * @param movies IMedialist Objekt mit einer Liste aller Movie Objekte.
 	 * @param audio IMedialist Objekt mit einer Liste aller Movie Objekte.
 	 * @return IMedia Objekt, welches die Referenz zum gesuchten File Objekt enthält. 
+	 * @throws InvalidInputException 
 	 */
-	public static IMedia getInput(Settings s, File play_data, IMedialist movies, IMedialist audio) {
+	public static IMedia getInput(Settings s, File play_data, IMedialist movies, IMedialist audio) throws InvalidInputException {
 		
 		// Schreibt alle Medien in eine gemeinsamme Collection
 		List<IMedia> tempmedia = new ArrayList<>();
@@ -186,7 +193,7 @@ public class GUIMedia {
 		log.info("Metadaten der Datei " + m.getFile() + "erfolgreich gespeichert.");
 	}
 
-	public static void deleteMedia(Settings s, File play_data, IMedialist movies, IMedialist audio, boolean delete) {
+	public static void deleteMedia(Settings s, File play_data, IMedialist movies, IMedialist audio, boolean delete) throws InvalidInputException {
 
 		IMedia m = getInput(s, play_data, movies, audio);		
 

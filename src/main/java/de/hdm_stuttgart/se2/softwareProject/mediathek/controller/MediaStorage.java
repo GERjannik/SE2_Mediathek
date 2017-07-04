@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
@@ -17,6 +18,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.driver.App;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidInputException;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidTypeException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
@@ -48,15 +51,16 @@ public class MediaStorage {
 	 * @param Settings Globale Einstellungen, mit Dateipfad und IMedialistobjekten für alle Filme und Audios
 	 * @return Array mit jeweils einem Audiolist, Booklist und Movielist Objekt 
 	 * des Typen IMedialist
+	 * @throws InvalidTypeException 
 	 */
-	public static IMedialist[] mediaScan(File file) {
+	public static IMedialist[] mediaScan(File file) throws InvalidTypeException {
 		
-		//HashMaps für Medien werden erzeugt
-		IMedialist movies = ListFactory.getInstance("video", "scannedMovies");
-		log.info("Liste für Videodateien erstellt");
-
-		IMedialist audio = ListFactory.getInstance("audio", "scannedMovies");
-		log.info("Liste für Musikdateien erstellt");
+			//HashMaps für Medien werden erzeugt
+			IMedialist movies = ListFactory.getInstance("video", "scannedMovies");
+			log.info("Liste für Videodateien erstellt");
+	
+			IMedialist audio = ListFactory.getInstance("audio", "scannedMovies");
+			log.info("Liste für Musikdateien erstellt");
 /*
 		IMedialist books = ListFactory.getInstance("books", "scannedMovies");
 		log.info("Liste für Textdateien erstellt");
@@ -161,8 +165,9 @@ public class MediaStorage {
 	 * @param scan Objekt vom Typ 'Scanner', enthält Referenz zum Pfad der Mediendateien
 	 * @param movies Objekt vom Typ 'IMedialist', enhält Map mit Movie Objekten
 	 * @param audio Objekt vom Typ 'IMedialist', enhält Map mit Audio Objekten
+	 * @throws InvalidInputException 
 	 */
-	public static void deleteMedia(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {
+	public static void deleteMedia(Settings s, Scanner scan, IMedialist movies, IMedialist audio) throws InvalidInputException {
 
 		IMedia m = App.getInput(s, scan, movies, audio);		
 		System.out.println("Möchtest du das Medium " + m.getTitle() +  " von der Festplatte löschen? (Ja/Nein)\n");
@@ -427,6 +432,9 @@ public class MediaStorage {
 			log.info("Keine Datei mit gespeicherten Playlists gefunden.");
 		} catch (ParseException e) {
 			e.printStackTrace();
+		} catch (InvalidTypeException e) {
+			log.log(Level.ERROR, "InvalidInputException: Falscher Parametertyp", e);
+			e.printStackTrace();
 		}
 		return allLists;
 	}
@@ -437,8 +445,9 @@ public class MediaStorage {
 	 * @param scan Scanner für den User-Input.
 	 * @param movies Liste mit Movie Objekten.
 	 * @param audio Liste mit Audio Objekten.
+	 * @throws InvalidInputException 
 	 */
-	public static void playMovie(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {
+	public static void playMovie(Settings s, Scanner scan, IMedialist movies, IMedialist audio) throws InvalidInputException {
 		System.out.println("Welcher Film soll gespielt werden?");
 		App.getInput(s, scan, movies, audio).open();
 	}

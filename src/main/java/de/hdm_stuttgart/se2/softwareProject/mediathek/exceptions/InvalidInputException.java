@@ -3,7 +3,7 @@ package de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-public class InvalidInputException extends RuntimeException {
+public class InvalidInputException extends Exception {
 
 	private static final long serialVersionUID = 1;
 

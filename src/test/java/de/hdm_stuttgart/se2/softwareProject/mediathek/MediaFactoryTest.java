@@ -12,25 +12,25 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.models.MediaFactory;
 public class MediaFactoryTest {
 
 	@Test
-	public void testMediaFactoryMovie() {
+	public void testMediaFactoryMovie() throws InvalidTypeException {
 	IMedia media = MediaFactory.getInstance("video", "aaa", new File("bbb.avi"), 5454, "2005", null, null, null, false, true, "4");
 	Assert.assertEquals("Movie", media.getClass().getSimpleName());
 	}
 	
 	@Test
-	public void testMediaFactoryAudio() {
+	public void testMediaFactoryAudio() throws InvalidTypeException {
 	IMedia media = MediaFactory.getInstance("audio", "aaa", new File("bbb.avi"), 5454, "2005", null, null, null, false, true, "4");
 	Assert.assertEquals("Audio", media.getClass().getSimpleName());
 	}
 	
 	@Test
-	public void testMediaFactoryBook() {
+	public void testMediaFactoryBook() throws InvalidTypeException {
 	IMedia media = MediaFactory.getInstance("book", "aaa", new File("bbb.avi"), 5454, "2005", null, null, null, false, true, "4");
 	Assert.assertEquals("Book", media.getClass().getSimpleName());
 	}
 	
 	@Test(expected=InvalidTypeException.class)
-	public void testMediaFactoryNegative() {
+	public void testMediaFactoryNegative() throws InvalidTypeException {
 	MediaFactory.getInstance("falseType", "aaa", new File("bbb.avi"), 5454, "2005", null, null, null, false, true, "4");
 	}
 }

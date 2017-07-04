@@ -16,6 +16,7 @@ import org.json.simple.parser.ParseException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidInputException;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidTypeException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
@@ -25,7 +26,7 @@ public class App {
 
 	private static Logger log = LogManager.getLogger(App.class);
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws InvalidTypeException, InvalidInputException {
 
 		Settings s = new Settings();
 		
@@ -228,8 +229,9 @@ public class App {
 	 * @param movies Objekt vom Typ 'IMedialist', enhält Map mit Movie Objekten
 	 * @param audio Objekt vom Typ 'IMedialist', enhält Map mit Movie Objekten
 	 * @return IMedia Objekt
+	 * @throws InvalidInputException 
 	 */
-	public static IMedia getInput(Settings s, Scanner scan, IMedialist movies, IMedialist audio) {
+	public static IMedia getInput(Settings s, Scanner scan, IMedialist movies, IMedialist audio) throws InvalidInputException {
 		System.out.println("Gib den Titel des Mediums ein");
 		scan.nextLine();
 		String input = scan.nextLine();

@@ -26,8 +26,9 @@ public class ListFactory {
 	 * @param name	Name der Playlist
 	 * @return		Liste mit Book-, Audio- oder Movie-Objekten mit entsprechenden
 	 * 				Methoden zum Handling der Liste
+	 * @throws InvalidTypeException 
 	 */
-	public static IMedialist getInstance (String typ, String name) {
+	public static IMedialist getInstance (String typ, String name) throws InvalidTypeException {
 		switch (typ) {
 		case "video":
 			log.debug("Movielist " + name + " erfolgreich erstellt");

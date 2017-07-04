@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.json.simple.JSONObject;
@@ -22,6 +23,8 @@ import org.json.simple.parser.ParseException;
 
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidInputException;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidTypeException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import javafx.collections.FXCollections;
@@ -190,6 +193,9 @@ public class MOController implements Initializable {
 									tableview.setItems(data);
 								}							
 							}
+						} catch (InvalidTypeException e) {
+							log.log(Level.ERROR, "InvalidInputException in" + Thread.currentThread().getName(), e);
+							e.printStackTrace();
 						} finally {
 							lock.unlock();
 						}
@@ -264,6 +270,9 @@ public class MOController implements Initializable {
 							tableview.setItems(data);
 							break;
 						}
+					} catch (InvalidTypeException e) {
+						log.log(Level.ERROR, "InvalidInputException in" + Thread.currentThread().getName(), e);
+						e.printStackTrace();
 					} finally {
 						lock.unlock();
 					}
@@ -323,9 +332,14 @@ public class MOController implements Initializable {
 		} else {
 			play_data = tableview.getSelectionModel().getSelectedItem().getFile();
 
-			media = GUIMedia.getInput(s, play_data, movies, audio);
+			try {
+				media = GUIMedia.getInput(s, play_data, movies, audio);
+				GUIMedia.editMetaInformation(media, save_titel, save_year, save_artist, save_genre, ranking, save_favo); 
+			} catch (InvalidInputException e) {
+				log.log(Level.ERROR, "InvalidInputException", e);
+				e.printStackTrace();
+			}
 
-			GUIMedia.editMetaInformation(media, save_titel, save_year, save_artist, save_genre, ranking, save_favo); 
 
 			tf_title.setText(null);
 			tf_year.setText(null);
@@ -449,7 +463,7 @@ public class MOController implements Initializable {
 				} 
 			} 
 
-		} catch (NullPointerException e) {
+		} catch (NullPointerException | InvalidInputException e) {
 			log.catching(e);
 			l_news.setTextFill(javafx.scene.paint.Color.RED);
 			l_news.setText("Bitte wählen sie ein zu löschendes Medium aus");	

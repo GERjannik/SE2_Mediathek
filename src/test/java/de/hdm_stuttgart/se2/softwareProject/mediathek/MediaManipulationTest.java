@@ -13,6 +13,7 @@ import org.junit.Test;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.MediaStorage;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.controller.Settings;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidInputException;
+import de.hdm_stuttgart.se2.softwareProject.mediathek.exceptions.InvalidTypeException;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.gui.GUIMedia;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.interfaces.IMedialist;
 import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
@@ -20,7 +21,7 @@ import de.hdm_stuttgart.se2.softwareProject.mediathek.lists.ListFactory;
 public class MediaManipulationTest {
 
 	@Test
-	public void deleteFile_Test() throws IOException {
+	public void deleteFile_Test() throws IOException, InvalidTypeException, InvalidInputException {
 		new File("testDirectory").mkdirs();
 		Settings s = new Settings();
 		s.setMediaDirectory(new File("testDirectory"));
@@ -35,7 +36,7 @@ public class MediaManipulationTest {
 	}
 
 	@Test(expected=InvalidInputException.class)
-	public void deleteFile_Exception () {
+	public void deleteFile_Exception () throws InvalidInputException, InvalidTypeException {
 		new File("testDirectory").mkdirs();
 		Settings s = new Settings();
 		s.setMediaDirectory(new File("testDirectory"));

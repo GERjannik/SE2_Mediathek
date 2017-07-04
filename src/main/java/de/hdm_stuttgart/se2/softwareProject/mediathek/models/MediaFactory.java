@@ -35,9 +35,10 @@ public class MediaFactory {
 	 * @param genre			Genre
 	 * @param info			Anmerkungen vom Benutzer
 	 * @return				Book-, Audio- oder Movie-Objekte mit entsprechendem Pfad und Metadaten
+	 * @throws InvalidTypeException 
 	 */
 	public static IMedia getInstance (String typ, String title, File file, long duration,
-			String releaseDate, String regisseur, String genre, String info, boolean favorite, boolean visible, String ranking) {
+			String releaseDate, String regisseur, String genre, String info, boolean favorite, boolean visible, String ranking) throws InvalidTypeException {
 		switch (typ) {
 		case "video":
 			log.debug("Neues Objekt vom Typ Video erstellt");
