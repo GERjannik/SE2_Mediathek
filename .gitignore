@@ -28,6 +28,9 @@ visibility.json
 # Playlists Speicherdatei
 playlists.json
 
+#Testverzeichnis
+testDirectory/
+
 # Eclipse Core
 .project
 
